@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Premium",
+    "keywords": [
+      "prem",
+      "premium",
+      "premium",
+      "premium"
+    ],
+    "targets": [
+      "1333451334208327700",
+      "1333417822201843700",
+      "1333417822201843772",
+      "1333451334208327800"
+    ],
+    "reply_message": null,
+    "embed_title": "Premium Membership",
+    "embed_description": "Looking for a premium membership? Visit this website to choose from multiple subscription plans or a lifetime option.",
+    "embed_thumbnail": null,
+    "embed_footer": null,
+    "embed_color": null,
+    "buttons": [
+      {
+        "label": "Buy Now",
+        "url": "https://seisen.vercel.app/"
+      }
+    ],
+    "delete_after": 10
+  },
+  {
+    "name": "Executor",
+    "keywords": [
+      "exe",
+      "exe",
+      "exe",
+      "executor",
+      "executor",
+      "executor"
+    ],
+    "targets": [
+      "1333451334208327700",
+      "1333417822201843700",
+      "1333451334208327800",
+      "1333417822201843772"
+    ],
+    "reply_message": null,
+    "embed_title": "Supported Executor",
+    "embed_description": "Looking for an executor supported by Seisen Hub? Click the button below.",
+    "embed_thumbnail": null,
+    "embed_footer": "",
+    "embed_color": 5763719,
+    "buttons": [
+      {
+        "label": "Visit",
+        "url": "https://discord.com/channels/1333251917098520628/1403416613231001762"
+      }
+    ],
+    "delete_after": 10
+  },
+  {
+    "name": "Script",
+    "keywords": [
+      "script",
+      "script",
+      "script",
+      "scripts",
+      "scripts",
+      "scripts"
+    ],
+    "targets": [
+      "1333451334208327700",
+      "1333417822201843700",
+      "1333417822201843772",
+      "1333451334208327800"
+    ],
+    "reply_message": null,
+    "embed_title": "Seisen Hub Script",
+    "embed_description": "If you are looking for a free script, click the button below. You can choose the key duration: 1 hour, 5 hours, 10 hours, or 24 hours.",
+    "embed_thumbnail": null,
+    "embed_footer": "",
+    "embed_color": 5763719,
+    "buttons": [
+      {
+        "label": "Get Script",
+        "url": "https://discord.com/channels/1333251917098520628/1398592467024085063"
+      },
+      {
+        "label": "Redeem Key",
+        "url": "https://discord.com/channels/1333251917098520628/1434064472695246858"
+      },
+      {
+        "label": "Key Tutorial",
+        "url": "https://discord.com/channels/1333251917098520628/1434847543388278856"
+      }
+    ],
+    "delete_after": 5
+  }
+]

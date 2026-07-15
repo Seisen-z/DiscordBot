@@ -1,0 +1,15 @@
+{
+  "1333251917098520628": {
+    "Poll 1": {
+      "name": "Poll 1",
+      "question": "",
+      "channel_id": "",
+      "duration_hours": 24,
+      "multiple": false,
+      "options": [
+        "Option 1",
+        "Option 2"
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+# Environment variables (keep your token secret!)
+.env
+.env.*
+!.env.example
+
+# Runtime pip install target (e.g. Pillow via bot.py)
+.local/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Repository documentation (for local reference only)
+Repository.md
+
+# Runtime asset uploads
+database/assets/
+
+# Website files (separate repository)
+seisen/

@@ -1,0 +1,31 @@
+{
+  "1333251917098520628": {
+    "1508947348032848033": {
+      "channel_id": 1508787065494700122,
+      "message_id": 1508947348032848033,
+      "title": "Staff Keys",
+      "description": "Do not share your key with anyone. Sharing your key may result in a warning or further action being taken against your account.",
+      "button_label": "Get Key",
+      "webhook_url": null,
+      "webhook_secret": null,
+      "webhook_hmac_header": "seisen",
+      "product_name": "Premium Key",
+      "created_at": "2026-05-26T21:38:03.145493+00:00",
+      "created_by": 442317061104861184
+    },
+    "1508950293562523778": {
+      "channel_id": 1508787065494700122,
+      "message_id": 1508950293562523778,
+      "title": "Staff Keys",
+      "description": "Do not share your key with anyone. Sharing your key may result in a warning or further action being taken against your account.",
+      "button_label": "Get Key",
+      "required_role_ids": [
+        "1333419158485864511",
+        "1458853102814888142",
+        "1333417449386676306"
+      ],
+      "created_at": "2026-05-26T21:49:45.323655+00:00",
+      "created_by": 442317061104861184
+    }
+  }
+}

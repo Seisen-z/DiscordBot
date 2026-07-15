@@ -1,0 +1,53 @@
+{
+  "1333251917098520628": [
+    {
+      "name": null,
+      "universe_id": 9529182643,
+      "channel_id": 1481076051554598962,
+      "role_id": null,
+      "last_updated": "2026-05-21T20:32:14.68Z"
+    },
+    {
+      "name": null,
+      "universe_id": 9509842868,
+      "channel_id": 1481076051554598962,
+      "role_id": null,
+      "last_updated": "2026-04-18T23:07:33.27Z"
+    },
+    {
+      "name": null,
+      "universe_id": 5803093656,
+      "channel_id": 1481076051554598962,
+      "role_id": null,
+      "last_updated": "2026-04-28T20:55:38.31Z"
+    },
+    {
+      "name": null,
+      "universe_id": 8662243497,
+      "channel_id": 1481076051554598962,
+      "role_id": null,
+      "last_updated": "2026-05-30T16:24:37.392Z"
+    },
+    {
+      "name": null,
+      "universe_id": 7094518649,
+      "channel_id": 1481076051554598962,
+      "role_id": null,
+      "last_updated": "2026-06-02T08:07:00.4016967Z"
+    },
+    {
+      "name": null,
+      "universe_id": 7546582051,
+      "channel_id": 1481076051554598962,
+      "role_id": null,
+      "last_updated": "2026-05-30T01:04:02.841Z"
+    },
+    {
+      "name": null,
+      "universe_id": 9774981774,
+      "channel_id": 1481076051554598962,
+      "role_id": null,
+      "last_updated": "2026-06-02T04:10:10.3476978Z"
+    }
+  ]
+}

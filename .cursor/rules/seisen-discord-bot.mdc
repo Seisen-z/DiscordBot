@@ -1,0 +1,79 @@
+---
+description: Seisen Hub — Discord moderation/community bot, FastAPI dashboard API, and optional Next.js dashboard (seisen/).
+globs:
+  - "**/*.py"
+  - "seisen/**/*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# Seisen Hub workspace
+
+## Keep workspace AI docs in sync (required)
+
+Whenever you add or materially change how this project works, **update both** of these in the **same change** (same PR / same session), so future edits stay accurate:
+
+| File | Role |
+|------|------|
+| `.cursor/rules/seisen-discord-bot.mdc` | Project rules: constraints, safety notes, pointers, globs |
+| `.cursor/skills/seisen-discord-bot/SKILL.md` | Skill: stack table, feature map, procedures, debugging |
+
+**Update both when any of the following change:** new or removed `modules/*.py` or registration in `main.py`; new FastAPI routes, models, or CORS behavior in `api.py`; IPC/API ports or env vars (including `.env.example`); new root `*.json` config/state files; new dashboard areas or env vars under `seisen/`; deployment or process layout in `README.md`; moderation/automation behavior worth calling out.
+
+Keep the **rule** concise (what to enforce + where to look); put **step-by-step and tables** in the **skill**. If you touch only one file, still skim the other and add a one-line note there if the change affects it.
+
+## What this repo is
+
+- **Discord bot** (`main.py`): `discord.py` with slash commands, background `@tasks`, persistent views, and module registration via `register_all_modules()`.
+- **Dashboard API**: `api.py` (standalone FastAPI) **and** an API started from the bot process in `modules/ipc.py` (port resolution via `SERVER_PORT` / `PORT` / `API_PORT`; IPC via `IPC_PORT`).
+- **Website**: Next.js App Router app under `seisen/` (see root `README.md`). Note `seisen/` may be listed in `.gitignore` if tracked in another repo—still edit it when present locally.
+
+## Moderation and safety-adjacent areas
+
+- `modules/moderation.py` — kicks, bans, purge, ban list UI, etc.
+- `modules/automod.py` — automated moderation behavior.
+- `modules/activity_rewards.py` — message-activity tracking + RNG key rewards (webhook-driven key fetch, cooldown and thresholds).
+- `modules/access_control.py` — owner locks / command access (`command_access.json`).
+- `modules/tickets.py`, `modules/onboarding.py` — community flows that interact with permissions and verification.
+- Activity rewards dashboard/API is exposed at `/api/guilds/{guild_id}/activity_rewards` (+ `/status` + `/leaderboard` + `/test_webhook`) and `seisen/src/app/dashboard/[guildId]/activity-rewards/page.tsx` with webhook test/config controls and manual reroll/revoke actions via dashboard triggers.
+
+Prefer **hierarchy checks**, **audit-friendly logging**, and **ephemeral errors** where Discord already does; avoid leaking tokens or webhook URLs in logs/embeds.
+
+## Giveaway key ticket lifecycle
+
+- In `modules/giveaways.py`, keep key-ticket state persisted in the same giveaway storage used by `load_giveaways()` / `save_giveaways()`.
+- Claimed key tickets should auto-close after the configured delay (currently 5 minutes after claim) while key delivery/claim logs remain in log channels.
+
+## Configuration and persistence
+
+- Many features store state in **JSON files at the repo root** (e.g. `tickets.json`, `*_config.json`). `api.py` defines shared `load_json` / `save_json` helpers; modules often have their own loaders—**follow the existing pattern** in the file you touch.
+- **AI Help** (`ai_help_global`): stored in `database/ai_help_config.json` via `modules/utils.py`.
+- Activity rewards persist in root JSON files (`activity_rewards_stats.json`, `activity_rewards_config.json`, `activity_rewards_state.json`); keep writes atomic and avoid logging secret webhook details.
+- Secrets belong in **`.env`** only; never commit `.env`. Use `.env.example` as the template.
+
+## Adding or changing bot features
+
+1. Implement logic in `modules/<name>.py` with a `register(bot)` (or `setup(bot)` for optional modules like `fun`).
+2. Import and call registration from `main.py` in `register_all_modules()`.
+3. If the dashboard must read/write the same JSON, extend **`api.py`** routes and/or **`modules/dashboard_handlers.py`** / IPC triggers—watch for **circular imports** (see comments in `api.py` about lazy imports).
+4. **Update** `.cursor/rules/seisen-discord-bot.mdc` and `.cursor/skills/seisen-discord-bot/SKILL.md` per **Keep workspace AI docs in sync** above.
+
+## API / CORS / deployment
+
+- **Dashboard auth**: Guild-scoped `api.py` routes expect `Authorization: Bearer <Discord user OAuth token>` and **Manage Server or Administrator** in that guild (enforced by HTTP middleware + Discord `@me/guilds`). The Next.js `/api/bot` proxy injects the token from the **httpOnly** `session_token` cookie. Exception: `POST …/trigger/verify_member_web` only requires guild membership and matching `payload.user_id`.
+- **Expired session UX**: when dashboard proxy/auth routes receive Discord/upstream `401`, clear `session_token`/`user_id` cookies so users are forced cleanly back through login without manual logout clicks.
+- **Auth error mapping**: when validating Discord OAuth in `api.py`, only Discord `401/403` should map to "session invalid"; treat Discord `429`/`5xx` as transient upstream failures (5xx family from our API), not a forced logout condition.
+- **Auth logging safety**: if adding auth diagnostics, log only route/method/ip and optional short token fingerprint; never log raw bearer/session tokens.
+- **CORS**: set comma-separated **`CORS_ORIGINS`** in `.env` for new dashboard domains (defaults remain in code if unset).
+- **`/api/debug`**: disabled unless **`ENABLE_DEBUG_API=1`**; never add token previews.
+- README documents **three processes**: `python main.py`, `uvicorn api:app`, and `npm run dev` in `seisen/`. Port numbers in docs vs `.env.example` may differ; trust **runtime env** and `ipc.py` resolution when debugging “API not reachable” issues.
+
+## Code style for this project
+
+- Match surrounding style: type hints where already used, minimal new abstractions, no drive-by refactors unrelated to the task.
+- Keep changes **focused**: one concern per change set when fixing bugs or adding a feature.
+
+## Git repo boundaries
+
+- Treat the bot root (`D:/Discord Bot`) and `seisen/` as separate git repositories when both are present.
+- Commit in the repository where the change was made; do not mix bot and dashboard commits into one repo.
+- When a task updates both repos, create and push commits in each corresponding repo so both sides stay in sync.

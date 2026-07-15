@@ -1,0 +1,21 @@
+{
+  "1333251917098520628": {
+    "panel_channel_id": 1333435322603933706,
+    "panel_message_id": 1488726834425106603,
+    "ticket_category_id": "1333417822201843772",
+    "support_role_ids": [
+      "1333421502971904020",
+      "1333419158485864511",
+      "1333417449386676306"
+    ],
+    "open_tickets": {
+      "171442868190314497": 1488727051794911232,
+      "1122039029475581972": 1489368861718352044
+    },
+    "embed_title": "Support/Premium Ticket",
+    "embed_description": "To create a support ticket, click the \u2018Create Ticket\u2019 button below.\nPlease use this ticket only for support or assistance.",
+    "embed_color": null,
+    "embed_thumbnail": null,
+    "embed_footer": "Seisen Hub"
+  }
+}

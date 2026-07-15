@@ -1,0 +1,22 @@
+{
+  "1333251917098520628": {
+    "General/Script Role": {
+      "title": "\ud83d\udce2 Stay Updated on Scripts!",
+      "description": "Select a game below to get instant pings whenever its script receives a new update! \u26a1\ud83c\udfae\n\n> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!",
+      "placeholder": "Choose roles...",
+      "min_values": 1,
+      "max_values": 5,
+      "options": [
+        {
+          "label": "a",
+          "value": "1400874393193812100",
+          "description": "a"
+        }
+      ],
+      "color": "#5865F2",
+      "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Discord_logo_purple.svg/1200px-Discord_logo_purple.svg.png",
+      "footer": "",
+      "channel_id": "1333425858395770920"
+    }
+  }
+}

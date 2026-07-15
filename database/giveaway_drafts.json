@@ -1,0 +1,16 @@
+{
+  "1333251917098520628": {
+    "Giveaway 1": {
+      "name": "Monthly key",
+      "reward_title": "2x Monthly Key",
+      "reward_description": "React with \ud83c\udf89 to enter. Winners will be picked automatically at the end time.",
+      "channel_id": "1333425858395770920",
+      "winner_count": 2,
+      "duration_minutes": 60,
+      "ping_role_id": "1405196741107781744",
+      "key_log_channel_id": "1483654954638905364",
+      "emoji": "\ud83c\udf89",
+      "key_tier": "lifetime"
+    }
+  }
+}

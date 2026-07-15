@@ -1,0 +1,9 @@
+{
+  "loop_started_at": "2026-06-03T13:30:08.985245+00:00",
+  "last_error": null,
+  "last_poll_started": "2026-06-03T13:33:09.030157+00:00",
+  "last_poll_finished": "2026-06-03T13:33:09.648754+00:00",
+  "last_poll_seconds": 0.62,
+  "last_notifications": 0,
+  "monitor_count": 1
+}

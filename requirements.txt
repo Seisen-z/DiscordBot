@@ -1,0 +1,15 @@
+discord.py
+aiohttp
+python-dotenv
+openai
+certifi
+Pillow
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+requests
+yt-dlp
+davey
+imageio-ffmpeg
+discord.py[voice]

@@ -1,0 +1,24 @@
+{
+  "1333251917098520628": {
+    "enabled": true,
+    "action": "ban",
+    "timeout_minutes": 1440,
+    "log_channel_id": null,
+    "exempt_role_ids": [],
+    "exempt_channel_ids": [],
+    "scan_links": true,
+    "scan_images": true,
+    "blocked_domains": [
+      "discordapp.com"
+    ],
+    "whitelist_domains": [],
+    "blocked_image_hashes": [
+      "581a463a57d4723c4a3810916c879a04d6e7eb1808cd2c0866c1b6dba7e11bd7",
+      "d97c3a5bb0bf8e6f63d710e3b64639164a4aadd5befe94955745ea049e67d476",
+      "d975cff803c739dd91cac169064564bf2f2b00feaadb3aa95a6f4e52f49972b0",
+      "ba6430faf4e5044943619c7e86773dcb0e7f8d1e0957f7df9165d2f835d8e245"
+    ],
+    "dm_user_on_action": true,
+    "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+  }
+}
