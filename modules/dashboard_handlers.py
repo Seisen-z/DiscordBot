@@ -142,11 +142,26 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                         parts.append(img.strip())
                     
             final_content = "\n".join(parts)
-            
+
             if not final_content and not embeds and not files:
                 return {"status": "error", "action": action, "http_status": 400, "message": "Cannot send empty announcement."}
 
-            await channel.send(content=final_content, embeds=embeds, files=files)
+            view = None
+            buttons_data = data.get("buttons") or []
+            if isinstance(buttons_data, list) and buttons_data:
+                view = discord.ui.View(timeout=None)
+                for btn in buttons_data[:5]:
+                    if not isinstance(btn, dict):
+                        continue
+                    btn_url = str(btn.get("url") or "").strip()
+                    if not (btn_url.startswith("http://") or btn_url.startswith("https://")):
+                        continue
+                    btn_label = str(btn.get("label") or "Button").strip()[:80] or "Button"
+                    view.add_item(discord.ui.Button(style=discord.ButtonStyle.link, label=btn_label, url=btn_url))
+                if not view.children:
+                    view = None
+
+            await channel.send(content=final_content, embeds=embeds, files=files, view=view)
             return {"status": "success", "action": action, "channel_id": str(channel_id)}
                 
         elif action == "sticky":

@@ -865,6 +865,7 @@ class AnnouncementDraft(BaseModel):
     footer: Optional[str] = None
     channel_id: Optional[str] = None
     ping_role_id: Optional[str] = None
+    buttons: List[Dict[str, str]] = Field(default_factory=list)
 
     @field_validator("channel_id", "ping_role_id", mode="before")
     @classmethod
@@ -2005,11 +2006,14 @@ async def update_announcements(guild_id: str, drafts: Dict[str, Any]):
         validated = AnnouncementDraft.model_validate({
             "title": str(candidate.get("title", "")),
             "description": str(candidate.get("description", "")),
+            "content": candidate.get("content"),
             "thumbnail_url": candidate.get("thumbnail_url"),
             "image_url": candidate.get("image_url"),
+            "images": candidate.get("images") or [],
             "footer": candidate.get("footer"),
             "channel_id": candidate.get("channel_id"),
             "ping_role_id": candidate.get("ping_role_id"),
+            "buttons": candidate.get("buttons") or [],
         })
 
         normalized_drafts[draft_name] = validated.model_dump()
