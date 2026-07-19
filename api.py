@@ -3377,6 +3377,88 @@ async def test_activity_rewards_logging(guild_id: str, request: Request):
         raise HTTPException(status_code=status_code, detail=result.get("message", result.get("error", "Unknown error")))
     return result
 
+# --- Leveling ---
+
+_LEVELING_CONFIG_PATH = "leveling_configs"
+_LEVELING_STATS_PATH = "leveling_stats"
+
+_LEVELING_DEFAULT: Dict[str, Any] = {
+    "enabled": True,
+    "excluded_channel_ids": [],
+    "cooldown_seconds": 5,
+    "announce_level_up": True,
+    "announce_channel_id": None,
+    "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+    "tiers": [],
+}
+
+
+def _coerce_leveling_tier(raw: Any) -> Optional[Dict[str, Any]]:
+    if not isinstance(raw, dict):
+        return None
+    threshold = _coerce_int(raw.get("threshold"), 0, minimum=1)
+    role_id = str(raw.get("role_id") or "").strip()
+    if not role_id:
+        return None
+    name = str(raw.get("name") or "").strip() or f"Level {threshold}"
+    tier_id = str(raw.get("id") or "").strip() or uuid.uuid4().hex[:12]
+    return {"id": tier_id, "name": name, "threshold": threshold, "role_id": role_id}
+
+
+def _coerce_leveling_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
+    out = dict(_LEVELING_DEFAULT)
+    out.update({k: v for k, v in raw.items() if k in _LEVELING_DEFAULT})
+    out["enabled"] = _coerce_bool(out.get("enabled"), True)
+    out["cooldown_seconds"] = _coerce_int(out.get("cooldown_seconds"), 5, minimum=0)
+    out["announce_level_up"] = _coerce_bool(out.get("announce_level_up"), True)
+    out["announce_channel_id"] = _coerce_optional_str(out.get("announce_channel_id"))
+    out["level_up_message"] = str(out.get("level_up_message") or _LEVELING_DEFAULT["level_up_message"])
+
+    excluded = out.get("excluded_channel_ids")
+    out["excluded_channel_ids"] = [str(v).strip() for v in excluded if str(v).strip()] if isinstance(excluded, list) else []
+
+    tiers_raw = out.get("tiers")
+    tiers = [_coerce_leveling_tier(t) for t in tiers_raw] if isinstance(tiers_raw, list) else []
+    out["tiers"] = sorted([t for t in tiers if t], key=lambda t: t["threshold"])
+
+    return stringify_ids(out)
+
+
+@app.get("/api/guilds/{guild_id}/leveling")
+async def get_leveling(guild_id: str):
+    all_cfg = load_json(_LEVELING_CONFIG_PATH, {})
+    stored = all_cfg.get(guild_id, {})
+    merged = _coerce_leveling_payload(stored if isinstance(stored, dict) else {})
+    return merged
+
+
+@app.put("/api/guilds/{guild_id}/leveling")
+async def update_leveling(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
+    all_cfg = load_json(_LEVELING_CONFIG_PATH, {})
+    before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
+    merged_body = _merge_shallow_dict(before_cfg, body if isinstance(body, dict) else {})
+    coerced = _coerce_leveling_payload(merged_body)
+    all_cfg[guild_id] = coerced
+    save_json(_LEVELING_CONFIG_PATH, all_cfg)
+    await _append_config_audit_entry(
+        request=request,
+        guild_id=guild_id,
+        module="leveling",
+        before=before_cfg,
+        after=coerced,
+    )
+    return {"status": "success", "config": coerced}
+
+
+@app.get("/api/guilds/{guild_id}/leveling/leaderboard")
+async def get_leveling_leaderboard_route(guild_id: str, limit: int = 15):
+    from modules.leveling import get_leveling_leaderboard as _get_lb
+
+    safe_limit = max(1, min(50, int(limit or 15)))
+    rows = _get_lb(int(guild_id), safe_limit)
+    return stringify_ids({"items": rows, "count": len(rows)})
+
+
 # --- Auto Moderation ---
 
 _AUTOMOD_CONFIG_PATH = "automod_configs"

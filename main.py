@@ -187,6 +187,7 @@ import modules.automod as automod
 import modules.anti_spam as anti_spam
 import modules.ping_protection as ping_protection
 import modules.activity_rewards as activity_rewards
+import modules.leveling as leveling
 import modules.music as music
 import modules.key_panel as key_panel
 import modules.generate_key as generate_key
@@ -226,6 +227,7 @@ def register_all_modules():
     anti_spam.register(bot)
     ping_protection.register(bot)
     activity_rewards.register(bot)
+    leveling.register(bot)
     music.register(bot)
     key_panel.register(bot)
     generate_key.register(bot)
