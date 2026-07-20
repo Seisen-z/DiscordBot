@@ -3473,14 +3473,17 @@ def _coerce_channel_access_mapping(raw: Any) -> Optional[Dict[str, Any]]:
     if not isinstance(raw, dict):
         return None
     role_id = str(raw.get("role_id") or "").strip()
-    channel_id = str(raw.get("channel_id") or "").strip()
-    if not role_id or not channel_id:
+    channel_ids_raw = raw.get("channel_ids")
+    if not isinstance(channel_ids_raw, list):
+        channel_ids_raw = [raw.get("channel_id")] if raw.get("channel_id") else []
+    channel_ids = [str(c).strip() for c in channel_ids_raw if str(c or "").strip()]
+    if not role_id or not channel_ids:
         return None
     mapping_id = str(raw.get("id") or "").strip() or uuid.uuid4().hex[:12]
     return {
         "id": mapping_id,
         "role_id": role_id,
-        "channel_id": channel_id,
+        "channel_ids": channel_ids,
         "view_channel": _coerce_bool(raw.get("view_channel"), True),
         "send_messages": _coerce_bool(raw.get("send_messages"), True),
     }
