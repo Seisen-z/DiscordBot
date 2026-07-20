@@ -3459,6 +3459,87 @@ async def get_leveling_leaderboard_route(guild_id: str, limit: int = 15):
     return stringify_ids({"items": rows, "count": len(rows)})
 
 
+# --- Channel Access (role -> channel unlock mappings) ---
+
+_CHANNEL_ACCESS_CONFIG_PATH = "channel_access_configs"
+
+_CHANNEL_ACCESS_DEFAULT: Dict[str, Any] = {
+    "enabled": True,
+    "mappings": [],
+}
+
+
+def _coerce_channel_access_mapping(raw: Any) -> Optional[Dict[str, Any]]:
+    if not isinstance(raw, dict):
+        return None
+    role_id = str(raw.get("role_id") or "").strip()
+    channel_id = str(raw.get("channel_id") or "").strip()
+    if not role_id or not channel_id:
+        return None
+    mapping_id = str(raw.get("id") or "").strip() or uuid.uuid4().hex[:12]
+    return {
+        "id": mapping_id,
+        "role_id": role_id,
+        "channel_id": channel_id,
+        "view_channel": _coerce_bool(raw.get("view_channel"), True),
+        "send_messages": _coerce_bool(raw.get("send_messages"), True),
+    }
+
+
+def _coerce_channel_access_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
+    out = dict(_CHANNEL_ACCESS_DEFAULT)
+    out.update({k: v for k, v in raw.items() if k in _CHANNEL_ACCESS_DEFAULT})
+    out["enabled"] = _coerce_bool(out.get("enabled"), True)
+
+    mappings_raw = out.get("mappings")
+    mappings = [_coerce_channel_access_mapping(m) for m in mappings_raw] if isinstance(mappings_raw, list) else []
+    out["mappings"] = [m for m in mappings if m]
+
+    return stringify_ids(out)
+
+
+@app.get("/api/guilds/{guild_id}/channel_access")
+async def get_channel_access(guild_id: str):
+    all_cfg = load_json(_CHANNEL_ACCESS_CONFIG_PATH, {})
+    stored = all_cfg.get(guild_id, {})
+    return _coerce_channel_access_payload(stored if isinstance(stored, dict) else {})
+
+
+@app.put("/api/guilds/{guild_id}/channel_access")
+async def update_channel_access(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
+    all_cfg = load_json(_CHANNEL_ACCESS_CONFIG_PATH, {})
+    before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
+    merged_body = _merge_shallow_dict(before_cfg, body if isinstance(body, dict) else {})
+    coerced = _coerce_channel_access_payload(merged_body)
+    all_cfg[guild_id] = coerced
+    save_json(_CHANNEL_ACCESS_CONFIG_PATH, all_cfg)
+    await _append_config_audit_entry(
+        request=request,
+        guild_id=guild_id,
+        module="channel_access",
+        before=before_cfg,
+        after=coerced,
+    )
+
+    from modules.ipc import process_dashboard_trigger
+
+    sync_result, _ = await process_dashboard_trigger("channel_access_sync", guild_id, {"mappings": coerced["mappings"]})
+    return {"status": "success", "config": coerced, "sync": sync_result}
+
+
+@app.post("/api/guilds/{guild_id}/channel_access/sync")
+async def sync_channel_access(guild_id: str):
+    from modules.ipc import process_dashboard_trigger
+
+    all_cfg = load_json(_CHANNEL_ACCESS_CONFIG_PATH, {})
+    stored = all_cfg.get(guild_id, {})
+    cfg = _coerce_channel_access_payload(stored if isinstance(stored, dict) else {})
+    result, status_code = await process_dashboard_trigger("channel_access_sync", guild_id, {"mappings": cfg["mappings"]})
+    if status_code != 200:
+        raise HTTPException(status_code=status_code, detail=result.get("message", "Sync failed"))
+    return result
+
+
 # --- Auto Moderation ---
 
 _AUTOMOD_CONFIG_PATH = "automod_configs"

@@ -620,6 +620,13 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             except Exception as e:
                 return {"status": "error", "action": action, "http_status": 500, "message": f"Discord API error: {e}.{simulated_ticket_msg}"}
 
+        elif action == "channel_access_sync":
+            from modules.channel_access import sync_mappings_for_guild
+
+            mappings = payload.get("mappings", [])
+            applied, failed = await sync_mappings_for_guild(guild, mappings if isinstance(mappings, list) else [])
+            return {"status": "success", "action": action, "applied": applied, "failed": failed}
+
         elif action == "roblox":
             universe_id = _as_int(payload.get("universe_id"))
             channel_id = _as_int(payload.get("channel_id"))
