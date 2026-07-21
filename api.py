@@ -3543,6 +3543,70 @@ async def sync_channel_access(guild_id: str):
     return result
 
 
+# --- Trap Channels (auto kick/ban on message) ---
+
+_TRAP_CHANNEL_CONFIG_PATH = "trap_channel_configs"
+
+_TRAP_CHANNEL_DEFAULT: Dict[str, Any] = {
+    "enabled": True,
+    "channel_ids": [],
+    "action": "kick",
+    "delete_message_hours": 6,
+    "exempt_role_ids": [],
+    "delete_trigger_message": True,
+    "reason": "Posted in a restricted channel",
+    "log_channel_id": None,
+}
+
+
+def _coerce_trap_channel_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
+    out = dict(_TRAP_CHANNEL_DEFAULT)
+    out.update({k: v for k, v in raw.items() if k in _TRAP_CHANNEL_DEFAULT})
+    out["enabled"] = _coerce_bool(out.get("enabled"), True)
+
+    channel_ids = out.get("channel_ids")
+    out["channel_ids"] = [str(c).strip() for c in channel_ids if str(c or "").strip()] if isinstance(channel_ids, list) else []
+
+    action = str(out.get("action") or "kick").strip().lower()
+    out["action"] = action if action in {"kick", "ban"} else "kick"
+
+    out["delete_message_hours"] = min(168, _coerce_int(out.get("delete_message_hours"), 6, minimum=0))
+
+    exempt_roles = out.get("exempt_role_ids")
+    out["exempt_role_ids"] = [str(r).strip() for r in exempt_roles if str(r or "").strip()] if isinstance(exempt_roles, list) else []
+
+    out["delete_trigger_message"] = _coerce_bool(out.get("delete_trigger_message"), True)
+    out["reason"] = str(out.get("reason") or _TRAP_CHANNEL_DEFAULT["reason"])
+    out["log_channel_id"] = _coerce_optional_str(out.get("log_channel_id"))
+
+    return stringify_ids(out)
+
+
+@app.get("/api/guilds/{guild_id}/trap_channels")
+async def get_trap_channels(guild_id: str):
+    all_cfg = load_json(_TRAP_CHANNEL_CONFIG_PATH, {})
+    stored = all_cfg.get(guild_id, {})
+    return _coerce_trap_channel_payload(stored if isinstance(stored, dict) else {})
+
+
+@app.put("/api/guilds/{guild_id}/trap_channels")
+async def update_trap_channels(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
+    all_cfg = load_json(_TRAP_CHANNEL_CONFIG_PATH, {})
+    before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
+    merged_body = _merge_shallow_dict(before_cfg, body if isinstance(body, dict) else {})
+    coerced = _coerce_trap_channel_payload(merged_body)
+    all_cfg[guild_id] = coerced
+    save_json(_TRAP_CHANNEL_CONFIG_PATH, all_cfg)
+    await _append_config_audit_entry(
+        request=request,
+        guild_id=guild_id,
+        module="trap_channel",
+        before=before_cfg,
+        after=coerced,
+    )
+    return {"status": "success", "config": coerced}
+
+
 # --- Auto Moderation ---
 
 _AUTOMOD_CONFIG_PATH = "automod_configs"
