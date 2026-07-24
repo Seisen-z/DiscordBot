@@ -3614,7 +3614,7 @@ _MACRO_IMPORT_CONFIG_PATH = "macro_import_configs"
 _MACRO_IMPORT_DEFAULT: Dict[str, Any] = {
     "enabled": True,
     "channel_ids": [],
-    "storage_channel_id": None,
+    "private_channel_ids": [],
 }
 
 
@@ -3626,7 +3626,12 @@ def _coerce_macro_import_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
     channel_ids = out.get("channel_ids")
     out["channel_ids"] = [str(c).strip() for c in channel_ids if str(c or "").strip()] if isinstance(channel_ids, list) else []
 
-    out["storage_channel_id"] = _coerce_optional_str(out.get("storage_channel_id"))
+    private_channel_ids = out.get("private_channel_ids")
+    out["private_channel_ids"] = (
+        [str(c).strip() for c in private_channel_ids if str(c or "").strip()] if isinstance(private_channel_ids, list) else []
+    )
+    # A channel can't be both public and private at once — private wins.
+    out["channel_ids"] = [c for c in out["channel_ids"] if c not in out["private_channel_ids"]]
 
     return stringify_ids(out)
 

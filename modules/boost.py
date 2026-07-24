@@ -56,31 +56,43 @@ class CloseTicketView(discord.ui.View):
 
     @discord.ui.button(label="Close Ticket", style=discord.ButtonStyle.danger, emoji="🔒", custom_id="boost:close")
     async def close_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        cfg = load_boost_config()
-        guild_id = str(interaction.guild_id)
-        gcfg = cfg.get(guild_id, {})
-        open_tickets = gcfg.get("open_boost_tickets", {})
-        owner_id = open_tickets.get(str(interaction.channel_id))
-        is_owner = owner_id is not None and int(owner_id) == interaction.user.id
-        is_staff = interaction.user.guild_permissions.manage_channels
-
-        if not (is_owner or is_staff):
-            await interaction.response.send_message("❌ Only the booster or staff can close this ticket!", ephemeral=True)
-            return
-
-        await interaction.response.send_message("🔒 Closing ticket in 3 seconds...")
-
-        if str(interaction.channel_id) in open_tickets:
-            del open_tickets[str(interaction.channel_id)]
-            gcfg["open_boost_tickets"] = open_tickets
-            cfg[guild_id] = gcfg
-            save_boost_config(cfg)
-
-        await asyncio.sleep(3)
+        # Everything below is wrapped so a bad config read or any other
+        # unexpected error still gets a response back within Discord's 3s
+        # window — otherwise the client shows a bare "didn't respond in
+        # time" with no indication of what actually went wrong.
         try:
+            cfg = load_boost_config()
+            guild_id = str(interaction.guild_id)
+            gcfg = cfg.get(guild_id, {})
+            open_tickets = gcfg.get("open_boost_tickets", {})
+            owner_id = open_tickets.get(str(interaction.channel_id))
+            is_owner = owner_id is not None and int(owner_id) == interaction.user.id
+            is_staff = interaction.user.guild_permissions.manage_channels
+
+            if not (is_owner or is_staff):
+                await interaction.response.send_message("❌ Only the booster or staff can close this ticket!", ephemeral=True)
+                return
+
+            await interaction.response.send_message("🔒 Closing ticket in 3 seconds...")
+
+            if str(interaction.channel_id) in open_tickets:
+                del open_tickets[str(interaction.channel_id)]
+                gcfg["open_boost_tickets"] = open_tickets
+                cfg[guild_id] = gcfg
+                save_boost_config(cfg)
+
+            await asyncio.sleep(3)
             await interaction.channel.delete(reason="Boost ticket closed.")
+        except discord.HTTPException as e:
+            if interaction.response.is_done():
+                await interaction.followup.send(f"❌ Failed to delete channel: {e}", ephemeral=True)
+            else:
+                await interaction.response.send_message(f"❌ Failed to close ticket: {e}", ephemeral=True)
         except Exception as e:
-            await interaction.followup.send(f"❌ Failed to delete channel: {e}", ephemeral=True)
+            if interaction.response.is_done():
+                await interaction.followup.send(f"❌ Unexpected error while closing: {e}", ephemeral=True)
+            else:
+                await interaction.response.send_message(f"❌ Unexpected error while closing: {e}", ephemeral=True)
 
 
 # ── Webhook key helper ────────────────────────────────────────────────────────
@@ -351,6 +363,25 @@ async def boost_config_show(interaction: discord.Interaction):
     embed.add_field(name="Ticket Category", value=category.name if category else "None (Created at top)", inline=False)
     embed.add_field(name="Notification Roles", value=", ".join(roles) if roles else "None", inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+@boost_group.command(name="close", description="Close the current boost claim ticket channel")
+@app_commands.checks.has_permissions(manage_channels=True)
+async def boost_close(interaction: discord.Interaction):
+    """Fallback for closing a boost ticket if its Close Ticket button is unresponsive
+    (e.g. a message posted before the bot's persistent view registration was live)."""
+    await interaction.response.send_message("🔒 Closing ticket in 3 seconds...")
+    cfg = load_boost_config()
+    guild_id = str(interaction.guild_id)
+    gcfg = cfg.get(guild_id, {})
+    open_tickets = gcfg.get("open_boost_tickets", {})
+    if str(interaction.channel_id) in open_tickets:
+        del open_tickets[str(interaction.channel_id)]
+        gcfg["open_boost_tickets"] = open_tickets
+        cfg[guild_id] = gcfg
+        save_boost_config(cfg)
+    await asyncio.sleep(3)
+    await interaction.channel.delete(reason=f"Boost ticket closed by {interaction.user}")
 
 
 @boost_group.command(name="test", description="Test the server boost webhook and logging system")

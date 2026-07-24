@@ -2,17 +2,14 @@
 modules/macro_import.py
 Detects macro ".json" attachments posted in configured channels/forum posts and
 replies with a "Macro's File Import URL" embed (mirrors the Plusmate bot's
-response), including a button that re-uploads the file to a dedicated storage
-channel to mint a fresh, longer-lived Discord CDN link.
+response). Channels can be marked "private", in which case the reply hides the
+URL behind a Reveal button visible only to the original uploader.
 """
 
 from __future__ import annotations
 
-import io
 import json
 import re
-import uuid
-from pathlib import Path
 from typing import Any, Optional, Union
 from urllib.parse import urlparse, parse_qs
 
@@ -25,16 +22,12 @@ from modules.utils import load_json, save_json
 MACRO_IMPORT_CONFIG_FILE = "macro_import_configs"
 MACRO_IMPORT_CACHE_FILE = "macro_import_cache"
 
-# Raw copies of validated macro attachments live here so the "make permanent"
-# button keeps working even after the original Discord CDN link expires.
-_MACRO_FILES_DIR = Path(__file__).resolve().parent.parent / "database" / "macro_files"
-
 MAX_ATTACHMENT_BYTES = 2 * 1024 * 1024  # 2 MB — macros are small JSON, this is generous
 
 DEFAULT_CONFIG = {
     "enabled": True,
-    "channel_ids": [],       # text channels, forum channels, and/or individual threads to watch
-    "storage_channel_id": None,  # where the bot re-uploads the file to mint a fresh CDN link
+    "channel_ids": [],       # text channels, forum channels, and/or individual threads to watch (public replies)
+    "private_channel_ids": [],  # same, but the reply hides the URL behind a Reveal button (uploader-only)
 }
 
 _UNIT_SLOT_SUFFIX_RE = re.compile(r"\s*-\s*\d+\s*$")
@@ -55,8 +48,9 @@ def _guild_cfg(guild_id: int) -> dict:
     channel_ids = merged.get("channel_ids", [])
     merged["channel_ids"] = [str(c) for c in channel_ids] if isinstance(channel_ids, list) else []
 
-    storage_id = merged.get("storage_channel_id")
-    merged["storage_channel_id"] = str(storage_id) if storage_id else None
+    private_channel_ids = merged.get("private_channel_ids", [])
+    merged["private_channel_ids"] = [str(c) for c in private_channel_ids] if isinstance(private_channel_ids, list) else []
+
     return merged
 
 
@@ -80,22 +74,27 @@ def _channel_and_parent_ids(channel: Any) -> set[str]:
 
 def _extract_required_units(data: Any) -> Optional[list[str]]:
     """
-    Returns an ordered, de-duplicated list of unit names if `data` matches a
-    known macro schema, or None if it doesn't look like a macro file at all.
+    Returns an ordered, de-duplicated list of "UnitName" or "UnitName (Trait)"
+    strings if `data` matches a known macro schema, or None if it doesn't look
+    like a macro file at all.
 
     Two schemas are supported (both produced by the Seisen macro recorder):
-      A) {"version": 1, "entries": [{"values": [...], "slotUnitName": "..."}]}
+      A) {"version": 1, "entries": [{"values": [...], "slotUnitName": "...", "slotUnitTrait": "..."}]}
       B) {"<index>": {"Type": "...", "Pos": "UnitName - 1", ...}, ...}
+    Only schema A carries a trait field; schema B has no equivalent.
     """
-    units: list[str] = []
-    seen: set[str] = set()
+    order: list[str] = []
+    traits: dict[str, Optional[str]] = {}
 
-    def _add(name: Any) -> None:
+    def _add(name: Any, trait: Any = None) -> None:
         if isinstance(name, str) and name.strip():
             clean = name.strip()
-            if clean not in seen:
-                seen.add(clean)
-                units.append(clean)
+            if clean not in traits:
+                order.append(clean)
+                traits[clean] = trait.strip() if isinstance(trait, str) and trait.strip() else None
+
+    def _formatted() -> list[str]:
+        return [f"{name} ({traits[name]})" if traits[name] else name for name in order]
 
     if not isinstance(data, dict) or not data:
         return None
@@ -106,8 +105,8 @@ def _extract_required_units(data: Any) -> Optional[list[str]]:
         for entry in entries:
             if isinstance(entry, dict) and "values" in entry:
                 saw_action_entry = True
-                _add(entry.get("slotUnitName"))
-        return units if saw_action_entry else None
+                _add(entry.get("slotUnitName"), entry.get("slotUnitTrait"))
+        return _formatted() if saw_action_entry else None
 
     # Schema B: every top-level key is a numeric index mapping to an action dict.
     if all(isinstance(k, str) and k.isdigit() for k in data.keys()) and all(
@@ -117,7 +116,7 @@ def _extract_required_units(data: Any) -> Optional[list[str]]:
             pos = action.get("Pos")
             if isinstance(pos, str):
                 _add(_UNIT_SLOT_SUFFIX_RE.sub("", pos))
-        return units
+        return _formatted()
 
     return None
 
@@ -148,70 +147,55 @@ def _build_embed(url: str, units: list[str]) -> discord.Embed:
         "If it expires, you need to get a new Import URL by re-uploading the macro or copying the download link "
         "from the original macro file.\n\n"
         f"{units_line}\n\n"
-        f"```\n{url}\n```\n"
+        f"`{url}`\n"
         f"For mobile users: [Click here]({url}) to access the file."
     )
     return discord.Embed(title="Macro's File Import URL", description=description, color=discord.Color.blurple())
 
 
-class MacroUploadView(discord.ui.View):
-    """Single shared persistent view; the button looks up which file it belongs
-    to via the cache entry keyed by the message it's attached to."""
+def _build_teaser_embed(units: list[str], author_id: int) -> discord.Embed:
+    """Public-facing embed for private-channel replies — no URL, no expiry, just
+    a nudge to click Reveal. Anyone else in the channel sees only this."""
+    units_line = f"Required Unit: {', '.join(units)}." if units else "Required Unit: *(none detected)*"
+    description = (
+        f"🔒 This import link is private — only <@{author_id}> can view it.\n\n"
+        f"{units_line}\n\n"
+        "Click the button below to reveal your Import URL (only you will see it)."
+    )
+    return discord.Embed(title="Macro's File Import URL", description=description, color=discord.Color.blurple())
+
+
+def _not_uploader_message(entry: dict) -> str:
+    author_id = entry.get("author_id")
+    return f"❌ Only <@{author_id}> (who uploaded this macro) can view this link." if author_id else "❌ You can't do that."
+
+
+class MacroPrivateView(discord.ui.View):
+    """Persistent view for private-channel replies. The URL never touches the
+    visible embed — Reveal sends it as an ephemeral message, and only to the
+    original uploader; everyone else gets a refusal instead of the link."""
 
     def __init__(self):
         super().__init__(timeout=None)
 
     @discord.ui.button(
-        label="Upload Macro (Make the Import-URL Permanent)",
-        style=discord.ButtonStyle.secondary,
-        custom_id="macro_import:upload_permanent",
+        label="🔓 Reveal My Import URL",
+        style=discord.ButtonStyle.primary,
+        custom_id="macro_import:reveal_url",
     )
-    async def upload_permanent(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def reveal_url(self, interaction: discord.Interaction, button: discord.ui.Button):
         cache = load_json(MACRO_IMPORT_CACHE_FILE, {})
         entry = cache.get(str(interaction.message.id))
         if not isinstance(entry, dict):
-            await interaction.response.send_message(
-                "❌ This macro file is no longer available for re-upload.", ephemeral=True
-            )
+            await interaction.response.send_message("❌ This macro is no longer available.", ephemeral=True)
             return
 
-        cfg = _guild_cfg(interaction.guild.id)
-        storage_channel_id = cfg.get("storage_channel_id")
-        if not storage_channel_id:
-            await interaction.response.send_message(
-                "❌ No storage channel is configured for this server. An admin needs to run "
-                "`/macroimport setup` first.",
-                ephemeral=True,
-            )
+        if str(interaction.user.id) != str(entry.get("author_id")):
+            await interaction.response.send_message(_not_uploader_message(entry), ephemeral=True)
             return
 
-        storage_channel = interaction.guild.get_channel(int(storage_channel_id))
-        if storage_channel is None or not hasattr(storage_channel, "send"):
-            await interaction.response.send_message(
-                "❌ The configured storage channel could not be found.", ephemeral=True
-            )
-            return
-
-        stored_path = _MACRO_FILES_DIR / entry.get("stored_file", "")
-        if not stored_path.is_file():
-            await interaction.response.send_message(
-                "❌ The original macro file is no longer cached and can't be re-uploaded.", ephemeral=True
-            )
-            return
-
-        await interaction.response.defer(ephemeral=True, thinking=True)
-
-        raw_bytes = stored_path.read_bytes()
-        file_name = entry.get("file_name", "macro.json")
-        new_message = await storage_channel.send(
-            content=f"📎 Macro re-upload (permanent host) — originally posted by <@{entry.get('author_id')}>",
-            file=discord.File(io.BytesIO(raw_bytes), filename=file_name),
-        )
-        new_attachment = new_message.attachments[0]
-
-        new_embed = _build_embed(new_attachment.url, entry.get("required_units", []))
-        await interaction.message.edit(embed=new_embed, view=self)
-        await interaction.followup.send("✅ Re-uploaded — the Import URL has been refreshed.", ephemeral=True)
+        embed = _build_embed(entry.get("current_url", ""), entry.get("required_units", []))
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 # ── Message handling ───────────────────────────────────────────────────────────
@@ -221,43 +205,56 @@ async def _handle_macro_attachment(message: discord.Message) -> None:
         return
 
     cfg = _guild_cfg(message.guild.id)
-    if not cfg.get("enabled", True) or not cfg.get("channel_ids"):
-        return
-    if not _channel_and_parent_ids(message.channel) & set(cfg["channel_ids"]):
+    if not cfg.get("enabled", True):
         return
 
-    json_attachment = next(
-        (a for a in message.attachments if a.filename.lower().endswith(".json")), None
-    )
-    if json_attachment is None or json_attachment.size > MAX_ATTACHMENT_BYTES:
+    public_ids = set(cfg.get("channel_ids", []))
+    private_ids = set(cfg.get("private_channel_ids", []))
+    if not public_ids and not private_ids:
         return
 
-    try:
-        raw_bytes = await json_attachment.read()
-        data = json.loads(raw_bytes.decode("utf-8"))
-    except (discord.HTTPException, UnicodeDecodeError, json.JSONDecodeError):
+    message_ids = _channel_and_parent_ids(message.channel)
+    is_private = bool(message_ids & private_ids)
+    if not is_private and not (message_ids & public_ids):
         return
 
-    units = _extract_required_units(data)
-    if units is None:
-        return  # doesn't match a known macro schema — leave the message alone
+    # Discord renames large pasted text blocks to "message.txt" and users often
+    # rename/export macros with arbitrary extensions, so identify a macro by
+    # parsing its content against the known schemas rather than by filename.
+    json_attachment = None
+    units: Optional[list[str]] = None
+    for attachment in message.attachments:
+        if attachment.size > MAX_ATTACHMENT_BYTES:
+            continue
+        try:
+            candidate_bytes = await attachment.read()
+            data = json.loads(candidate_bytes.decode("utf-8"))
+        except (discord.HTTPException, UnicodeDecodeError, json.JSONDecodeError):
+            continue
+        candidate_units = _extract_required_units(data)
+        if candidate_units is not None:
+            json_attachment = attachment
+            units = candidate_units
+            break
 
-    _MACRO_FILES_DIR.mkdir(parents=True, exist_ok=True)
-    stored_file = f"{uuid.uuid4().hex}_{json_attachment.filename}"
-    (_MACRO_FILES_DIR / stored_file).write_bytes(raw_bytes)
+    if json_attachment is None or units is None:
+        return  # nothing attached matches a known macro schema — leave the message alone
 
-    embed = _build_embed(json_attachment.url, units)
-    reply = await message.reply(embed=embed, view=MacroUploadView())
+    if is_private:
+        embed = _build_teaser_embed(units, message.author.id)
+        reply = await message.reply(embed=embed, view=MacroPrivateView())
 
-    cache = load_json(MACRO_IMPORT_CACHE_FILE, {})
-    cache[str(reply.id)] = {
-        "guild_id": str(message.guild.id),
-        "stored_file": stored_file,
-        "file_name": json_attachment.filename,
-        "required_units": units,
-        "author_id": str(message.author.id),
-    }
-    save_json(MACRO_IMPORT_CACHE_FILE, cache)
+        cache = load_json(MACRO_IMPORT_CACHE_FILE, {})
+        cache[str(reply.id)] = {
+            "guild_id": str(message.guild.id),
+            "required_units": units,
+            "author_id": str(message.author.id),
+            "current_url": json_attachment.url,
+        }
+        save_json(MACRO_IMPORT_CACHE_FILE, cache)
+    else:
+        embed = _build_embed(json_attachment.url, units)
+        await message.reply(embed=embed)
 
 
 # ── Slash commands ────────────────────────────────────────────────────────────
@@ -267,32 +264,30 @@ macroimport_group = app_commands.Group(
 )
 
 
-@macroimport_group.command(name="setup", description="Set the storage channel used to re-host macro files")
-@app_commands.describe(storage_channel="Channel the bot re-uploads macro files to for a fresh, longer-lived link")
-@app_commands.checks.has_permissions(manage_guild=True)
-async def macroimport_setup(interaction: discord.Interaction, storage_channel: discord.TextChannel):
-    cfg = _guild_cfg(interaction.guild.id)
-    cfg["storage_channel_id"] = str(storage_channel.id)
-    _save_guild_cfg(interaction.guild.id, cfg)
-    await interaction.response.send_message(
-        f"✅ Macro re-uploads will be hosted in {storage_channel.mention}.", ephemeral=True
-    )
-
-
 @macroimport_group.command(name="add-channel", description="Watch a channel, forum, or thread for macro files")
-@app_commands.describe(channel="Text channel, forum, or thread to watch")
+@app_commands.describe(
+    channel="Text channel, forum, or thread to watch",
+    private="If true, only the uploader can view the Import URL (Reveal button); others just see a teaser",
+)
 @app_commands.checks.has_permissions(manage_guild=True)
 async def macroimport_add_channel(
     interaction: discord.Interaction,
     channel: Union[discord.TextChannel, discord.ForumChannel, discord.Thread],
+    private: bool = False,
 ):
     cfg = _guild_cfg(interaction.guild.id)
     channel_id = str(channel.id)
-    if channel_id not in cfg["channel_ids"]:
-        cfg["channel_ids"].append(channel_id)
-        _save_guild_cfg(interaction.guild.id, cfg)
+    target_list, other_list = ("private_channel_ids", "channel_ids") if private else ("channel_ids", "private_channel_ids")
+
+    if channel_id in cfg[other_list]:
+        cfg[other_list].remove(channel_id)
+    if channel_id not in cfg[target_list]:
+        cfg[target_list].append(channel_id)
+    _save_guild_cfg(interaction.guild.id, cfg)
+
+    mode = "private (Reveal button, uploader-only)" if private else "public"
     await interaction.response.send_message(
-        f"✅ Now watching {channel.mention} for macro `.json` uploads.", ephemeral=True
+        f"✅ Now watching {channel.mention} for macro `.json` uploads — **{mode}**.", ephemeral=True
     )
 
 
@@ -305,8 +300,12 @@ async def macroimport_remove_channel(
 ):
     cfg = _guild_cfg(interaction.guild.id)
     channel_id = str(channel.id)
-    if channel_id in cfg["channel_ids"]:
-        cfg["channel_ids"].remove(channel_id)
+    removed = False
+    for key in ("channel_ids", "private_channel_ids"):
+        if channel_id in cfg[key]:
+            cfg[key].remove(channel_id)
+            removed = True
+    if removed:
         _save_guild_cfg(interaction.guild.id, cfg)
         msg = f"✅ Stopped watching {channel.mention}."
     else:
@@ -331,11 +330,11 @@ async def macroimport_toggle(interaction: discord.Interaction, enabled: bool):
 async def macroimport_status(interaction: discord.Interaction):
     cfg = _guild_cfg(interaction.guild.id)
     channels = ", ".join(f"<#{c}>" for c in cfg["channel_ids"]) or "*(none)*"
-    storage = f"<#{cfg['storage_channel_id']}>" if cfg["storage_channel_id"] else "*(not set)*"
+    private_channels = ", ".join(f"<#{c}>" for c in cfg["private_channel_ids"]) or "*(none)*"
     embed = discord.Embed(title="Macro Import Configuration", color=discord.Color.blurple())
     embed.add_field(name="Enabled", value=str(cfg["enabled"]), inline=True)
-    embed.add_field(name="Storage Channel", value=storage, inline=True)
-    embed.add_field(name="Watched Channels", value=channels, inline=False)
+    embed.add_field(name="Watched Channels (Public)", value=channels, inline=False)
+    embed.add_field(name="Watched Channels (Private / Reveal-only)", value=private_channels, inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
@@ -343,5 +342,5 @@ async def macroimport_status(interaction: discord.Interaction):
 
 def register(bot: commands.Bot):
     bot.tree.add_command(macroimport_group)
-    bot.add_view(MacroUploadView())
+    bot.add_view(MacroPrivateView())
     bot.add_listener(_handle_macro_attachment, "on_message")
