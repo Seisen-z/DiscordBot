@@ -3607,6 +3607,55 @@ async def update_trap_channels(guild_id: str, request: Request, body: Dict[str, 
     return {"status": "success", "config": coerced}
 
 
+# --- Macro Import (auto "Macro's File Import URL" response on .json uploads) ---
+
+_MACRO_IMPORT_CONFIG_PATH = "macro_import_configs"
+
+_MACRO_IMPORT_DEFAULT: Dict[str, Any] = {
+    "enabled": True,
+    "channel_ids": [],
+    "storage_channel_id": None,
+}
+
+
+def _coerce_macro_import_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
+    out = dict(_MACRO_IMPORT_DEFAULT)
+    out.update({k: v for k, v in raw.items() if k in _MACRO_IMPORT_DEFAULT})
+    out["enabled"] = _coerce_bool(out.get("enabled"), True)
+
+    channel_ids = out.get("channel_ids")
+    out["channel_ids"] = [str(c).strip() for c in channel_ids if str(c or "").strip()] if isinstance(channel_ids, list) else []
+
+    out["storage_channel_id"] = _coerce_optional_str(out.get("storage_channel_id"))
+
+    return stringify_ids(out)
+
+
+@app.get("/api/guilds/{guild_id}/macro_import")
+async def get_macro_import(guild_id: str):
+    all_cfg = load_json(_MACRO_IMPORT_CONFIG_PATH, {})
+    stored = all_cfg.get(guild_id, {})
+    return _coerce_macro_import_payload(stored if isinstance(stored, dict) else {})
+
+
+@app.put("/api/guilds/{guild_id}/macro_import")
+async def update_macro_import(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
+    all_cfg = load_json(_MACRO_IMPORT_CONFIG_PATH, {})
+    before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
+    merged_body = _merge_shallow_dict(before_cfg, body if isinstance(body, dict) else {})
+    coerced = _coerce_macro_import_payload(merged_body)
+    all_cfg[guild_id] = coerced
+    save_json(_MACRO_IMPORT_CONFIG_PATH, all_cfg)
+    await _append_config_audit_entry(
+        request=request,
+        guild_id=guild_id,
+        module="macro_import",
+        before=before_cfg,
+        after=coerced,
+    )
+    return {"status": "success", "config": coerced}
+
+
 # --- Auto Moderation ---
 
 _AUTOMOD_CONFIG_PATH = "automod_configs"

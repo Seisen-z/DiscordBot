@@ -21,6 +21,7 @@ Repository.md
 
 # Runtime asset uploads
 database/assets/
+database/macro_files/
 
 # Website files (separate repository)
 seisen/

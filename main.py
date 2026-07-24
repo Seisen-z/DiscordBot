@@ -190,6 +190,7 @@ import modules.activity_rewards as activity_rewards
 import modules.leveling as leveling
 import modules.channel_access as channel_access
 import modules.trap_channel as trap_channel
+import modules.macro_import as macro_import
 import modules.music as music
 import modules.key_panel as key_panel
 import modules.generate_key as generate_key
@@ -232,6 +233,7 @@ def register_all_modules():
     leveling.register(bot)
     channel_access.register(bot)
     trap_channel.register(bot)
+    macro_import.register(bot)
     music.register(bot)
     key_panel.register(bot)
     generate_key.register(bot)
