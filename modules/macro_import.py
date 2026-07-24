@@ -8,6 +8,7 @@ URL behind a Reveal button visible only to the original uploader.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import re
 from typing import Any, Optional, Union
@@ -155,12 +156,12 @@ def _build_embed(url: str, units: list[str]) -> discord.Embed:
 
 def _build_teaser_embed(units: list[str], author_id: int) -> discord.Embed:
     """Public-facing embed for private-channel replies — no URL, no expiry, just
-    a nudge to click Reveal. Anyone else in the channel sees only this."""
+    a nudge to click the copy button. Anyone else in the channel sees only this."""
     units_line = f"Required Unit: {', '.join(units)}." if units else "Required Unit: *(none detected)*"
     description = (
-        f"🔒 This import link is private — only <@{author_id}> can view it.\n\n"
+        f"🔒 This CDN link is private — only <@{author_id}> can view it.\n\n"
         f"{units_line}\n\n"
-        "Click the button below to reveal your Import URL (only you will see it)."
+        "Click the button below to copy your CDN link (only you will see it)."
     )
     return discord.Embed(title="Macro's File Import URL", description=description, color=discord.Color.blurple())
 
@@ -172,14 +173,14 @@ def _not_uploader_message(entry: dict) -> str:
 
 class MacroPrivateView(discord.ui.View):
     """Persistent view for private-channel replies. The URL never touches the
-    visible embed — Reveal sends it as an ephemeral message, and only to the
+    visible embed — Copy CDN sends it as an ephemeral message, and only to the
     original uploader; everyone else gets a refusal instead of the link."""
 
     def __init__(self):
         super().__init__(timeout=None)
 
     @discord.ui.button(
-        label="🔓 Reveal My Import URL",
+        label="📋 Copy My CDN Link",
         style=discord.ButtonStyle.primary,
         custom_id="macro_import:reveal_url",
     )
@@ -201,7 +202,7 @@ class MacroPrivateView(discord.ui.View):
 # ── Message handling ───────────────────────────────────────────────────────────
 
 async def _handle_macro_attachment(message: discord.Message) -> None:
-    if not message.guild or message.author.bot or not message.attachments:
+    if not message.guild or message.author.bot:
         return
 
     cfg = _guild_cfg(message.guild.id)
@@ -238,7 +239,13 @@ async def _handle_macro_attachment(message: discord.Message) -> None:
             break
 
     if json_attachment is None or units is None:
-        return  # nothing attached matches a known macro schema — leave the message alone
+        # No attachment, or nothing attached is a recognized macro — these
+        # channels are macro-only, so the message doesn't belong here.
+        try:
+            await message.delete()
+        except (discord.Forbidden, discord.NotFound, discord.HTTPException):
+            pass
+        return
 
     if is_private:
         embed = _build_teaser_embed(units, message.author.id)
@@ -252,6 +259,16 @@ async def _handle_macro_attachment(message: discord.Message) -> None:
             "current_url": json_attachment.url,
         }
         save_json(MACRO_IMPORT_CACHE_FILE, cache)
+
+        # The raw attachment is visible/downloadable to anyone in the channel
+        # until the message is gone, which defeats the point of "private" —
+        # delete the original upload shortly after caching its CDN link so
+        # only the teaser + Reveal button (uploader-only) remain.
+        await asyncio.sleep(10)
+        try:
+            await message.delete()
+        except (discord.Forbidden, discord.NotFound, discord.HTTPException):
+            pass
     else:
         embed = _build_embed(json_attachment.url, units)
         await message.reply(embed=embed)
