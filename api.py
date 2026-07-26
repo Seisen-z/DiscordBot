@@ -2180,12 +2180,23 @@ async def delete_auto_post(guild_id: str, post_name: str):
 
 @app.post("/api/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
 @app.post("/api/bot/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
-async def trigger_post_now(guild_id: str, post_name: str):
+async def trigger_post_now(guild_id: str, post_name: str, body: Dict[str, Any] = Body(None)):
     data = load_json("auto_posts", {})
     guild_posts = data.get(guild_id, {})
-    if not isinstance(guild_posts, dict) or post_name not in guild_posts:
+    if not isinstance(guild_posts, dict):
+        guild_posts = {}
+        data[guild_id] = guild_posts
+
+    # If payload body is supplied from client, update config first so unsaved UI changes apply
+    if isinstance(body, dict) and body:
+        existing = guild_posts.get(post_name, {})
+        post_cfg = {**existing, **body}
+        guild_posts[post_name] = post_cfg
+        save_json("auto_posts", data)
+    elif post_name in guild_posts:
+        post_cfg = guild_posts[post_name]
+    else:
         raise HTTPException(status_code=404, detail="Post configuration not found")
-    post_cfg = guild_posts[post_name]
     
     from modules.ipc import process_dashboard_trigger
     result, status_code = await process_dashboard_trigger("auto_post_now", guild_id, post_cfg)
