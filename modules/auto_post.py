@@ -75,6 +75,8 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
             parts.append(msg_content)
         if desc and not msg_content:
             parts.append(desc)
+        if image and image.strip() and not image.startswith("attachment://"):
+            parts.append(image.strip())
     else:
         # Embed mode: build Discord Embed card
         if msg_content:
