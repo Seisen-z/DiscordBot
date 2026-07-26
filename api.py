@@ -2128,6 +2128,23 @@ async def delete_announcement_draft(guild_id: str, draft_name: str):
     
     return {"status": "success", "deleted_draft": draft_name}
 
+def _merge_auto_post_nested_guild(prev: Any, patch: Dict[str, Any]) -> Dict[str, Any]:
+    out: Dict[str, Any] = dict(prev) if isinstance(prev, dict) else {}
+    if not isinstance(patch, dict):
+        return out
+    for k, v in patch.items():
+        if isinstance(v, dict):
+            prev_row = out.get(k) if isinstance(out.get(k), dict) else {}
+            merged_row = {**prev_row, **v}
+            if not v.get("last_message_id") and prev_row.get("last_message_id"):
+                merged_row["last_message_id"] = prev_row["last_message_id"]
+            if not v.get("last_posted_at") and prev_row.get("last_posted_at"):
+                merged_row["last_posted_at"] = prev_row["last_posted_at"]
+            out[k] = merged_row
+        else:
+            out[k] = v
+    return out
+
 # Auto-Post Drafts & Configs
 @app.get("/api/guilds/{guild_id}/auto_posts")
 @app.get("/api/bot/guilds/{guild_id}/auto_posts")
@@ -2141,7 +2158,7 @@ async def get_auto_posts(guild_id: str):
 async def update_auto_posts(guild_id: str, posts: Dict[str, Any]):
     data = load_json("auto_posts", {})
     patch = posts if isinstance(posts, dict) else {}
-    data[guild_id] = _merge_shallow_nested_guild(data.get(guild_id), patch)
+    data[guild_id] = _merge_auto_post_nested_guild(data.get(guild_id), patch)
     save_json("auto_posts", data)
     return {"status": "success"}
 
@@ -2191,6 +2208,10 @@ async def trigger_post_now(guild_id: str, post_name: str, body: Dict[str, Any] =
     if isinstance(body, dict) and body:
         existing = guild_posts.get(post_name, {})
         post_cfg = {**existing, **body}
+        if not body.get("last_message_id") and existing.get("last_message_id"):
+            post_cfg["last_message_id"] = existing["last_message_id"]
+        if not body.get("last_posted_at") and existing.get("last_posted_at"):
+            post_cfg["last_posted_at"] = existing["last_posted_at"]
         guild_posts[post_name] = post_cfg
         save_json("auto_posts", data)
     elif post_name in guild_posts:

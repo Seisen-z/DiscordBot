@@ -44,6 +44,9 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
         try:
             old_msg = await channel.fetch_message(int(old_msg_id))
             await old_msg.delete()
+            print(f"[AutoPost] Successfully deleted previous message {old_msg_id} in #{channel.name}")
+        except discord.NotFound:
+            print(f"[AutoPost] Old message {old_msg_id} was already deleted or not found.")
         except Exception as exc:
             print(f"[AutoPost] Could not delete old message {old_msg_id} in #{channel.name}: {exc}")
 
@@ -144,6 +147,11 @@ async def auto_post_check_loop():
             try:
                 guild_id = int(guild_id_str)
                 guild = _bot.get_guild(guild_id)
+                if not guild:
+                    try:
+                        guild = await _bot.fetch_guild(guild_id)
+                    except Exception:
+                        guild = None
             except ValueError:
                 guild = None
 
