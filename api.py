@@ -2128,23 +2128,6 @@ async def delete_announcement_draft(guild_id: str, draft_name: str):
     
     return {"status": "success", "deleted_draft": draft_name}
 
-# Announcement Execution History
-@app.get("/api/guilds/{guild_id}/announcements/history")
-@app.get("/api/bot/guilds/{guild_id}/announcements/history")
-async def get_announcement_history(guild_id: str):
-    data = load_json("announcement_history", {})
-    history = data.get(guild_id, [])
-    return history if isinstance(history, list) else []
-
-@app.delete("/api/guilds/{guild_id}/announcements/history")
-@app.delete("/api/bot/guilds/{guild_id}/announcements/history")
-async def clear_announcement_history(guild_id: str):
-    data = load_json("announcement_history", {})
-    if guild_id in data:
-        data[guild_id] = []
-        save_json("announcement_history", data)
-    return {"status": "success"}
-
 # System-Wide Audit Logs
 @app.get("/api/guilds/{guild_id}/audit_logs")
 @app.get("/api/bot/guilds/{guild_id}/audit_logs")
