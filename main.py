@@ -332,6 +332,7 @@ async def on_ready():
     from modules.social_monitor import social_update_check
     from modules.roblox_monitor import roblox_update_check_loop
     from modules.activity_rewards import activity_rewards_draw_loop, activity_rewards_claim_check
+    from modules.auto_post import auto_post_check_loop
 
     if not giveaway_end_check.is_running():
         giveaway_end_check.start()
@@ -349,6 +350,8 @@ async def on_ready():
         activity_rewards_draw_loop.start()
     if not activity_rewards_claim_check.is_running():
         activity_rewards_claim_check.start()
+    if not auto_post_check_loop.is_running():
+        auto_post_check_loop.start()
 
 if __name__ == "__main__":
     if not TOKEN:

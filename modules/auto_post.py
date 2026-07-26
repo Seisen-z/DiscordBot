@@ -1,7 +1,7 @@
 """
 modules/auto_post.py
-Auto-Post cog that periodically posts configured messages/embeds to specific channels
-and automatically deletes the previous post.
+Auto-Post background task that periodically posts configured messages/embeds
+to target channels and deletes the previous post.
 """
 
 from __future__ import annotations
@@ -45,7 +45,7 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
             old_msg = await channel.fetch_message(int(old_msg_id))
             await old_msg.delete()
         except Exception as exc:
-            print(f"[AutoPost] Could not delete old message {old_msg_id} in {channel.name}: {exc}")
+            print(f"[AutoPost] Could not delete old message {old_msg_id} in #{channel.name}: {exc}")
 
     # Build content, embeds, attachments, and buttons
     title = data.get("title", "")
@@ -112,104 +112,97 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
         return False, None, None, err_msg
 
 
-class AutoPostCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
-        self.bot = bot
-        self.check_loop.start()
+@tasks.loop(seconds=30)
+async def auto_post_check_loop():
+    """Background task loop checking active auto-posts across all guilds."""
+    if _bot is None or not _bot.is_ready():
+        return
 
-    def cog_unload(self):
-        self.check_loop.cancel()
-
-    @tasks.loop(seconds=30)
-    async def check_loop(self):
-        if not self.bot.is_ready():
+    try:
+        data = load_json(AUTO_POST_DB, {})
+        if not isinstance(data, dict):
             return
 
-        try:
-            data = load_json(AUTO_POST_DB, {})
-            if not isinstance(data, dict):
-                return
+        modified = False
+        now = datetime.now(timezone.utc)
 
-            modified = False
-            now = datetime.now(timezone.utc)
+        for guild_id_str, guild_posts in data.items():
+            if not isinstance(guild_posts, dict):
+                continue
 
-            for guild_id_str, guild_posts in data.items():
-                if not isinstance(guild_posts, dict):
+            try:
+                guild_id = int(guild_id_str)
+                guild = _bot.get_guild(guild_id)
+            except ValueError:
+                guild = None
+
+            if not guild:
+                continue
+
+            for post_key, post_cfg in guild_posts.items():
+                if not isinstance(post_cfg, dict):
                     continue
 
-                try:
-                    guild_id = int(guild_id_str)
-                    guild = self.bot.get_guild(guild_id)
-                except ValueError:
-                    guild = None
-
-                if not guild:
+                if not post_cfg.get("enabled", False):
                     continue
 
-                for post_key, post_cfg in guild_posts.items():
-                    if not isinstance(post_cfg, dict):
-                        continue
+                channel_id = post_cfg.get("channel_id")
+                if not channel_id:
+                    continue
 
-                    if not post_cfg.get("enabled", False):
-                        continue
+                # Calculate interval in seconds
+                interval_minutes = post_cfg.get("interval_minutes")
+                if interval_minutes is None:
+                    interval_hours = post_cfg.get("interval_hours", 1)
+                    interval_minutes = float(interval_hours) * 60.0
+                else:
+                    interval_minutes = float(interval_minutes)
 
-                    channel_id = post_cfg.get("channel_id")
-                    if not channel_id:
-                        continue
+                if interval_minutes <= 0:
+                    interval_minutes = 60.0
 
-                    # Calculate interval in seconds
-                    interval_minutes = post_cfg.get("interval_minutes")
-                    if interval_minutes is None:
-                        interval_hours = post_cfg.get("interval_hours", 1)
-                        interval_minutes = float(interval_hours) * 60.0
-                    else:
-                        interval_minutes = float(interval_minutes)
+                interval_seconds = interval_minutes * 60.0
 
-                    if interval_minutes <= 0:
-                        interval_minutes = 60.0
+                # Check last posted time
+                last_posted_at_raw = post_cfg.get("last_posted_at")
+                should_post = False
 
-                    interval_seconds = interval_minutes * 60.0
-
-                    # Check last posted time
-                    last_posted_at_raw = post_cfg.get("last_posted_at")
-                    should_post = False
-
-                    if not last_posted_at_raw:
-                        should_post = True
-                    else:
-                        try:
-                            last_posted_dt = datetime.fromisoformat(str(last_posted_at_raw).replace("Z", "+00:00"))
-                            if last_posted_dt.tzinfo is None:
-                                last_posted_dt = last_posted_dt.replace(tzinfo=timezone.utc)
-                            elapsed = (now - last_posted_dt).total_seconds()
-                            if elapsed >= interval_seconds:
-                                should_post = True
-                        except Exception:
+                if not last_posted_at_raw:
+                    should_post = True
+                else:
+                    try:
+                        last_posted_dt = datetime.fromisoformat(str(last_posted_at_raw).replace("Z", "+00:00"))
+                        if last_posted_dt.tzinfo is None:
+                            last_posted_dt = last_posted_dt.replace(tzinfo=timezone.utc)
+                        elapsed = (now - last_posted_dt).total_seconds()
+                        if elapsed >= interval_seconds:
                             should_post = True
+                    except Exception:
+                        should_post = True
 
-                    if should_post:
-                        print(f"[AutoPost] Executing scheduled post '{post_key}' in guild '{guild.name}' ({guild.id})")
-                        success, new_msg_id, now_iso, err = await execute_auto_post_send(guild, post_cfg)
-                        if success:
-                            post_cfg["last_message_id"] = new_msg_id
-                            post_cfg["last_posted_at"] = now_iso
-                            modified = True
-                        else:
-                            print(f"[AutoPost] Failed scheduled post '{post_key}': {err}")
+                if should_post:
+                    print(f"[AutoPost] Executing scheduled post '{post_key}' in guild '{guild.name}' ({guild.id})")
+                    success, new_msg_id, now_iso, err = await execute_auto_post_send(guild, post_cfg)
+                    if success:
+                        post_cfg["last_message_id"] = new_msg_id
+                        post_cfg["last_posted_at"] = now_iso
+                        modified = True
+                    else:
+                        print(f"[AutoPost] Failed scheduled post '{post_key}': {err}")
 
-            if modified:
-                save_json(AUTO_POST_DB, data)
+        if modified:
+            save_json(AUTO_POST_DB, data)
 
-        except Exception as exc:
-            print(f"[AutoPost] Error in background task loop: {exc}")
+    except Exception as exc:
+        print(f"[AutoPost] Error in background task loop: {exc}")
 
-    @check_loop.before_loop
-    async def before_check_loop(self):
-        await self.bot.wait_until_ready()
+
+@auto_post_check_loop.before_loop
+async def before_auto_post_check_loop():
+    if _bot:
+        await _bot.wait_until_ready()
 
 
 def register(bot: commands.Bot):
     global _bot
     _bot = bot
-    cog = AutoPostCog(bot)
-    asyncio.create_task(bot.add_cog(cog))
