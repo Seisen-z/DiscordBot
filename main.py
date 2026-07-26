@@ -195,7 +195,13 @@ import modules.music as music
 import modules.key_panel as key_panel
 import modules.generate_key as generate_key
 import modules.applications as applications
-import modules.auto_post as auto_post
+
+auto_post = None
+try:
+    import modules.auto_post as auto_post
+    print("[System] Auto-post module loaded successfully")
+except Exception as _ap_err:
+    print(f"[System] Auto-post module load failed: {_ap_err}")
 
 # Try to import fun module - if it fails, continue without it
 fun = None
@@ -239,7 +245,8 @@ def register_all_modules():
     key_panel.register(bot)
     generate_key.register(bot)
     applications.register(bot)
-    auto_post.register(bot)
+    if auto_post is not None and hasattr(auto_post, 'register'):
+        auto_post.register(bot)
     # Register fun module only if it was successfully imported
     if fun is not None and hasattr(fun, 'setup'):
         fun.setup(bot)
@@ -350,8 +357,10 @@ async def on_ready():
         activity_rewards_draw_loop.start()
     if not activity_rewards_claim_check.is_running():
         activity_rewards_claim_check.start()
-    if not auto_post_check_loop.is_running():
-        auto_post_check_loop.start()
+    if auto_post is not None:
+        from modules.auto_post import auto_post_check_loop
+        if not auto_post_check_loop.is_running():
+            auto_post_check_loop.start()
 
 if __name__ == "__main__":
     if not TOKEN:

@@ -12,8 +12,32 @@ import discord
 from discord.ext import commands, tasks
 from typing import Optional, Dict, Any
 
+from pathlib import Path
+import urllib.parse
+from uuid import uuid4
+
 from modules.utils import load_json, save_json, _as_int
-from modules.dashboard_handlers import resolve_local_asset, resolve_trigger_channel
+
+def resolve_local_asset(url: str, files_list: list) -> str:
+    if not url:
+        return url
+    url = str(url).strip()
+    try:
+        parsed = urllib.parse.urlparse(url)
+        path = parsed.path
+        if path.startswith("/api/bot/assets/") or path.startswith("/api/assets/"):
+            parts = [p for p in path.split("/") if p]
+            if len(parts) >= 3:
+                filename = parts[-1]
+                g_id = parts[-2]
+                local_path = Path(__file__).resolve().parent.parent / "database" / "assets" / g_id / filename
+                if local_path.is_file():
+                    safe_name = f"att_{uuid4().hex[:6]}_{filename}"
+                    files_list.append(discord.File(str(local_path), filename=safe_name))
+                    return f"attachment://{safe_name}"
+    except Exception:
+        pass
+    return url
 
 _bot: commands.Bot | None = None
 AUTO_POST_DB = "auto_posts"
