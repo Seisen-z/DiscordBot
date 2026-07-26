@@ -2145,6 +2145,41 @@ async def clear_announcement_history(guild_id: str):
         save_json("announcement_history", data)
     return {"status": "success"}
 
+# System-Wide Audit Logs
+@app.get("/api/guilds/{guild_id}/audit_logs")
+@app.get("/api/bot/guilds/{guild_id}/audit_logs")
+async def get_audit_logs(guild_id: str, category: Optional[str] = None, q: Optional[str] = None):
+    data = load_json("audit_logs", {})
+    logs = data.get(guild_id, [])
+    if not isinstance(logs, list):
+        logs = []
+
+    if category and category.lower() != "all":
+        cat_lower = category.lower()
+        logs = [entry for entry in logs if isinstance(entry, dict) and entry.get("category", "").lower() == cat_lower]
+
+    if q and q.strip():
+        query = q.strip().lower()
+        filtered = []
+        for entry in logs:
+            if not isinstance(entry, dict):
+                continue
+            searchable = f"{entry.get('category','')} {entry.get('action','')} {entry.get('actor','')} {entry.get('details','')} {json.dumps(entry.get('metadata',{}))}".lower()
+            if query in searchable:
+                filtered.append(entry)
+        logs = filtered
+
+    return logs
+
+@app.delete("/api/guilds/{guild_id}/audit_logs")
+@app.delete("/api/bot/guilds/{guild_id}/audit_logs")
+async def clear_audit_logs(guild_id: str):
+    data = load_json("audit_logs", {})
+    if guild_id in data:
+        data[guild_id] = []
+        save_json("audit_logs", data)
+    return {"status": "success"}
+
 def _merge_auto_post_nested_guild(prev: Any, patch: Dict[str, Any]) -> Dict[str, Any]:
     out: Dict[str, Any] = dict(prev) if isinstance(prev, dict) else {}
     if not isinstance(patch, dict):

@@ -200,6 +200,23 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             history_data[str(guild.id)] = guild_history[:100]
             save_json("announcement_history", history_data)
 
+            # Record system-wide audit log
+            from modules.utils import record_audit_log
+            record_audit_log(
+                guild_id=guild.id,
+                category="Announcements",
+                action="Published Announcement",
+                actor="Dashboard User",
+                details=f"Published '{data.get('name') or title or 'Announcement'}' to #{getattr(channel, 'name', channel_id)}",
+                metadata={
+                    "channel_id": str(channel_id),
+                    "channel_name": getattr(channel, "name", "channel"),
+                    "message_id": str(sent_msg.id),
+                    "ping_role_id": str(role_id) if role_id else None,
+                    "auto_reactions": reactions_list,
+                },
+            )
+
             return {"status": "success", "action": action, "channel_id": str(channel_id), "message_id": str(sent_msg.id)}
 
         elif action in {"auto_post_send", "auto_post_now"}:
@@ -207,6 +224,20 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             success, msg_id, now_iso, err = await execute_auto_post_send(guild, payload)
             if not success:
                 return {"status": "error", "action": action, "http_status": 400, "message": err or "Failed to post message"}
+
+            from modules.utils import record_audit_log
+            record_audit_log(
+                guild_id=guild.id,
+                category="Auto-Post",
+                action="Executed Auto-Post",
+                actor="Dashboard User" if action == "auto_post_now" else "System Scheduler",
+                details=f"Posted '{payload.get('name') or payload.get('title') or 'Auto-Post'}' to channel",
+                metadata={
+                    "post_name": payload.get("name") or payload.get("title"),
+                    "message_id": msg_id,
+                    "channel_id": str(payload.get("channel_id")),
+                },
+            )
             return {"status": "success", "action": action, "message_id": msg_id, "last_posted_at": now_iso}
                 
         elif action == "sticky":

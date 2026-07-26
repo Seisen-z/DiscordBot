@@ -521,3 +521,41 @@ def parse_id_set_from_env(var_name: str) -> set[int]:
             values.add(int(part))
     return values
 
+
+def record_audit_log(
+    guild_id: str | int,
+    category: str,
+    action: str,
+    actor: str = "System",
+    details: str = "",
+    metadata: dict | None = None,
+) -> dict:
+    """
+    Record a system-wide audit log entry in database/audit_logs.json.
+    Categories: 'Announcements', 'Auto-Post', 'Moderation', 'Settings', 'Bot System'
+    """
+    import uuid
+    gid_str = str(guild_id)
+    if not gid_str:
+        return {}
+
+    data = load_json("audit_logs", {})
+    guild_logs = data.get(gid_str, [])
+    if not isinstance(guild_logs, list):
+        guild_logs = []
+
+    log_entry = {
+        "id": uuid.uuid4().hex[:12],
+        "category": category,
+        "action": action,
+        "actor": actor,
+        "details": details,
+        "metadata": metadata or {},
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+    guild_logs.insert(0, log_entry)
+    data[gid_str] = guild_logs[:300]
+    save_json("audit_logs", data)
+    return log_entry
+

@@ -204,6 +204,20 @@ async def auto_post_check_loop():
                         post_cfg["last_message_id"] = new_msg_id
                         post_cfg["last_posted_at"] = now_iso
                         modified = True
+
+                        from modules.utils import record_audit_log
+                        record_audit_log(
+                            guild_id=guild.id,
+                            category="Auto-Post",
+                            action="Scheduled Auto-Post Reposted",
+                            actor="Bot Task Loop",
+                            details=f"Auto-reposted '{post_key}' to channel",
+                            metadata={
+                                "post_key": post_key,
+                                "message_id": new_msg_id,
+                                "channel_id": str(post_cfg.get("channel_id")),
+                            },
+                        )
                     else:
                         print(f"[AutoPost] Failed scheduled post '{post_key}': {err}")
 
