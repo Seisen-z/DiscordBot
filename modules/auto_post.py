@@ -12,32 +12,8 @@ import discord
 from discord.ext import commands, tasks
 from typing import Optional, Dict, Any
 
-from pathlib import Path
-import urllib.parse
-from uuid import uuid4
-
 from modules.utils import load_json, save_json, _as_int
-
-def resolve_local_asset(url: str, files_list: list) -> str:
-    if not url:
-        return url
-    url = str(url).strip()
-    try:
-        parsed = urllib.parse.urlparse(url)
-        path = parsed.path
-        if path.startswith("/api/bot/assets/") or path.startswith("/api/assets/"):
-            parts = [p for p in path.split("/") if p]
-            if len(parts) >= 3:
-                filename = parts[-1]
-                g_id = parts[-2]
-                local_path = Path(__file__).resolve().parent.parent / "database" / "assets" / g_id / filename
-                if local_path.is_file():
-                    safe_name = f"att_{uuid4().hex[:6]}_{filename}"
-                    files_list.append(discord.File(str(local_path), filename=safe_name))
-                    return f"attachment://{safe_name}"
-    except Exception:
-        pass
-    return url
+from modules.dashboard_handlers import resolve_local_asset, resolve_trigger_channel
 
 _bot: commands.Bot | None = None
 AUTO_POST_DB = "auto_posts"
@@ -72,6 +48,7 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
             print(f"[AutoPost] Could not delete old message {old_msg_id} in #{channel.name}: {exc}")
 
     # Build content, embeds, attachments, and buttons
+    post_type = str(data.get("post_type") or "embed").strip().lower()
     title = data.get("title", "")
     desc = data.get("description", "")
     msg_content = data.get("content", "")
@@ -84,22 +61,32 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
     role_id = data.get("ping_role_id")
 
     embeds = []
-    main_embed = discord.Embed(title=title, description=desc, color=discord.Color.from_str("#3b82f6"))
-    if thumb:
-        main_embed.set_thumbnail(url=thumb)
-    if image:
-        main_embed.set_image(url=image)
-    if footer:
-        main_embed.set_footer(text=footer)
-
-    if title or desc or thumb or image or footer:
-        embeds.append(main_embed)
-
     parts = []
+
     if role_id:
         parts.append(f"<@&{role_id}>")
-    if msg_content:
-        parts.append(msg_content)
+
+    if post_type == "plain":
+        # Plain text mode: send plain message without Discord Embed box
+        if msg_content:
+            parts.append(msg_content)
+        if desc and not msg_content:
+            parts.append(desc)
+    else:
+        # Embed mode: build Discord Embed card
+        if msg_content:
+            parts.append(msg_content)
+
+        main_embed = discord.Embed(title=title, description=desc, color=discord.Color.from_str("#3b82f6"))
+        if thumb:
+            main_embed.set_thumbnail(url=thumb)
+        if image:
+            main_embed.set_image(url=image)
+        if footer:
+            main_embed.set_footer(text=footer)
+
+        if title or desc or thumb or image or footer:
+            embeds.append(main_embed)
 
     for img in images:
         if img and img.strip() and not img.startswith("attachment://"):
