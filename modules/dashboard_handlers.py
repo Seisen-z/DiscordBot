@@ -269,6 +269,16 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 stickies[gid][cid]["last_message_id"] = new_msg.id
                 save_sticky(stickies)
 
+            from modules.utils import record_audit_log
+            record_audit_log(
+                guild_id=guild.id,
+                category="Settings",
+                action="Posted Sticky Message",
+                actor="Dashboard User",
+                details=f"Posted sticky message in #{getattr(channel, 'name', channel_id)}",
+                metadata={"channel_id": str(channel_id), "message_id": str(new_msg.id)},
+            )
+
             return {"status": "success", "action": action, "channel_id": str(channel_id)}
                 
         elif action == "ticket":
@@ -317,6 +327,16 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             gcfg["panel_message_id"] = panel_msg.id
             cfg[str(guild.id)] = gcfg
             save_ticket_config(cfg)
+
+            from modules.utils import record_audit_log
+            record_audit_log(
+                guild_id=guild.id,
+                category="Settings",
+                action="Posted Ticket Panel",
+                actor="Dashboard User",
+                details=f"Posted Ticket Panel in #{getattr(channel, 'name', channel_id)}",
+                metadata={"channel_id": str(channel.id), "panel_message_id": str(panel_msg.id)},
+            )
             return {
                 "status": "success",
                 "action": action,
