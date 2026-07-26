@@ -2197,7 +2197,7 @@ async def delete_auto_post(guild_id: str, post_name: str):
 
 @app.post("/api/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
 @app.post("/api/bot/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
-async def trigger_post_now(guild_id: str, post_name: str, body: Dict[str, Any] = Body(None)):
+async def trigger_post_now(guild_id: str, post_name: str, body: Optional[Dict[str, Any]] = Body(default=None)):
     data = load_json("auto_posts", {})
     guild_posts = data.get(guild_id, {})
     if not isinstance(guild_posts, dict):
