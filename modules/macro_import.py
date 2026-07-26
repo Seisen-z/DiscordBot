@@ -1,14 +1,16 @@
 """
 modules/macro_import.py
-Detects macro ".json" attachments posted in configured channels/forum posts and
-replies with a "Macro's File Import URL" embed (mirrors the Plusmate bot's
-response). Channels can be marked "private", in which case the reply hides the
-URL behind a Reveal button visible only to the original uploader.
+Detects macro ".json" attachments posted in configured "public" channels/forum
+posts and replies with a "Macro's File Import URL" embed (mirrors the Plusmate
+bot's response). Channels marked "private" instead require the /import slash
+command — its response is a real Discord ephemeral message (like /purge's
+"Only you can see this"), which is the only way a bot reply can actually be
+invisible to everyone but the user who triggered it; a plain message reply can
+never be ephemeral, only an interaction (slash command/button/etc.) can.
 """
 
 from __future__ import annotations
 
-import asyncio
 import json
 import re
 from typing import Any, Optional, Union
@@ -21,14 +23,13 @@ from discord.ext import commands
 from modules.utils import load_json, save_json
 
 MACRO_IMPORT_CONFIG_FILE = "macro_import_configs"
-MACRO_IMPORT_CACHE_FILE = "macro_import_cache"
 
 MAX_ATTACHMENT_BYTES = 2 * 1024 * 1024  # 2 MB — macros are small JSON, this is generous
 
 DEFAULT_CONFIG = {
     "enabled": True,
     "channel_ids": [],       # text channels, forum channels, and/or individual threads to watch (public replies)
-    "private_channel_ids": [],  # same, but the reply hides the URL behind a Reveal button (uploader-only)
+    "private_channel_ids": [],  # channels where /import must be used instead — direct posts get deleted
 }
 
 _UNIT_SLOT_SUFFIX_RE = re.compile(r"\s*-\s*\d+\s*$")
@@ -79,10 +80,10 @@ def _extract_required_units(data: Any) -> Optional[list[str]]:
     strings if `data` matches a known macro schema, or None if it doesn't look
     like a macro file at all.
 
-    Two schemas are supported (both produced by the Seisen macro recorder):
+    Schemas supported (produced by the Seisen macro recorder):
       A) {"version": 1, "entries": [{"values": [...], "slotUnitName": "...", "slotUnitTrait": "..."}]}
-      B) {"<index>": {"Type": "...", "Pos": "UnitName - 1", ...}, ...}
-    Only schema A carries a trait field; schema B has no equivalent.
+      B) [{"values": [...], "slotUnitName": "...", "slotUnitTrait": "..."}, ...] (raw entries array)
+      C) {"<index>": {"Type": "...", "Pos": "UnitName - 1", ...}, ...}
     """
     order: list[str] = []
     traits: dict[str, Optional[str]] = {}
@@ -97,10 +98,16 @@ def _extract_required_units(data: Any) -> Optional[list[str]]:
     def _formatted() -> list[str]:
         return [f"{name} ({traits[name]})" if traits[name] else name for name in order]
 
-    if not isinstance(data, dict) or not data:
+    if not data:
         return None
 
-    entries = data.get("entries")
+    if isinstance(data, list):
+        entries = data
+    elif isinstance(data, dict):
+        entries = data.get("entries")
+    else:
+        return None
+
     if isinstance(entries, list):
         saw_action_entry = False
         for entry in entries:
@@ -109,8 +116,8 @@ def _extract_required_units(data: Any) -> Optional[list[str]]:
                 _add(entry.get("slotUnitName"), entry.get("slotUnitTrait"))
         return _formatted() if saw_action_entry else None
 
-    # Schema B: every top-level key is a numeric index mapping to an action dict.
-    if all(isinstance(k, str) and k.isdigit() for k in data.keys()) and all(
+    # Schema C: every top-level key is a numeric index mapping to an action dict.
+    if isinstance(data, dict) and all(isinstance(k, str) and k.isdigit() for k in data.keys()) and all(
         isinstance(v, dict) and "Type" in v for v in data.values()
     ):
         for action in data.values():
@@ -132,7 +139,16 @@ def _parse_attachment_expiry(url: str) -> Optional[int]:
         return None
 
 
-# ── Embed / view construction ─────────────────────────────────────────────────
+async def _read_macro_units(read_bytes) -> Optional[list[str]]:
+    """Decode+validate raw attachment bytes; None means "not a recognized macro"."""
+    try:
+        data = json.loads(read_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    return _extract_required_units(data)
+
+
+# ── Embed construction ────────────────────────────────────────────────────────
 
 def _build_embed(url: str, units: list[str]) -> discord.Embed:
     expiry_ts = _parse_attachment_expiry(url)
@@ -148,58 +164,37 @@ def _build_embed(url: str, units: list[str]) -> discord.Embed:
         "If it expires, you need to get a new Import URL by re-uploading the macro or copying the download link "
         "from the original macro file.\n\n"
         f"{units_line}\n\n"
-        f"`{url}`\n"
+        f"```\n{url}\n```\n"
         f"For mobile users: [Click here]({url}) to access the file."
     )
     return discord.Embed(title="Macro's File Import URL", description=description, color=discord.Color.blurple())
 
 
-def _build_teaser_embed(units: list[str], author_id: int) -> discord.Embed:
-    """Public-facing embed for private-channel replies — no URL, no expiry, just
-    a nudge to click the copy button. Anyone else in the channel sees only this."""
+def _build_import_embed(url: str, units: list[str]) -> discord.Embed:
+    """Leaner embed for /import's ephemeral reply — a fenced code block instead
+    of inline code, since only fenced blocks get Discord's built-in hover
+    "copy" icon on the code itself."""
     units_line = f"Required Unit: {', '.join(units)}." if units else "Required Unit: *(none detected)*"
-    description = (
-        f"🔒 This CDN link is private — only <@{author_id}> can view it.\n\n"
-        f"{units_line}\n\n"
-        "Click the button below to copy your CDN link (only you will see it)."
-    )
+    description = f"{units_line}\n```\n{url}\n```"
     return discord.Embed(title="Macro's File Import URL", description=description, color=discord.Color.blurple())
 
 
-def _not_uploader_message(entry: dict) -> str:
-    author_id = entry.get("author_id")
-    return f"❌ Only <@{author_id}> (who uploaded this macro) can view this link." if author_id else "❌ You can't do that."
+class CopyCdnLinkView(discord.ui.View):
+    """One-off view attached to /import's ephemeral reply. The code block's
+    hover-to-copy icon is desktop-only and easy to miss, so this gives an
+    actual button — on any platform — that hands back the bare URL as plain
+    text (easiest possible long-press/select-all copy target)."""
+
+    def __init__(self, url: str):
+        super().__init__(timeout=600)
+        self._url = url
+
+    @discord.ui.button(label="📋 Copy CDN Link", style=discord.ButtonStyle.primary)
+    async def copy_cdn_link(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_message(self._url, ephemeral=True)
 
 
-class MacroPrivateView(discord.ui.View):
-    """Persistent view for private-channel replies. The URL never touches the
-    visible embed — Copy CDN sends it as an ephemeral message, and only to the
-    original uploader; everyone else gets a refusal instead of the link."""
-
-    def __init__(self):
-        super().__init__(timeout=None)
-
-    @discord.ui.button(
-        label="📋 Copy My CDN Link",
-        style=discord.ButtonStyle.primary,
-        custom_id="macro_import:reveal_url",
-    )
-    async def reveal_url(self, interaction: discord.Interaction, button: discord.ui.Button):
-        cache = load_json(MACRO_IMPORT_CACHE_FILE, {})
-        entry = cache.get(str(interaction.message.id))
-        if not isinstance(entry, dict):
-            await interaction.response.send_message("❌ This macro is no longer available.", ephemeral=True)
-            return
-
-        if str(interaction.user.id) != str(entry.get("author_id")):
-            await interaction.response.send_message(_not_uploader_message(entry), ephemeral=True)
-            return
-
-        embed = _build_embed(entry.get("current_url", ""), entry.get("required_units", []))
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-
-
-# ── Message handling ───────────────────────────────────────────────────────────
+# ── Message handling (public channels only) ───────────────────────────────────
 
 async def _handle_macro_attachment(message: discord.Message) -> None:
     if not message.guild or message.author.bot:
@@ -215,76 +210,76 @@ async def _handle_macro_attachment(message: discord.Message) -> None:
         return
 
     message_ids = _channel_and_parent_ids(message.channel)
-    is_private = bool(message_ids & private_ids)
-    if not is_private and not (message_ids & public_ids):
+
+    if message_ids & private_ids:
+        # Private channels are /import-only — anything posted directly here
+        # (macro or not) gets removed instead of processed.
+        try:
+            await message.delete()
+        except (discord.Forbidden, discord.NotFound, discord.HTTPException):
+            pass
         return
 
-    # Discord renames large pasted text blocks to "message.txt" and users often
-    # rename/export macros with arbitrary extensions, so identify a macro by
-    # parsing its content against the known schemas rather than by filename.
+    if not (message_ids & public_ids) or not message.attachments:
+        return
+
     json_attachment = None
     units: Optional[list[str]] = None
+    unsupported_filename: Optional[str] = None
+
     for attachment in message.attachments:
         if attachment.size > MAX_ATTACHMENT_BYTES:
             continue
         try:
             candidate_bytes = await attachment.read()
-            data = json.loads(candidate_bytes.decode("utf-8"))
-        except (discord.HTTPException, UnicodeDecodeError, json.JSONDecodeError):
+        except discord.HTTPException:
             continue
-        candidate_units = _extract_required_units(data)
+        candidate_units = await _read_macro_units(candidate_bytes)
         if candidate_units is not None:
             json_attachment = attachment
             units = candidate_units
             break
+        elif attachment.filename.lower().endswith(".json"):
+            unsupported_filename = attachment.filename
 
     if json_attachment is None or units is None:
-        # No attachment, or nothing attached is a recognized macro — these
-        # channels are macro-only, so the message doesn't belong here.
-        try:
-            await message.delete()
-        except (discord.Forbidden, discord.NotFound, discord.HTTPException):
-            pass
+        if unsupported_filename:
+            embed = discord.Embed(
+                title="⚠️ Unsupported Macro Format",
+                description=(
+                    f"The file `{unsupported_filename}` was recognized as JSON, but it does not match "
+                    "any supported Seisen macro format.\n\n"
+                    "**Supported Formats:**\n"
+                    "• Version 1 JSON (`{\"version\": 1, \"entries\": [...]}`)\n"
+                    "• Raw Entry Array (`[{\"values\": [...], ...}]`)\n"
+                    "• Key-Indexed Actions (`{\"0\": {\"Type\": \"...\"}}`)\n\n"
+                    "Please re-export your macro file using the official recorder."
+                ),
+                color=discord.Color.gold(),
+            )
+            await message.reply(embed=embed)
         return
 
-    if is_private:
-        embed = _build_teaser_embed(units, message.author.id)
-        reply = await message.reply(embed=embed, view=MacroPrivateView())
-
-        cache = load_json(MACRO_IMPORT_CACHE_FILE, {})
-        cache[str(reply.id)] = {
-            "guild_id": str(message.guild.id),
-            "required_units": units,
-            "author_id": str(message.author.id),
-            "current_url": json_attachment.url,
-        }
-        save_json(MACRO_IMPORT_CACHE_FILE, cache)
-
-        # The raw attachment is visible/downloadable to anyone in the channel
-        # until the message is gone, which defeats the point of "private" —
-        # delete the original upload shortly after caching its CDN link so
-        # only the teaser + Reveal button (uploader-only) remain.
-        await asyncio.sleep(10)
-        try:
-            await message.delete()
-        except (discord.Forbidden, discord.NotFound, discord.HTTPException):
-            pass
-    else:
-        embed = _build_embed(json_attachment.url, units)
-        await message.reply(embed=embed)
+    embed = _build_embed(json_attachment.url, units)
+    await message.reply(embed=embed)
 
 
 # ── Slash commands ────────────────────────────────────────────────────────────
 
 macroimport_group = app_commands.Group(
-    name="macroimport", description="Configure automatic macro-file import responses"
+    name="macroimport",
+    description="Configure automatic macro-file import responses",
+    # Hides /macroimport from the command list for anyone without Manage
+    # Server by default — regular members only ever see /import. (Server
+    # admins can still widen this per-role in Integrations settings.)
+    default_permissions=discord.Permissions(manage_guild=True),
 )
 
 
 @macroimport_group.command(name="add-channel", description="Watch a channel, forum, or thread for macro files")
 @app_commands.describe(
     channel="Text channel, forum, or thread to watch",
-    private="If true, only the uploader can view the Import URL (Reveal button); others just see a teaser",
+    private="If true, this channel is /import-only — direct posts get deleted, replies are ephemeral",
 )
 @app_commands.checks.has_permissions(manage_guild=True)
 async def macroimport_add_channel(
@@ -302,7 +297,7 @@ async def macroimport_add_channel(
         cfg[target_list].append(channel_id)
     _save_guild_cfg(interaction.guild.id, cfg)
 
-    mode = "private (Reveal button, uploader-only)" if private else "public"
+    mode = "private (/import only)" if private else "public"
     await interaction.response.send_message(
         f"✅ Now watching {channel.mention} for macro `.json` uploads — **{mode}**.", ephemeral=True
     )
@@ -351,13 +346,59 @@ async def macroimport_status(interaction: discord.Interaction):
     embed = discord.Embed(title="Macro Import Configuration", color=discord.Color.blurple())
     embed.add_field(name="Enabled", value=str(cfg["enabled"]), inline=True)
     embed.add_field(name="Watched Channels (Public)", value=channels, inline=False)
-    embed.add_field(name="Watched Channels (Private / Reveal-only)", value=private_channels, inline=False)
+    embed.add_field(name="Watched Channels (Private / /import-only)", value=private_channels, inline=False)
     await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+@app_commands.command(name="import", description="Privately import a macro file — only you can see the reply")
+@app_commands.describe(file="Your macro .json (or exported .txt) file")
+async def import_macro(interaction: discord.Interaction, file: discord.Attachment):
+    if not interaction.guild:
+        await interaction.response.send_message("❌ This command only works in a server.", ephemeral=True)
+        return
+
+    cfg = _guild_cfg(interaction.guild.id)
+    if not cfg.get("enabled", True):
+        await interaction.response.send_message("❌ Macro import is disabled in this server.", ephemeral=True)
+        return
+
+    private_ids = set(cfg.get("private_channel_ids", []))
+    if not private_ids:
+        await interaction.response.send_message(
+            "❌ No private macro-import channel is configured. Ask an admin to run "
+            "`/macroimport add-channel private:true`.",
+            ephemeral=True,
+        )
+        return
+
+    if not (_channel_and_parent_ids(interaction.channel) & private_ids):
+        await interaction.response.send_message(
+            "❌ This command can only be used in a designated private macro-import channel.", ephemeral=True
+        )
+        return
+
+    if file.size > MAX_ATTACHMENT_BYTES:
+        await interaction.response.send_message("❌ That file is too large to be a macro.", ephemeral=True)
+        return
+
+    try:
+        raw_bytes = await file.read()
+    except discord.HTTPException:
+        await interaction.response.send_message("❌ Couldn't read that file — try again.", ephemeral=True)
+        return
+
+    units = await _read_macro_units(raw_bytes)
+    if units is None:
+        await interaction.response.send_message("❌ That doesn't look like a valid macro file.", ephemeral=True)
+        return
+
+    embed = _build_import_embed(file.url, units)
+    await interaction.response.send_message(embed=embed, view=CopyCdnLinkView(file.url), ephemeral=True)
 
 
 # ── Registration ──────────────────────────────────────────────────────────────
 
 def register(bot: commands.Bot):
     bot.tree.add_command(macroimport_group)
-    bot.add_view(MacroPrivateView())
+    bot.tree.add_command(import_macro)
     bot.add_listener(_handle_macro_attachment, "on_message")

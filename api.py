@@ -2128,6 +2128,80 @@ async def delete_announcement_draft(guild_id: str, draft_name: str):
     
     return {"status": "success", "deleted_draft": draft_name}
 
+# Auto-Post Drafts & Configs
+@app.get("/api/guilds/{guild_id}/auto_posts")
+@app.get("/api/bot/guilds/{guild_id}/auto_posts")
+async def get_auto_posts(guild_id: str):
+    data = load_json("auto_posts", {})
+    guild_data = data.get(guild_id, {})
+    return guild_data if isinstance(guild_data, dict) else {}
+
+@app.put("/api/guilds/{guild_id}/auto_posts")
+@app.put("/api/bot/guilds/{guild_id}/auto_posts")
+async def update_auto_posts(guild_id: str, posts: Dict[str, Any]):
+    data = load_json("auto_posts", {})
+    patch = posts if isinstance(posts, dict) else {}
+    data[guild_id] = _merge_shallow_nested_guild(data.get(guild_id), patch)
+    save_json("auto_posts", data)
+    return {"status": "success"}
+
+@app.post("/api/guilds/{guild_id}/auto_posts/{old_name:path}/rename")
+@app.post("/api/bot/guilds/{guild_id}/auto_posts/{old_name:path}/rename")
+async def rename_auto_post(guild_id: str, old_name: str, body: Dict[str, str] = Body(...)):
+    new_name = body.get("new_name", "").strip()
+    if not new_name:
+        raise HTTPException(status_code=400, detail="new_name is required")
+    data = load_json("auto_posts", {})
+    if guild_id not in data:
+        raise HTTPException(status_code=404, detail="Guild not found")
+    guild_posts = data[guild_id]
+    if old_name not in guild_posts:
+        raise HTTPException(status_code=404, detail="Post not found")
+    if new_name in guild_posts and new_name != old_name:
+        raise HTTPException(status_code=409, detail="A post with this name already exists")
+    if new_name != old_name:
+        row = guild_posts[old_name]
+        if isinstance(row, dict):
+            row["name"] = new_name
+        guild_posts[new_name] = row
+        del guild_posts[old_name]
+    save_json("auto_posts", data)
+    return {"status": "success", "old_name": old_name, "new_name": new_name}
+
+@app.delete("/api/guilds/{guild_id}/auto_posts/{post_name:path}")
+@app.delete("/api/bot/guilds/{guild_id}/auto_posts/{post_name:path}")
+async def delete_auto_post(guild_id: str, post_name: str):
+    data = load_json("auto_posts", {})
+    if guild_id not in data or post_name not in data[guild_id]:
+        raise HTTPException(status_code=404, detail="Post not found")
+    del data[guild_id][post_name]
+    save_json("auto_posts", data)
+    return {"status": "success", "deleted_post": post_name}
+
+@app.post("/api/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
+@app.post("/api/bot/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
+async def trigger_post_now(guild_id: str, post_name: str):
+    data = load_json("auto_posts", {})
+    guild_posts = data.get(guild_id, {})
+    if not isinstance(guild_posts, dict) or post_name not in guild_posts:
+        raise HTTPException(status_code=404, detail="Post configuration not found")
+    post_cfg = guild_posts[post_name]
+    
+    from modules.ipc import process_dashboard_trigger
+    result, status_code = await process_dashboard_trigger("auto_post_now", guild_id, post_cfg)
+    
+    if status_code == 200 and result.get("status") == "success":
+        new_msg_id = result.get("message_id")
+        last_posted = result.get("last_posted_at")
+        if new_msg_id:
+            post_cfg["last_message_id"] = new_msg_id
+        if last_posted:
+            post_cfg["last_posted_at"] = last_posted
+        save_json("auto_posts", data)
+        return {"status": "success", "message_id": new_msg_id, "last_posted_at": last_posted}
+    else:
+        raise HTTPException(status_code=status_code, detail=result.get("message", "Failed to post message"))
+
 # Poll Drafts
 @app.get("/api/guilds/{guild_id}/polls")
 @app.get("/api/bot/guilds/{guild_id}/polls")

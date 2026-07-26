@@ -63,6 +63,16 @@ def save_guild_config(guild_id: int, cfg: dict) -> None:
 
 # ── Detection helpers ─────────────────────────────────────────────────────────
 
+def _is_explicit_mention(message: discord.Message, target: discord.Member) -> bool:
+    """True only if `target` is @mentioned in the message text itself — not
+    just notified because the message is a reply to one of their messages.
+    discord.py's `message.mentions` reflects Discord's own `mentions` field,
+    which can include the replied-to author purely from the reply-ping
+    (allowed_mentions.replied_user), with no literal @mention in content."""
+    content = message.content or ""
+    return f"<@{target.id}>" in content or f"<@!{target.id}>" in content
+
+
 def _is_protected_member(target: discord.Member, cfg: dict) -> bool:
     if str(target.id) in {str(v) for v in cfg.get("protected_user_ids", [])}:
         return True
@@ -158,6 +168,8 @@ def _register_listener(bot: commands.Bot) -> None:
             if not isinstance(target, discord.Member):
                 continue
             if target.bot or target.id == member.id:
+                continue
+            if not _is_explicit_mention(message, target):
                 continue
             if _is_protected_member(target, cfg):
                 await _execute_warning(message, cfg, target)

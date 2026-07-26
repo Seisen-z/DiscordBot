@@ -163,6 +163,13 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
 
             await channel.send(content=final_content, embeds=embeds, files=files, view=view)
             return {"status": "success", "action": action, "channel_id": str(channel_id)}
+
+        elif action in {"auto_post_send", "auto_post_now"}:
+            from modules.auto_post import execute_auto_post_send
+            success, msg_id, now_iso, err = await execute_auto_post_send(guild, payload)
+            if not success:
+                return {"status": "error", "action": action, "http_status": 400, "message": err or "Failed to post message"}
+            return {"status": "success", "action": action, "message_id": msg_id, "last_posted_at": now_iso}
                 
         elif action == "sticky":
             channel_id, channel = await resolve_trigger_channel(guild, payload)
@@ -612,6 +619,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             embed.add_field(name="Tier", value=tier_display, inline=True)
             embed.add_field(name="Reason", value="Random Activity Draw", inline=True)
             embed.set_footer(text="Testing Activity Rewards Logging")
+
             try:
                 await log_channel.send(embed=embed)
                 return {"status": "success", "action": action, "message": f"Test message sent to #{log_channel.name}.{simulated_ticket_msg}"}

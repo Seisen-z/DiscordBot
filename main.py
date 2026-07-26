@@ -195,6 +195,7 @@ import modules.music as music
 import modules.key_panel as key_panel
 import modules.generate_key as generate_key
 import modules.applications as applications
+import modules.auto_post as auto_post
 
 # Try to import fun module - if it fails, continue without it
 fun = None
@@ -238,6 +239,7 @@ def register_all_modules():
     key_panel.register(bot)
     generate_key.register(bot)
     applications.register(bot)
+    auto_post.register(bot)
     # Register fun module only if it was successfully imported
     if fun is not None and hasattr(fun, 'setup'):
         fun.setup(bot)
