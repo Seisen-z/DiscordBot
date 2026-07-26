@@ -8,6 +8,7 @@ from __future__ import annotations
 import base64
 from datetime import datetime, timezone
 
+import asyncio
 import aiohttp
 import discord
 from discord.ext import commands
