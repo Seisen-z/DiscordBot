@@ -161,8 +161,46 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 if not view.children:
                     view = None
 
-            await channel.send(content=final_content, embeds=embeds, files=files, view=view)
-            return {"status": "success", "action": action, "channel_id": str(channel_id)}
+            sent_msg = await channel.send(content=final_content, embeds=embeds, files=files, view=view)
+
+            # Auto-Reactions for Announcement
+            raw_reactions = data.get("auto_reactions") or []
+            if isinstance(raw_reactions, str):
+                reactions_list = [r.strip() for r in raw_reactions.split(",") if r.strip()]
+            elif isinstance(raw_reactions, list):
+                reactions_list = [str(r).strip() for r in raw_reactions if r]
+            else:
+                reactions_list = []
+
+            for react in reactions_list[:10]:
+                try:
+                    await sent_msg.add_reaction(react)
+                except Exception as exc:
+                    print(f"[Announcement] Failed to add reaction '{react}': {exc}")
+
+            # Save execution history entry
+            history_data = load_json("announcement_history", {})
+            guild_history = history_data.get(str(guild.id), [])
+            if not isinstance(guild_history, list):
+                guild_history = []
+
+            log_entry = {
+                "id": uuid4().hex[:12],
+                "draft_name": str(data.get("name") or data.get("title") or "Announcement"),
+                "title": title,
+                "channel_id": str(channel_id),
+                "channel_name": getattr(channel, "name", "channel"),
+                "message_id": str(sent_msg.id),
+                "ping_role_id": str(role_id) if role_id else None,
+                "posted_at": datetime.now(timezone.utc).isoformat(),
+                "auto_reactions": reactions_list,
+                "status": "success",
+            }
+            guild_history.insert(0, log_entry)
+            history_data[str(guild.id)] = guild_history[:100]
+            save_json("announcement_history", history_data)
+
+            return {"status": "success", "action": action, "channel_id": str(channel_id), "message_id": str(sent_msg.id)}
 
         elif action in {"auto_post_send", "auto_post_now"}:
             from modules.auto_post import execute_auto_post_send
