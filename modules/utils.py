@@ -136,19 +136,32 @@ def _write_json_document(file_path: Path, data) -> float:
             prefix=f".{file_path.stem}.",
             suffix=".tmp",
         ) as handle:
+            temp_name = handle.name  # capture immediately so cleanup works even if write fails
             json.dump(data, handle, indent=2, ensure_ascii=False)
             handle.write("\n")
             handle.flush()
             os.fsync(handle.fileno())
-            temp_name = handle.name
         os.replace(temp_name, file_path)
         return file_path.stat().st_mtime
     except Exception:
+        # Always clean up our own temp file
         if temp_name:
             try:
                 os.unlink(temp_name)
             except OSError:
                 pass
+        # Also sweep any stale .tmp files older than 5 min left by prior crashes
+        try:
+            import time as _time
+            cutoff = _time.time() - 300
+            for stale in file_path.parent.glob("*.tmp"):
+                try:
+                    if stale.stat().st_mtime < cutoff:
+                        stale.unlink(missing_ok=True)
+                except OSError:
+                    pass
+        except Exception:
+            pass
         raise
 
 # Helpers shared by the local JSON persistence layer.
