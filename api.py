@@ -2171,9 +2171,11 @@ def _merge_auto_post_nested_guild(prev: Any, patch: Dict[str, Any]) -> Dict[str,
         if isinstance(v, dict):
             prev_row = out.get(k) if isinstance(out.get(k), dict) else {}
             merged_row = {**prev_row, **v}
-            if not v.get("last_message_id") and prev_row.get("last_message_id"):
+            # Always preserve server-side runtime state — the bot task loop owns
+            # these fields and a dashboard save must never reset them.
+            if prev_row.get("last_message_id"):
                 merged_row["last_message_id"] = prev_row["last_message_id"]
-            if not v.get("last_posted_at") and prev_row.get("last_posted_at"):
+            if prev_row.get("last_posted_at"):
                 merged_row["last_posted_at"] = prev_row["last_posted_at"]
             out[k] = merged_row
         else:

@@ -47,7 +47,6 @@ from email.utils import parsedate_to_datetime
 from collections import deque
 from urllib.parse import quote, urlparse
 from dotenv import load_dotenv
-from openai import OpenAI
 def _load_pillow_modules():
     try:
         from PIL import Image as PILImage, ImageDraw as PILImageDraw, ImageFont as PILImageFont, ImageOps as PILImageOps
@@ -116,17 +115,6 @@ def _looks_like_bot_token(token: str | None) -> bool:
 from modules.utils import normalize_discord_token
 
 TOKEN = normalize_discord_token(os.getenv("DISCORD_TOKEN"))
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-
-# Initialize OpenRouter Client
-client = None
-if OPENROUTER_API_KEY:
-    client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=OPENROUTER_API_KEY,
-    )
-else:
-    print("⚠️ OPENROUTER_API_KEY not found in .env. AI Help will be disabled.")
 
 intents = discord.Intents.default()
 intents.message_content = True

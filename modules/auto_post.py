@@ -168,7 +168,7 @@ async def auto_post_check_loop():
                 if not channel_id:
                     continue
 
-                # Calculate interval in seconds
+                # Calculate interval in seconds (minimum 5 minutes to prevent spam)
                 interval_minutes = post_cfg.get("interval_minutes")
                 if interval_minutes is None:
                     interval_hours = post_cfg.get("interval_hours", 1)
@@ -176,8 +176,8 @@ async def auto_post_check_loop():
                 else:
                     interval_minutes = float(interval_minutes)
 
-                if interval_minutes <= 0:
-                    interval_minutes = 60.0
+                if interval_minutes < 5:
+                    interval_minutes = 5.0
 
                 interval_seconds = interval_minutes * 60.0
 
@@ -219,6 +219,10 @@ async def auto_post_check_loop():
                             },
                         )
                     else:
+                        # Save the attempt time even on failure so we don't
+                        # retry every 30 seconds and spam the channel.
+                        post_cfg["last_posted_at"] = now.isoformat()
+                        modified = True
                         print(f"[AutoPost] Failed scheduled post '{post_key}': {err}")
 
         if modified:
