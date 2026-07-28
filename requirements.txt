@@ -8,3 +8,5 @@ uvicorn
 pydantic
 python-multipart
 requests
+yt-dlp
+discord.py[voice]
