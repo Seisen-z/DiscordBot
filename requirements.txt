@@ -1,7 +1,6 @@
 discord.py
 aiohttp
 python-dotenv
-openai
 certifi
 Pillow
 fastapi
