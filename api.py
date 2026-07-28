@@ -2064,6 +2064,30 @@ async def upload_assets(request: Request, guild_id: str, file: UploadFile = File
     return {"status": "success", "url": public_url, "filename": safe_name, "content_type": content_type}
 
 
+@app.get("/api/guilds/{guild_id}/assets")
+@app.get("/api/bot/guilds/{guild_id}/assets")
+async def list_guild_assets(guild_id: str, request: Request):
+    """List all uploaded assets for a guild."""
+    user_token = _bearer_token(request)
+    manageable = await _discord_user_manageable_guild_ids(user_token)
+    if guild_id not in manageable:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    asset_dir = _LOCAL_ASSET_ROOT / guild_id
+    if not asset_dir.is_dir():
+        return {"assets": []}
+
+    assets = []
+    for f in sorted(asset_dir.iterdir(), key=lambda x: x.stat().st_mtime, reverse=True):
+        if f.is_file():
+            assets.append({
+                "filename": f.name,
+                "url": f"/api/bot/assets/{guild_id}/{f.name}",
+                "size": f.stat().st_size,
+            })
+    return {"assets": assets}
+
+
 @app.get("/api/assets/{guild_id}/{filename}")
 @app.get("/api/bot/assets/{guild_id}/{filename}")
 async def get_uploaded_asset(guild_id: str, filename: str):
