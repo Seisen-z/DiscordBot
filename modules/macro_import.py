@@ -257,11 +257,11 @@ async def _handle_macro_attachment(message: discord.Message) -> None:
                 ),
                 color=discord.Color.gold(),
             )
-            await message.reply(embed=embed)
+            await message.reply(embed=embed, delete_after=60)
         return
 
     embed = _build_embed(json_attachment.url, units)
-    await message.reply(embed=embed)
+    await message.reply(embed=embed, delete_after=60)
 
 
 # ── Slash commands ────────────────────────────────────────────────────────────
