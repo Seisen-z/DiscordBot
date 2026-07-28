@@ -1,7 +1,8 @@
 """
 standalone_verification_bot.py
-A super-lightweight, standalone Discord Verification Bot with ZERO heavy dependencies.
-Requires ONLY discord.py and python-dotenv.
+A super-lightweight, standalone Discord Verification Bot connected to your dashboard configs.
+Reads server settings from database/onboarding_configs.json (configured on your website dashboard)
+as well as local verification_bot_config.json.
 
 Commands:
 - /setup-verify : Post a persistent verification button embed in a channel.
@@ -10,7 +11,6 @@ Commands:
 
 import os
 import json
-import asyncio
 from pathlib import Path
 from typing import Optional
 
@@ -22,22 +22,65 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.getenv("DISCORD_BOT_TOKEN") or os.getenv("TOKEN") or ""
-CONFIG_FILE = Path(__file__).parent / "verification_bot_config.json"
+BASE_DIR = Path(__file__).parent
+ONBOARDING_FILE = BASE_DIR / "database" / "onboarding_configs.json"
+LOCAL_CONFIG_FILE = BASE_DIR / "verification_bot_config.json"
 
 
-def load_config() -> dict:
-    if CONFIG_FILE.exists():
+def get_guild_verification_config(guild_id: str | int) -> dict:
+    gid = str(guild_id)
+    verified_role_id = None
+    channel_id = None
+
+    # 1. Try reading from website dashboard database (database/onboarding_configs.json)
+    if ONBOARDING_FILE.exists():
         try:
-            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+            with open(ONBOARDING_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                guild_cfg = data.get(gid, {})
+                if isinstance(guild_cfg, dict):
+                    verified_role_id = guild_cfg.get("verified_role_id")
+                    channel_id = guild_cfg.get("welcome_channel_id")
         except Exception:
             pass
-    return {}
+
+    # 2. Fall back to / Overwrite with local verification_bot_config.json
+    if LOCAL_CONFIG_FILE.exists():
+        try:
+            with open(LOCAL_CONFIG_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                local_cfg = data.get(gid, {})
+                if isinstance(local_cfg, dict):
+                    if local_cfg.get("verified_role_id"):
+                        verified_role_id = local_cfg["verified_role_id"]
+                    if local_cfg.get("channel_id"):
+                        channel_id = local_cfg["channel_id"]
+        except Exception:
+            pass
+
+    return {
+        "verified_role_id": str(verified_role_id) if verified_role_id else None,
+        "channel_id": str(channel_id) if channel_id else None,
+    }
 
 
-def save_config(data: dict):
+def save_local_config(guild_id: str | int, verified_role_id: str | int, channel_id: str | int):
+    gid = str(guild_id)
+    data = {}
+    if LOCAL_CONFIG_FILE.exists():
+        try:
+            with open(LOCAL_CONFIG_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception:
+            data = {}
+
+    data[gid] = {
+        "verified_role_id": str(verified_role_id),
+        "channel_id": str(channel_id),
+    }
+
     try:
-        with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+        with open(LOCAL_CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
     except Exception as e:
         print(f"[VerificationBot] Error saving config: {e}")
@@ -59,16 +102,16 @@ class VerifyButtonView(discord.ui.View):
             await interaction.response.send_message("❌ This button can only be used in a server.", ephemeral=True)
             return
 
-        cfg = load_config().get(str(interaction.guild.id), {})
+        cfg = get_guild_verification_config(interaction.guild.id)
         role_id = cfg.get("verified_role_id")
 
         if not role_id:
-            await interaction.response.send_message("❌ No verified role has been configured for this server yet.", ephemeral=True)
+            await interaction.response.send_message("❌ No verified role has been configured on the dashboard or via `/setup-verify` yet.", ephemeral=True)
             return
 
         role = interaction.guild.get_role(int(role_id))
         if not role:
-            await interaction.response.send_message("❌ The configured verified role no longer exists.", ephemeral=True)
+            await interaction.response.send_message(f"❌ Could not find verified role (ID: `{role_id}`). Please check server role settings.", ephemeral=True)
             return
 
         if role in interaction.user.roles:
@@ -79,7 +122,7 @@ class VerifyButtonView(discord.ui.View):
             await interaction.user.add_roles(role, reason="Verification button clicked")
             await interaction.response.send_message(f"✅ Success! You have been verified and given the **{role.name}** role.", ephemeral=True)
         except discord.Forbidden:
-            await interaction.response.send_message("❌ Bot lacks permission to assign the verified role. Please check role hierarchy.", ephemeral=True)
+            await interaction.response.send_message("❌ Bot lacks permission to assign the verified role. Ensure the bot's role is placed HIGHER than the Verified Role.", ephemeral=True)
         except Exception as e:
             await interaction.response.send_message(f"❌ Error assigning role: {e}", ephemeral=True)
 
@@ -92,7 +135,6 @@ class VerificationBot(commands.Bot):
         super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self):
-        # Register persistent view so button works across bot restarts
         self.add_view(VerifyButtonView())
         print("[VerificationBot] Persistent verification view registered.")
 
@@ -127,15 +169,8 @@ async def setup_verify(
 ):
     await interaction.response.defer(ephemeral=True)
 
-    guild_id = str(interaction.guild.id)
-    cfg = load_config()
-    cfg[guild_id] = {
-        "verified_role_id": role.id,
-        "channel_id": channel.id,
-    }
-    save_config(cfg)
+    save_local_config(interaction.guild.id, role.id, channel.id)
 
-    # Parse color
     color = discord.Color.green()
     if color_hex:
         try:
@@ -148,11 +183,17 @@ async def setup_verify(
         description=description or "Click the button below to verify yourself and gain full access to the server!",
         color=color
     )
-    embed.set_footer(text=f"{interaction.guild.name} Verification", icon_url=interaction.guild.icon.url if interaction.guild.icon else None)
+    embed.set_footer(
+        text=f"{interaction.guild.name} Verification",
+        icon_url=interaction.guild.icon.url if interaction.guild.icon else None
+    )
 
     try:
         await channel.send(embed=embed, view=VerifyButtonView())
-        await interaction.followup.send(f"✅ Verification panel sent to {channel.mention}! Users clicking the button will receive **{role.name}**.", ephemeral=True)
+        await interaction.followup.send(
+            f"✅ Verification panel sent to {channel.mention}! Users clicking the button will receive **{role.name}**.",
+            ephemeral=True
+        )
     except Exception as e:
         await interaction.followup.send(f"❌ Failed to send panel to channel: {e}", ephemeral=True)
 
@@ -161,17 +202,16 @@ async def setup_verify(
 @app_commands.describe(member="Member to verify")
 @app_commands.checks.has_permissions(manage_roles=True)
 async def verify_member(interaction: discord.Interaction, member: discord.Member):
-    guild_id = str(interaction.guild.id)
-    cfg = load_config()
-    role_id = cfg.get(guild_id, {}).get("verified_role_id")
+    cfg = get_guild_verification_config(interaction.guild.id)
+    role_id = cfg.get("verified_role_id")
 
     if not role_id:
-        await interaction.response.send_message("❌ No verified role configured. Run `/setup-verify` first.", ephemeral=True)
+        await interaction.response.send_message("❌ No verified role configured. Configure it on your website dashboard or run `/setup-verify`.", ephemeral=True)
         return
 
     role = interaction.guild.get_role(int(role_id))
     if not role:
-        await interaction.response.send_message("❌ Verified role not found.", ephemeral=True)
+        await interaction.response.send_message(f"❌ Verified role (ID: `{role_id}`) not found.", ephemeral=True)
         return
 
     try:
