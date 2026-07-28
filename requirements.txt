@@ -4,11 +4,7 @@ python-dotenv
 certifi
 Pillow
 fastapi
-uvicorn[standard]
+uvicorn
 pydantic
 python-multipart
 requests
-yt-dlp
-davey
-imageio-ffmpeg
-discord.py[voice]
