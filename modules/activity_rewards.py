@@ -207,7 +207,7 @@ def _append_reward_audit(guild_id: int, event: dict) -> None:
                     embed.add_field(name="Reason", value=str(reason), inline=True)
                 
                 try:
-                    await channel.send(embed=embed)
+                    await channel.send(embed=embed, delete_after=60)
                 except discord.HTTPException:
                     pass
             

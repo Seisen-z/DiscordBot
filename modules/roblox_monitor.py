@@ -307,7 +307,7 @@ def get_roblox_update_loop(bot_instance: discord.ext.commands.Bot):
                         embed.set_footer(text="Roblox Game Monitor")
 
                         try:
-                            await channel.send(content=role.mention if role else None, embed=embed)
+                            await channel.send(content=role.mention if role else None, embed=embed, delete_after=60)
                             notifications_sent += 1
                         except Exception as e:
                             print(f"[Roblox Monitor] Send update failed for universe {universe_id}: {e}")
