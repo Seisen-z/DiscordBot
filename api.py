@@ -2220,7 +2220,10 @@ async def update_auto_posts(guild_id: str, posts: Dict[str, Any]):
     data = load_json("auto_posts", {})
     patch = posts if isinstance(posts, dict) else {}
     data[guild_id] = _merge_auto_post_nested_guild(data.get(guild_id), patch)
-    save_json("auto_posts", data)
+    try:
+        save_json("auto_posts", data)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to save auto_posts: {exc}") from exc
     return {"status": "success"}
 
 @app.post("/api/guilds/{guild_id}/auto_posts/{old_name:path}/rename")

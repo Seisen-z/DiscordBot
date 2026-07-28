@@ -399,7 +399,7 @@ def save_json(path: str, data, *, warn_on_persist_failure: bool = True):
         if warn_on_persist_failure:
             print(f"[Persistence] Failed to save {path} to {target_path.name}: {exc}")
         invalidate_json_cache(path)
-        return
+        raise
 
     with _CACHE_LOCK:
         _STATE_CACHE[cache_key] = snapshot
