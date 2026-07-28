@@ -148,8 +148,10 @@ class VerifyButtonView(discord.ui.View):
 class VerificationBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
-        intents.guilds = True
-        intents.members = True
+        try:
+            intents.members = True
+        except Exception:
+            pass
         super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self):
