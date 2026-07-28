@@ -2188,18 +2188,18 @@ async def clear_audit_logs(guild_id: str):
     return {"status": "success"}
 
 def _merge_auto_post_nested_guild(prev: Any, patch: Dict[str, Any]) -> Dict[str, Any]:
-    out: Dict[str, Any] = dict(prev) if isinstance(prev, dict) else {}
+    out: Dict[str, Any] = {}
     if not isinstance(patch, dict):
         return out
+    prev_dict = prev if isinstance(prev, dict) else {}
     for k, v in patch.items():
         if isinstance(v, dict):
-            prev_row = out.get(k) if isinstance(out.get(k), dict) else {}
-            merged_row = {**prev_row, **v}
-            # Always preserve server-side runtime state — the bot task loop owns
-            # these fields and a dashboard save must never reset them.
-            if prev_row.get("last_message_id"):
+            prev_row = prev_dict.get(k) if isinstance(prev_dict.get(k), dict) else {}
+            merged_row = {**v}
+            # Preserve server-side runtime state if present on server and missing/null in client payload
+            if prev_row.get("last_message_id") and not v.get("last_message_id"):
                 merged_row["last_message_id"] = prev_row["last_message_id"]
-            if prev_row.get("last_posted_at"):
+            if prev_row.get("last_posted_at") and not v.get("last_posted_at"):
                 merged_row["last_posted_at"] = prev_row["last_posted_at"]
             out[k] = merged_row
         else:
