@@ -820,14 +820,15 @@ class AutoReplyButton(BaseModel):
 class AutoReplyRule(BaseModel):
     id: Optional[int] = None
     name: Optional[str] = None
-    keywords: List[str]
-    targets: List[str]
+    category: Optional[str] = "General"
+    keywords: List[str] = Field(default_factory=list)
+    targets: List[str] = Field(default_factory=list)
     reply_message: Optional[str] = None
     embed_title: Optional[str] = None
     embed_description: Optional[str] = None
     embed_thumbnail: Optional[str] = None
     embed_footer: Optional[str] = None
-    embed_color: Optional[int] = None
+    embed_color: Optional[Union[int, str]] = None
     buttons: List[AutoReplyButton] = Field(default_factory=list)
     delete_after: Optional[int] = None
 
@@ -859,6 +860,7 @@ class AnnouncementDraft(BaseModel):
     title: str
     description: str
     content: Optional[str] = None
+    post_type: Optional[str] = "embed"
     thumbnail_url: Optional[str] = None
     image_url: Optional[str] = None
     images: List[str] = Field(default_factory=list)
@@ -866,6 +868,7 @@ class AnnouncementDraft(BaseModel):
     channel_id: Optional[str] = None
     ping_role_id: Optional[str] = None
     buttons: List[Dict[str, str]] = Field(default_factory=list)
+    auto_reactions: List[str] = Field(default_factory=list)
 
     @field_validator("channel_id", "ping_role_id", mode="before")
     @classmethod
@@ -1609,6 +1612,7 @@ async def get_config_audit(guild_id: str, limit: int = 50):
 
 # Guild Channels (fetched live from Discord)
 @app.get("/api/guilds/{guild_id}/channels")
+@app.get("/api/bot/guilds/{guild_id}/channels")
 async def get_guild_channels(guild_id: str):
     """Fetch all channels for a guild using the bot token (cached; single-flight per guild)."""
     return await _ensure_discord_guild_channels(guild_id)
@@ -1616,6 +1620,7 @@ async def get_guild_channels(guild_id: str):
 
 # Guild Roles (fetched live from Discord)
 @app.get("/api/guilds/{guild_id}/roles")
+@app.get("/api/bot/guilds/{guild_id}/roles")
 async def get_guild_roles(guild_id: str):
     """Fetch all roles for a guild using the bot token (cached; single-flight per guild)."""
     return await _ensure_discord_guild_roles(guild_id)
@@ -1775,6 +1780,7 @@ async def debug_db():
 
 
 @app.get("/api/guilds/{guild_id}/autoreply")
+@app.get("/api/bot/guilds/{guild_id}/autoreply")
 async def get_autoreply(guild_id: str):
     channel_ids = await _guild_channel_ids_for_autoreply(guild_id)
     data = load_json("autoreplies", [])
@@ -1785,6 +1791,7 @@ async def get_autoreply(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/autoreply")
+@app.put("/api/bot/guilds/{guild_id}/autoreply")
 async def update_autoreply(guild_id: str, rules: List[AutoReplyRule], request: Request):
     channel_ids = await _guild_channel_ids_for_autoreply(guild_id)
     full = load_json("autoreplies", [])
@@ -2416,11 +2423,13 @@ async def get_giveaways(guild_id: str):
 
 # Tickets
 @app.get("/api/guilds/{guild_id}/tickets")
+@app.get("/api/bot/guilds/{guild_id}/tickets")
 async def get_tickets(guild_id: str):
     data = load_json("open_tickets", {})
     return stringify_ids(data.get(guild_id, TicketsConfigGuild().model_dump()))
 
 @app.put("/api/guilds/{guild_id}/tickets")
+@app.put("/api/bot/guilds/{guild_id}/tickets")
 async def update_tickets(guild_id: str, config: TicketsConfigGuild):
     data = load_json("open_tickets", {})
     prev = data.get(guild_id, {}) if isinstance(data.get(guild_id, {}), dict) else {}
@@ -2432,12 +2441,14 @@ async def update_tickets(guild_id: str, config: TicketsConfigGuild):
 
 # Key Panels
 @app.get("/api/guilds/{guild_id}/keypanels")
+@app.get("/api/bot/guilds/{guild_id}/keypanels")
 async def get_key_panels(guild_id: str):
     data = load_json("key_panels", {})
     guild_panels = data.get(guild_id, {})
     return stringify_ids(guild_panels)
 
 @app.put("/api/guilds/{guild_id}/keypanels")
+@app.put("/api/bot/guilds/{guild_id}/keypanels")
 async def update_key_panels(guild_id: str, config: Dict[str, KeyPanelConfig]):
     data = load_json("key_panels", {})
     data[guild_id] = {k: v.model_dump() for k, v in config.items()}
@@ -2445,6 +2456,7 @@ async def update_key_panels(guild_id: str, config: Dict[str, KeyPanelConfig]):
     return {"status": "success"}
 
 @app.delete("/api/guilds/{guild_id}/keypanels/{message_id}")
+@app.delete("/api/bot/guilds/{guild_id}/keypanels/{message_id}")
 async def delete_key_panel(guild_id: str, message_id: str):
     data = load_json("key_panels", {})
     guild_panels = data.get(guild_id, {})
@@ -2464,6 +2476,7 @@ async def delete_key_panel(guild_id: str, message_id: str):
 
 # Roblox Monitors
 @app.get("/api/guilds/{guild_id}/roblox")
+@app.get("/api/bot/guilds/{guild_id}/roblox")
 async def get_roblox(guild_id: str):
     data = load_json("roblox_monitors", {})
     # Stored data may use an int guild_id; match by string comparison.
@@ -2485,6 +2498,7 @@ async def get_roblox(guild_id: str):
     return normalized
 
 @app.put("/api/guilds/{guild_id}/roblox")
+@app.put("/api/bot/guilds/{guild_id}/roblox")
 async def update_roblox(guild_id: str, monitors: List[RobloxMonitor]):
     data = load_json("roblox_monitors", {})
     data[guild_id] = [m.model_dump() for m in monitors]
@@ -2689,12 +2703,14 @@ async def get_social_health(guild_id: str):
 
 # Fun Commands (per-guild overlay in fun_config.json → guilds[guildId])
 @app.get("/api/guilds/{guild_id}/fun-commands")
+@app.get("/api/bot/guilds/{guild_id}/fun-commands")
 async def get_fun_commands(guild_id: str):
     """Get fun command responses configuration for this guild."""
     return _fun_get_guild_payload(guild_id)
 
 
 @app.put("/api/guilds/{guild_id}/fun-commands")
+@app.put("/api/bot/guilds/{guild_id}/fun-commands")
 async def update_fun_commands(guild_id: str, payload: Dict[str, Any] = Body(default_factory=dict)):
     """Update fun command responses for this guild only."""
     _fun_put_guild_payload(guild_id, payload)
@@ -2765,6 +2781,7 @@ async def get_roblox_info(request: Request, universe_id: str):
 
 # Sticky
 @app.get("/api/guilds/{guild_id}/sticky")
+@app.get("/api/bot/guilds/{guild_id}/sticky")
 async def get_sticky(guild_id: str):
     data = load_json("stickies", {})
     raw = data.get(guild_id, {})
@@ -2786,6 +2803,7 @@ async def get_sticky(guild_id: str):
     return stringify_ids(raw)
 
 @app.put("/api/guilds/{guild_id}/sticky")
+@app.put("/api/bot/guilds/{guild_id}/sticky")
 async def update_sticky(guild_id: str, config: Dict[str, StickyConfig]):
     data = load_json("stickies", {})
     existing = data.get(guild_id, {})
@@ -2803,6 +2821,7 @@ async def update_sticky(guild_id: str, config: Dict[str, StickyConfig]):
 
 # Boost
 @app.get("/api/guilds/{guild_id}/boost")
+@app.get("/api/bot/guilds/{guild_id}/boost")
 async def get_boost(guild_id: str):
     data = load_json("boost_configs", {})
     raw = data.get(guild_id, {})
@@ -2816,6 +2835,7 @@ async def get_boost(guild_id: str):
     })
 
 @app.put("/api/guilds/{guild_id}/boost")
+@app.put("/api/bot/guilds/{guild_id}/boost")
 async def update_boost(guild_id: str, config: BoostConfigGuild):
     data = load_json("boost_configs", {})
     prev = data.get(guild_id, {}) if isinstance(data.get(guild_id, {}), dict) else {}
@@ -2969,6 +2989,7 @@ async def sync_role_counter_panel(guild_id: str, panel_id: str, request: Request
 
 # Vouch
 @app.get("/api/guilds/{guild_id}/vouch")
+@app.get("/api/bot/guilds/{guild_id}/vouch")
 async def get_vouch(guild_id: str):
     data = load_json("vouch_configs", {})
     raw = data.get(guild_id)
@@ -2979,6 +3000,7 @@ async def get_vouch(guild_id: str):
     return {"channel_id": str(raw) if raw and isinstance(raw, int) else (raw or None)}
 
 @app.put("/api/guilds/{guild_id}/vouch")
+@app.put("/api/bot/guilds/{guild_id}/vouch")
 async def update_vouch(guild_id: str, config: Dict[str, Any]):
     data = load_json("vouch_configs", {})
     data[guild_id] = config.get("channel_id")
@@ -2996,6 +3018,7 @@ async def get_available_commands():
     return {"commands": sorted(OWNER_LOCKED_COMMANDS)}
 
 @app.get("/api/guilds/{guild_id}/commands")
+@app.get("/api/bot/guilds/{guild_id}/commands")
 async def get_commands(guild_id: str):
     data = load_json("command_access", {})
     stored = data.get(guild_id, [])
@@ -3022,6 +3045,7 @@ async def get_commands(guild_id: str):
     return stringify_ids({"commands": commands_map})
 
 @app.put("/api/guilds/{guild_id}/commands")
+@app.put("/api/bot/guilds/{guild_id}/commands")
 async def update_commands(guild_id: str, config: CommandAccessConfig):
     data = load_json("command_access", {})
     prev = data.get(guild_id)
@@ -3040,12 +3064,14 @@ async def update_commands(guild_id: str, config: CommandAccessConfig):
 
 # Application Panel Config
 @app.get("/api/guilds/{guild_id}/apppanel")
+@app.get("/api/bot/guilds/{guild_id}/apppanel")
 async def get_apppanel(guild_id: str):
     data = load_json("app_panels", {})
     cfg = data.get(guild_id, {})
     return stringify_ids(cfg)
 
 @app.put("/api/guilds/{guild_id}/apppanel")
+@app.put("/api/bot/guilds/{guild_id}/apppanel")
 async def save_apppanel(guild_id: str, body: Dict[str, Any] = Body(...)):
     data = load_json("app_panels", {})
     existing = data.get(guild_id, {})
@@ -3055,6 +3081,7 @@ async def save_apppanel(guild_id: str, body: Dict[str, Any] = Body(...)):
 
 # Applications
 @app.get("/api/guilds/{guild_id}/applications")
+@app.get("/api/bot/guilds/{guild_id}/applications")
 async def get_applications(guild_id: str, status: Optional[str] = None, position: Optional[str] = None):
     data = load_json("applications", {})
     apps = data.get(guild_id, [])
@@ -3074,6 +3101,7 @@ async def get_applications(guild_id: str, status: Optional[str] = None, position
 
 
 @app.put("/api/guilds/{guild_id}/applications/{app_id}")
+@app.put("/api/bot/guilds/{guild_id}/applications/{app_id}")
 async def update_application(guild_id: str, app_id: str, body: Dict[str, Any] = Body(...)):
     data = load_json("applications", {})
     apps = data.get(guild_id, [])
@@ -3112,6 +3140,7 @@ async def update_application(guild_id: str, app_id: str, body: Dict[str, Any] = 
 
 # Reaction Roles
 @app.get("/api/guilds/{guild_id}/reaction_roles")
+@app.get("/api/bot/guilds/{guild_id}/reaction_roles")
 async def get_reaction_roles(guild_id: str):
     data = load_json("reaction_roles", {})
     guild_messages = {}
@@ -3123,6 +3152,7 @@ async def get_reaction_roles(guild_id: str):
     return guild_messages
 
 @app.post("/api/guilds/{guild_id}/reaction_roles")
+@app.post("/api/bot/guilds/{guild_id}/reaction_roles")
 async def create_reaction_role(guild_id: str, config: Dict[str, Any]):
     from modules.ipc import process_dashboard_trigger
     result, status_code = await process_dashboard_trigger("create_reaction_role", guild_id, config)
@@ -3131,6 +3161,7 @@ async def create_reaction_role(guild_id: str, config: Dict[str, Any]):
     return result
 
 @app.put("/api/guilds/{guild_id}/reaction_roles/{message_id}")
+@app.put("/api/bot/guilds/{guild_id}/reaction_roles/{message_id}")
 async def update_reaction_role(guild_id: str, message_id: str, config: Dict[str, Any]):
     from modules.ipc import process_dashboard_trigger
     payload = {"message_id": message_id, **config}
@@ -3140,6 +3171,7 @@ async def update_reaction_role(guild_id: str, message_id: str, config: Dict[str,
     return result
 
 @app.delete("/api/guilds/{guild_id}/reaction_roles/{message_id}")
+@app.delete("/api/bot/guilds/{guild_id}/reaction_roles/{message_id}")
 async def delete_reaction_role(guild_id: str, message_id: str):
     data = load_json("reaction_roles", {})
     
@@ -3440,6 +3472,7 @@ def _coerce_activity_rewards_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/activity_rewards")
+@app.get("/api/bot/guilds/{guild_id}/activity_rewards")
 async def get_activity_rewards(guild_id: str):
     all_cfg = load_json(_ACTIVITY_REWARDS_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -3452,6 +3485,7 @@ async def get_activity_rewards(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/activity_rewards")
+@app.put("/api/bot/guilds/{guild_id}/activity_rewards")
 async def update_activity_rewards(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_ACTIVITY_REWARDS_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
@@ -3470,6 +3504,7 @@ async def update_activity_rewards(guild_id: str, request: Request, body: Dict[st
 
 
 @app.get("/api/guilds/{guild_id}/activity_rewards/status")
+@app.get("/api/bot/guilds/{guild_id}/activity_rewards/status")
 async def get_activity_rewards_status(guild_id: str):
     cfg = await get_activity_rewards(guild_id)
     stats_root = load_json(_ACTIVITY_REWARDS_STATS_PATH, {})
@@ -3530,6 +3565,7 @@ async def get_activity_rewards_status(guild_id: str):
 
 
 @app.get("/api/guilds/{guild_id}/activity_rewards/leaderboard")
+@app.get("/api/bot/guilds/{guild_id}/activity_rewards/leaderboard")
 async def get_activity_rewards_leaderboard(guild_id: str, limit: int = 15):
     from modules.activity_rewards import get_activity_rewards_leaderboard as _get_lb
 
@@ -3595,6 +3631,7 @@ def _coerce_leveling_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/leveling")
+@app.get("/api/bot/guilds/{guild_id}/leveling")
 async def get_leveling(guild_id: str):
     all_cfg = load_json(_LEVELING_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -3603,6 +3640,7 @@ async def get_leveling(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/leveling")
+@app.put("/api/bot/guilds/{guild_id}/leveling")
 async def update_leveling(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_LEVELING_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
@@ -3621,6 +3659,7 @@ async def update_leveling(guild_id: str, request: Request, body: Dict[str, Any] 
 
 
 @app.get("/api/guilds/{guild_id}/leveling/leaderboard")
+@app.get("/api/bot/guilds/{guild_id}/leveling/leaderboard")
 async def get_leveling_leaderboard_route(guild_id: str, limit: int = 15):
     from modules.leveling import get_leveling_leaderboard as _get_lb
 
@@ -3672,6 +3711,7 @@ def _coerce_channel_access_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/channel_access")
+@app.get("/api/bot/guilds/{guild_id}/channel_access")
 async def get_channel_access(guild_id: str):
     all_cfg = load_json(_CHANNEL_ACCESS_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -3679,6 +3719,7 @@ async def get_channel_access(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/channel_access")
+@app.put("/api/bot/guilds/{guild_id}/channel_access")
 async def update_channel_access(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_CHANNEL_ACCESS_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
@@ -3701,6 +3742,7 @@ async def update_channel_access(guild_id: str, request: Request, body: Dict[str,
 
 
 @app.post("/api/guilds/{guild_id}/channel_access/sync")
+@app.post("/api/bot/guilds/{guild_id}/channel_access/sync")
 async def sync_channel_access(guild_id: str):
     from modules.ipc import process_dashboard_trigger
 
@@ -3753,6 +3795,7 @@ def _coerce_trap_channel_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/trap_channels")
+@app.get("/api/bot/guilds/{guild_id}/trap_channels")
 async def get_trap_channels(guild_id: str):
     all_cfg = load_json(_TRAP_CHANNEL_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -3760,6 +3803,7 @@ async def get_trap_channels(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/trap_channels")
+@app.put("/api/bot/guilds/{guild_id}/trap_channels")
 async def update_trap_channels(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_TRAP_CHANNEL_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
@@ -3807,6 +3851,7 @@ def _coerce_macro_import_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/macro_import")
+@app.get("/api/bot/guilds/{guild_id}/macro_import")
 async def get_macro_import(guild_id: str):
     all_cfg = load_json(_MACRO_IMPORT_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -3814,6 +3859,7 @@ async def get_macro_import(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/macro_import")
+@app.put("/api/bot/guilds/{guild_id}/macro_import")
 async def update_macro_import(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_MACRO_IMPORT_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
@@ -3880,6 +3926,7 @@ def _coerce_automod_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/automod")
+@app.get("/api/bot/guilds/{guild_id}/automod")
 async def get_automod(guild_id: str):
     all_cfg = load_json(_AUTOMOD_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -3889,6 +3936,7 @@ async def get_automod(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/automod")
+@app.put("/api/bot/guilds/{guild_id}/automod")
 async def update_automod(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_AUTOMOD_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
@@ -3954,6 +4002,7 @@ def _coerce_antispam_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/anti-spam")
+@app.get("/api/bot/guilds/{guild_id}/anti-spam")
 async def get_antispam(guild_id: str):
     all_cfg = load_json(_ANTISPAM_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -3963,6 +4012,7 @@ async def get_antispam(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/anti-spam")
+@app.put("/api/bot/guilds/{guild_id}/anti-spam")
 async def update_antispam(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_ANTISPAM_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
@@ -4020,6 +4070,7 @@ def _coerce_pingprotect_payload(raw: Dict[str, Any]) -> Dict[str, Any]:
 
 
 @app.get("/api/guilds/{guild_id}/ping-protection")
+@app.get("/api/bot/guilds/{guild_id}/ping-protection")
 async def get_ping_protection(guild_id: str):
     all_cfg = load_json(_PINGPROTECT_CONFIG_PATH, {})
     stored = all_cfg.get(guild_id, {})
@@ -4029,6 +4080,7 @@ async def get_ping_protection(guild_id: str):
 
 
 @app.put("/api/guilds/{guild_id}/ping-protection")
+@app.put("/api/bot/guilds/{guild_id}/ping-protection")
 async def update_ping_protection(guild_id: str, request: Request, body: Dict[str, Any] = Body(...)):
     all_cfg = load_json(_PINGPROTECT_CONFIG_PATH, {})
     before_cfg = all_cfg.get(guild_id, {}) if isinstance(all_cfg.get(guild_id, {}), dict) else {}
