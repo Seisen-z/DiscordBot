@@ -2019,6 +2019,7 @@ async def update_announcements(guild_id: str, drafts: Dict[str, Any]):
             "title": str(candidate.get("title", "")),
             "description": str(candidate.get("description", "")),
             "content": candidate.get("content"),
+            "post_type": str(candidate.get("post_type", "embed")),
             "thumbnail_url": candidate.get("thumbnail_url"),
             "image_url": candidate.get("image_url"),
             "images": candidate.get("images") or [],
@@ -2026,6 +2027,7 @@ async def update_announcements(guild_id: str, drafts: Dict[str, Any]):
             "channel_id": candidate.get("channel_id"),
             "ping_role_id": candidate.get("ping_role_id"),
             "buttons": candidate.get("buttons") or [],
+            "auto_reactions": candidate.get("auto_reactions") or [],
         })
 
         normalized_drafts[draft_name] = validated.model_dump()
