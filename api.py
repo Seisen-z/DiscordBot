@@ -1979,15 +1979,20 @@ async def get_available_models(request: Request):
 async def get_announcements(guild_id: str):
     data = load_json("announcement_drafts", {})
     guild_drafts = data.get(guild_id, {})
-    
-    # Return structured data with draft names as a separate field for easier editing
+    if not isinstance(guild_drafts, dict):
+        return {}
+
     result = {}
     for draft_name, draft_content in guild_drafts.items():
-        result[draft_name] = {
-            "name": draft_name,  # Editable name
-            "content": draft_content  # Draft content
-        }
-    
+        if isinstance(draft_content, dict) and isinstance(draft_content.get("content"), dict):
+            flat = {**draft_content["content"], "name": draft_name}
+            result[draft_name] = flat
+        elif isinstance(draft_content, dict):
+            flat = {**draft_content, "name": draft_name}
+            result[draft_name] = flat
+        else:
+            result[draft_name] = draft_content
+
     return result
 
 @app.put("/api/guilds/{guild_id}/announcements")
