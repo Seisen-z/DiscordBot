@@ -1618,6 +1618,65 @@ async def get_guild_channels(guild_id: str):
     return await _ensure_discord_guild_channels(guild_id)
 
 
+class RenameChannelRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+
+
+@app.patch("/api/guilds/{guild_id}/channels/{channel_id}")
+@app.patch("/api/bot/guilds/{guild_id}/channels/{channel_id}")
+async def rename_guild_channel(
+    guild_id: str,
+    channel_id: str,
+    payload: RenameChannelRequest,
+    request: Request
+):
+    """Rename a specific guild channel using the bot token."""
+    await require_guild_dashboard_access(request, guild_id)
+    
+    channels = await _ensure_discord_guild_channels(guild_id)
+    channel_exists = any(str(c.get("id")) == str(channel_id) for c in channels)
+    if not channel_exists:
+        raise HTTPException(status_code=404, detail="Channel not found in this guild")
+
+    if not DISCORD_BOT_TOKEN:
+        raise HTTPException(status_code=500, detail="Bot token not configured")
+
+    headers = {
+        "Authorization": f"Bot {DISCORD_BOT_TOKEN}",
+        "Content-Type": "application/json"
+    }
+    
+    timeout = aiohttp.ClientTimeout(total=20)
+    async with aiohttp.ClientSession(
+        timeout=timeout,
+        headers=_DASHBOARD_UA,
+        connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
+    ) as session:
+        async with session.patch(
+            f"{DISCORD_API}/channels/{channel_id}",
+            headers=headers,
+            json={"name": payload.name}
+        ) as resp:
+            if resp.status == 429:
+                body = await resp.json()
+                retry_after = body.get("retry_after", 1.0)
+                raise HTTPException(status_code=429, detail=f"Discord Rate Limit: retry after {retry_after}s")
+            elif resp.status != 200:
+                try:
+                    body = await resp.json()
+                    detail = body.get("message", "Failed to rename channel")
+                except Exception:
+                    detail = f"Failed to rename channel (status {resp.status})"
+                raise HTTPException(status_code=resp.status, detail=detail)
+            
+            updated_channel = await resp.json()
+
+    # Clear channel cache for this guild to reflect the rename
+    discord_channel_cache.pop(str(guild_id).strip(), None)
+    
+    return updated_channel
+
+
 # Guild Roles (fetched live from Discord)
 @app.get("/api/guilds/{guild_id}/roles")
 @app.get("/api/bot/guilds/{guild_id}/roles")
