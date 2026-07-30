@@ -1658,8 +1658,11 @@ async def rename_guild_channel(
             json={"name": payload.name}
         ) as resp:
             if resp.status == 429:
-                body = await resp.json()
-                retry_after = body.get("retry_after", 1.0)
+                try:
+                    body = await resp.json()
+                    retry_after = float(body.get("retry_after", 5.0))
+                except Exception:
+                    retry_after = 5.0
                 raise HTTPException(status_code=429, detail=f"Discord Rate Limit: retry after {retry_after}s")
             elif resp.status != 200:
                 try:
