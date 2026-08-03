@@ -280,6 +280,38 @@ def _register_commands(bot: discord.ext.commands.Bot):
         except discord.Forbidden:
             await interaction.response.send_message("❌ I don't have permission to create or view invites.", ephemeral=True)
 
+    @bot.tree.command(name="report-fixed", description="Mark this bug report as fixed and lock the forum post")
+    async def report_fixed(interaction: discord.Interaction):
+        if interaction.guild is None or interaction.guild.owner_id != interaction.user.id:
+            await interaction.response.send_message("❌ Only the server owner can use this command.", ephemeral=True)
+            return
+
+        thread = interaction.channel
+        if not isinstance(thread, discord.Thread):
+            await interaction.response.send_message("❌ This command must be used inside a forum post (thread).", ephemeral=True)
+            return
+
+        await interaction.response.defer(ephemeral=True)
+
+        embed = discord.Embed(
+            title="✅ Report Fixed",
+            description=(
+                "This bug report has been reviewed and **fixed**.\n\n"
+                "Thank you for submitting this report! This post is now locked."
+            ),
+            color=discord.Color.green(),
+        )
+        embed.set_footer(text=f"Resolved by {interaction.user} • {discord.utils.utcnow().strftime('%Y-%m-%d %H:%M UTC')}")
+
+        try:
+            await thread.send(embed=embed)
+            await thread.edit(locked=True, archived=True)
+            await interaction.followup.send("✅ Report marked as fixed and the forum post has been locked.", ephemeral=True)
+        except discord.Forbidden:
+            await interaction.followup.send("❌ I don't have permission to lock this thread.", ephemeral=True)
+        except discord.HTTPException as e:
+            await interaction.followup.send(f"❌ Something went wrong: {e}", ephemeral=True)
+
     @bot.tree.command(name="invitelist", description="List all active invites in the server")
     @app_commands.default_permissions(manage_guild=True)
     async def invitelist(interaction: discord.Interaction):

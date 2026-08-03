@@ -220,6 +220,43 @@ def _register_commands(bot: discord.ext.commands.Bot):
     bot.tree.add_command(roblox_group)
 
 
+_DELETION_TTL_SECONDS = 7 * 24 * 3600  # 7 days
+
+
+def _load_pending_deletions() -> list:
+    health = load_roblox_health()
+    return health.get("pending_deletions", [])
+
+
+def _save_pending_deletions(entries: list):
+    health = load_roblox_health()
+    health["pending_deletions"] = entries
+    save_roblox_health(health)
+
+
+async def _process_pending_deletions(bot_instance: discord.ext.commands.Bot):
+    entries = await asyncio.to_thread(_load_pending_deletions)
+    now = datetime.now(timezone.utc).timestamp()
+    remaining = []
+    for entry in entries:
+        if now < entry["delete_at"]:
+            remaining.append(entry)
+            continue
+        guild = bot_instance.get_guild(entry["guild_id"])
+        if not guild:
+            continue
+        channel = guild.get_channel(entry["channel_id"])
+        if not channel:
+            continue
+        try:
+            msg = await channel.fetch_message(entry["message_id"])
+            await msg.delete()
+        except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+            pass
+    if len(remaining) != len(entries):
+        await asyncio.to_thread(_save_pending_deletions, remaining)
+
+
 roblox_update_check_loop = None
 _roblox_is_first_run = True
 
@@ -232,6 +269,7 @@ def get_roblox_update_loop(bot_instance: discord.ext.commands.Bot):
         monitor_count = 0
         # Run blocking JSON I/O in a thread so the event loop (and Discord heartbeat) stay free.
         await asyncio.to_thread(set_roblox_health, last_poll_started=started_at.isoformat(), last_error=None)
+        await _process_pending_deletions(bot_instance)
 
         try:
             monitors = await asyncio.to_thread(load_roblox_monitors)
@@ -307,8 +345,17 @@ def get_roblox_update_loop(bot_instance: discord.ext.commands.Bot):
                         embed.set_footer(text="Roblox Game Monitor")
 
                         try:
-                            await channel.send(content=role.mention if role else None, embed=embed, delete_after=60)
+                            sent = await channel.send(content=role.mention if role else None, embed=embed)
                             notifications_sent += 1
+                            delete_at = datetime.now(timezone.utc).timestamp() + _DELETION_TTL_SECONDS
+                            entries = await asyncio.to_thread(_load_pending_deletions)
+                            entries.append({
+                                "guild_id": guild_int,
+                                "channel_id": channel_id,
+                                "message_id": sent.id,
+                                "delete_at": delete_at,
+                            })
+                            await asyncio.to_thread(_save_pending_deletions, entries)
                         except Exception as e:
                             print(f"[Roblox Monitor] Send update failed for universe {universe_id}: {e}")
 
