@@ -20,7 +20,7 @@
     "panel_embed_footer": "Verification System",
     "welcome_enabled": true,
     "welcome_channel_id": "1333251918100697141",
-    "welcome_content": "\ud83c\udf89 Welcome ${usermention} to Seisen Hub! \ud83c\udf89 We're glad to have you here \u2014 check out the rules and say hi! \ud83d\udc4b",
+    "welcome_content": "🎉 Welcome ${usermention} to Seisen Hub! 🎉 We're glad to have you here — check out the rules and say hi! 👋",
     "welcome_embed_title": "Welcome ${userglobalnickname}!",
     "welcome_embed_description": "to ${guildname}\n\nYou are member #${guildmembercount}.",
     "welcome_embed_color": "#5865F2",
@@ -43,7 +43,7 @@
         "weight": 1,
         "enabled": true,
         "message_mode": "normal",
-        "content": "\ud83c\udf89 Welcome ${usermention} to Seisen Hub! \ud83c\udf89 We're glad to have you here \u2014 check out the rules and say hi! \ud83d\udc4b",
+        "content": "🎉 Welcome ${usermention} to Seisen Hub! 🎉 We're glad to have you here — check out the rules and say hi! 👋",
         "embed_title": "Welcome ${userglobalnickname}!",
         "embed_description": "to ${guildname}\n\nYou are member #${guildmembercount}.",
         "embed_color": "#5865F2",
@@ -59,7 +59,7 @@
         "weight": 1,
         "enabled": true,
         "message_mode": "normal",
-        "content": "\ud83c\udf1f ${usermention} just arrived at Seisen Hub! Grab a seat, meet the community, and enjoy your stay! \u2728",
+        "content": "🌟 ${usermention} just arrived at Seisen Hub! Grab a seat, meet the community, and enjoy your stay! ✨",
         "embed_title": "Welcome ${userglobalnickname}!",
         "embed_description": "to ${guildname}\n\nYou are member #${guildmembercount}.",
         "embed_color": "#5865F2",
@@ -246,6 +246,10 @@
     "min_account_age_days": 3,
     "block_default_avatar": false,
     "join_guard_action": "kick",
-    "join_guard_log_channel_id": "1420478977042022511"
+    "join_guard_log_channel_id": "1420478977042022511",
+    "visible_before_verify_channel_ids": [
+      "1333251918100697141",
+      "1333439229434265630"
+    ]
   }
 }

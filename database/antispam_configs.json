@@ -1,0 +1,23 @@
+{
+  "1333251917098520628": {
+    "enabled": false,
+    "threshold": 3,
+    "window_seconds": 8,
+    "action": "timeout",
+    "timeout_minutes": 3,
+    "delete_messages": true,
+    "log_channel_id": null,
+    "exempt_role_ids": [
+      "1333421502971904020",
+      "1333419158485864511",
+      "1333417449386676306",
+      "1458853102814888142"
+    ],
+    "exempt_channel_ids": [
+      "1509184232122220604",
+      "1509556268858343674"
+    ],
+    "dm_user_on_action": true,
+    "dm_message": "You were actioned in this server for sending too many messages too quickly (spam)."
+  }
+}

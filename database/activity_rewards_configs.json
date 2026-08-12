@@ -1,0 +1,14 @@
+{
+  "1333251917098520628": {
+    "enabled": false,
+    "min_messages_low": 200,
+    "min_messages_high": 300,
+    "draw_interval_minutes": 360,
+    "cooldown_days": 7,
+    "max_rewards_per_draw": 1,
+    "daily_winner_cap": 1,
+    "weekly_winner_cap": 3,
+    "key_pool": "activity_pool",
+    "logging_channel_id": "1483654954638905364"
+  }
+}

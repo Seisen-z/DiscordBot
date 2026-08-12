@@ -1,1 +1,17 @@
-{}
+{
+  "1333251917098520628": {
+    "enabled": true,
+    "mappings": [
+      {
+        "id": "pn02etjz",
+        "role_id": "1528773755080413325",
+        "channel_ids": [
+          "1528774014368092330",
+          "1528773940464324669"
+        ],
+        "view_channel": true,
+        "send_messages": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "1333251917098520628": {
+    "enabled": true,
+    "action": "timeout",
+    "timeout_minutes": 10,
+    "log_channel_id": "1483654954638905364",
+    "exempt_role_ids": [
+      "1333421502971904020",
+      "1333419158485864511",
+      "1333417449386676306",
+      "1458853102814888142"
+    ],
+    "exempt_channel_ids": [],
+    "scan_links": true,
+    "scan_images": false,
+    "blocked_domains": [],
+    "whitelist_domains": [],
+    "blocked_image_hashes": [],
+    "dm_user_on_action": true,
+    "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+  }
+}

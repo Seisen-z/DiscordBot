@@ -2,15 +2,39 @@
   "1333251917098520628": {
     "Giveaway 1": {
       "name": "Monthly key",
-      "reward_title": "2x Monthly Key",
-      "reward_description": "React with \ud83c\udf89 to enter. Winners will be picked automatically at the end time.",
-      "channel_id": "1333425858395770920",
-      "winner_count": 2,
-      "duration_minutes": 60,
+      "reward_title": "1 Week Key",
+      "reward_description": "Another 1 Week Key Giveaway for you lot\nReact with 🎉 to enter. Winners will be picked automatically at the end time.\n@wonder of u.. giveaway her winning reward key",
+      "channel_id": "1408051026677727345",
+      "winner_count": 1,
+      "duration_minutes": 1440,
       "ping_role_id": "1405196741107781744",
       "key_log_channel_id": "1483654954638905364",
-      "emoji": "\ud83c\udf89",
-      "key_tier": "lifetime"
+      "emoji": "🎉",
+      "key_tier": "weekly"
+    },
+    "Giveaway 2": {
+      "name": "Account Manager",
+      "reward_title": "2x 3Months Key",
+      "reward_description": "**This giveaway is only for Account Manager key apps that use it.**\nReact with 🎉 to enter. Winners will be picked automatically at the end time.",
+      "channel_id": "1408051026677727345",
+      "winner_count": 2,
+      "duration_minutes": 1440,
+      "ping_role_id": "1405196741107781744",
+      "key_log_channel_id": "1483654954638905364",
+      "emoji": "🎉",
+      "key_tier": "none"
+    },
+    "Giveaway 3": {
+      "name": "Giveaway",
+      "reward_title": "1x Lifetime Premium Key",
+      "reward_description": "@217388905006104577 Giving away his premium lifetime key ",
+      "channel_id": "1408051026677727345",
+      "winner_count": 1,
+      "duration_minutes": 420,
+      "ping_role_id": "1405196741107781744",
+      "key_log_channel_id": "",
+      "emoji": "🎉",
+      "key_tier": "none"
     }
   }
 }

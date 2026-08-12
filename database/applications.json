@@ -1,0 +1,67 @@
+{
+  "1333251917098520628": [
+    {
+      "id": "CC18AF25",
+      "guild_id": "1333251917098520628",
+      "user_id": "1107665638517915710",
+      "username": "whitemoonligth",
+      "display_name": "el blub blub",
+      "avatar_url": "https://cdn.discordapp.com/avatars/1107665638517915710/55fed18f7670d33368dc5d6807046cf0.png?size=1024",
+      "position": "tester",
+      "answers": {
+        "Timezone & hours/week? (1-5/6-10/11-20/20+)": "UTC+8 (WITA). Available from 2 PM to 12 AM most days, 17+ hours/week",
+        "Prior testing experience? (scripts/exploits)": "i’ve been using scripts and exploits for about 7 months and have experience with different games and script types. because i use them regularly, i’m familiar with testing features, spotting bugs, and noticing when something isn’t working correctly. when i find an issue, i try to reproduce it and provide as much detail as possible so it’s easier to understand and fix. i’m also willing to retest updates to make sure reported issues are resolved.",
+        "Testing devices you have? (PC/Android/Cloud)": "phone",
+        "How would you report a bug or failure?": "if i find an issue, i’ll do my best to figure out what caused it and provide clear details about it. i can include the steps i took, what happened, what i expected to happen, and screenshots or videos if needed. i like giving detailed feedback because it makes it easier to track down and fix problems.",
+        "Why do you want to join the Seisen team?": "i’d like to join the seisen team because i enjoy trying out new features and helping find issues before they affect other users. i have a good amount of free time, and i’m willing to spend it testing, giving feedback, and helping improve the quality of the project whenever i can."
+      },
+      "submitted_at": "2026-06-08T06:22:52.651450+00:00",
+      "status": "accepted",
+      "reviewed_by": null,
+      "reviewed_at": "2026-06-20T11:20:53.101915+00:00",
+      "notes": null
+    },
+    {
+      "id": "C75A0888",
+      "guild_id": "1333251917098520628",
+      "user_id": "442317061104861184",
+      "username": ".seisen",
+      "display_name": "[DM = MUTE]",
+      "avatar_url": "https://cdn.discordapp.com/avatars/442317061104861184/c77aa921d9df5ee0c0db106ea038ebf9.png?size=1024",
+      "position": "staff",
+      "answers": {
+        "Timezone & hours/week? (1-5/6-10/11-20/20+)": "testing",
+        "Moderation experience? (servers & roles)": "seshan",
+        "Handle a toxic/disrespectful member?": "wonder",
+        "Why should we pick you as Staff?": "reloaded",
+        "Why do you want to join the Seisen team?": "hello <3"
+      },
+      "submitted_at": "2026-06-08T07:49:28.148222+00:00",
+      "status": "rejected",
+      "reviewed_by": null,
+      "reviewed_at": "2026-06-20T11:20:30.795153+00:00",
+      "notes": null
+    },
+    {
+      "id": "6E7F4B88",
+      "guild_id": "1333251917098520628",
+      "user_id": "920710108852387853",
+      "username": ".seshan.",
+      "display_name": "[DM = MUTE]",
+      "avatar_url": "https://cdn.discordapp.com/avatars/920710108852387853/74573a0d4df92f62b2bb22efde5eacaa.png?size=1024",
+      "position": "helper",
+      "answers": {
+        "Timezone & hours/week? (1-5/6-10/11-20/20+)": "2",
+        "How familiar are you with Seisen Hub?": "Oooooooooooooooooo",
+        "How would you help a completely new user?": "Like wonder of you",
+        "What if you don't know the answer?": "I will blame",
+        "Why do you want to join the Seisen team?": "Becs I want to hit wonder of you"
+      },
+      "submitted_at": "2026-06-10T04:42:37.630956+00:00",
+      "status": "rejected",
+      "reviewed_by": null,
+      "reviewed_at": "2026-06-20T11:20:48.028912+00:00",
+      "notes": null
+    }
+  ]
+}

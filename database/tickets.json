@@ -10,10 +10,14 @@
     ],
     "open_tickets": {
       "171442868190314497": 1488727051794911232,
-      "1122039029475581972": 1489368861718352044
+      "1122039029475581972": 1489368861718352044,
+      "531645180160245771": 1516852108819828908,
+      "1350404746002956308": 1522845773270880427,
+      "866766841057902602": 1531276578871443506,
+      "461734644216365068": 1531393289255915650
     },
     "embed_title": "Support/Premium Ticket",
-    "embed_description": "To create a support ticket, click the \u2018Create Ticket\u2019 button below.\nPlease use this ticket only for support or assistance.",
+    "embed_description": "To create a support ticket, click the ‘Create Ticket’ button below.\nPlease use this ticket only for support or assistance.",
     "embed_color": null,
     "embed_thumbnail": null,
     "embed_footer": "Seisen Hub"

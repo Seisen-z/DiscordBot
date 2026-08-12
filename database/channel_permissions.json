@@ -1,0 +1,2851 @@
+{
+  "1333251917098520628": {
+    "channels": {
+      "1333251918100697141": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1434600917361098782": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ],
+      "1489492126566846525": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "add_reactions",
+            "send_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "use_external_stickers"
+          ]
+        }
+      ],
+      "1333251918100697139": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1367854268228304987": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1511722157460422716": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ],
+      "1333457207030710303": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ],
+      "1333412589140447254": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [],
+          "deny": [
+            "manage_channel",
+            "view_channel",
+            "manage_permissions",
+            "manage_webhooks"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "read_message_history",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1333439229434265630": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        }
+      ],
+      "1333464316044775455": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "send_tts_messages",
+            "mention_everyone",
+            "use_application_commands",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1333425858395770920": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel",
+            "send_messages"
+          ]
+        }
+      ],
+      "1509137246505406617": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "use_application_commands"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "send_tts_messages",
+            "mention_everyone",
+            "use_application_commands",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1509141291953291347",
+          "allow": [
+            "view_channel",
+            "send_messages_in_threads"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "use_application_commands"
+          ],
+          "deny": []
+        }
+      ],
+      "1453721914626277551": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ],
+      "1509147746488025129": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "use_application_commands"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "send_tts_messages",
+            "mention_everyone",
+            "use_application_commands",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1509141291953291347",
+          "allow": [
+            "view_channel",
+            "send_messages_in_threads"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "use_application_commands"
+          ],
+          "deny": []
+        }
+      ],
+      "1401242714258931813": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [],
+          "deny": [
+            "view_channel",
+            "send_messages"
+          ]
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel",
+            "send_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [],
+          "deny": [
+            "view_channel",
+            "send_messages"
+          ]
+        }
+      ],
+      "1333251918100697140": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "use_application_commands"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "send_tts_messages",
+            "mention_everyone",
+            "use_application_commands",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1509141291953291347",
+          "allow": [
+            "view_channel",
+            "send_messages_in_threads"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "use_application_commands"
+          ],
+          "deny": []
+        }
+      ],
+      "1420478977042022511": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "read_message_history",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel",
+            "send_messages"
+          ]
+        }
+      ],
+      "1418924284591603712": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages",
+            "send_messages_in_threads"
+          ]
+        }
+      ],
+      "1436948657017720842": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ],
+      "1458266945379110973": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ],
+      "1333417822201843772": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": []
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel",
+            "send_messages"
+          ],
+          "deny": []
+        }
+      ],
+      "1333458476709580851": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1405832485690019851": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "manage_channel",
+            "view_channel",
+            "send_messages",
+            "manage_permissions",
+            "manage_webhooks"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "mention_everyone",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1483652997215944785": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ],
+      "1333450786335883275": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1367733424227483658": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1408051026677727345": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "view_channel",
+            "send_messages"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel",
+            "send_messages"
+          ],
+          "deny": []
+        }
+      ],
+      "1367858645110624338": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1367733791065510011": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1367738330355335188": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [],
+          "deny": [
+            "view_channel",
+            "send_messages"
+          ]
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages"
+          ]
+        }
+      ],
+      "1401575209881964647": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1451311331075428373": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1398592467024085063": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1434064472695246858": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1434847543388278856": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1421560929425817662": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "send_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages"
+          ]
+        }
+      ],
+      "1461051868959735868": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history",
+            "mention_everyone"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1510522155710808155": [
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel",
+            "send_messages"
+          ]
+        }
+      ],
+      "1486367961118933123": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [],
+          "deny": [
+            "manage_channel",
+            "view_channel",
+            "manage_permissions",
+            "manage_webhooks"
+          ]
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "view_channel",
+            "send_messages",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1333451334208327800": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [],
+          "deny": [
+            "manage_channel",
+            "view_channel",
+            "manage_permissions",
+            "manage_webhooks"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "manage_messages"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "send_messages",
+            "embed_links",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "add_reactions",
+            "send_tts_messages",
+            "manage_messages",
+            "attach_files",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1509186112239698054",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "add_reactions",
+            "attach_files",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers"
+          ],
+          "deny": []
+        }
+      ],
+      "1511600078404714566": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [],
+          "deny": [
+            "manage_channel",
+            "view_channel",
+            "manage_permissions",
+            "manage_webhooks"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "read_message_history",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1367735167145214033": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "read_message_history",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_voice_messages"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "attach_files",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "read_message_history",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ],
+          "deny": []
+        }
+      ],
+      "1452965709842878616": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "read_message_history",
+            "use_external_emojis",
+            "use_application_commands",
+            "use_external_stickers"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "send_messages_in_threads"
+          ]
+        }
+      ],
+      "1510238868824395878": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [],
+          "deny": [
+            "manage_channel",
+            "view_channel",
+            "manage_permissions",
+            "manage_webhooks"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "read_message_history",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "use_application_commands",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel",
+            "read_message_history"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "add_reactions",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "attach_files",
+            "mention_everyone",
+            "use_external_emojis",
+            "manage_permissions",
+            "manage_webhooks",
+            "manage_threads",
+            "create_public_threads",
+            "create_private_threads",
+            "use_external_stickers",
+            "send_messages_in_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1476968561019846799": [
+        {
+          "role_id": "1333413061964595282",
+          "allow": [],
+          "deny": [
+            "manage_channel",
+            "view_channel",
+            "manage_permissions",
+            "manage_webhooks"
+          ]
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "send_messages",
+            "attach_files"
+          ],
+          "deny": [
+            "create_invite",
+            "manage_channel",
+            "send_tts_messages",
+            "manage_messages",
+            "embed_links",
+            "manage_permissions",
+            "manage_webhooks",
+            "use_application_commands",
+            "manage_threads",
+            "create_private_threads",
+            "send_voice_messages"
+          ]
+        }
+      ],
+      "1418881459518963754": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages",
+            "send_messages_in_threads"
+          ]
+        },
+        {
+          "role_id": "1405196741107781744",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers",
+            "send_messages_in_threads"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers",
+            "send_messages_in_threads"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1403415214791332064",
+          "allow": [
+            "add_reactions",
+            "view_channel",
+            "send_messages",
+            "attach_files",
+            "read_message_history",
+            "use_external_emojis",
+            "use_external_stickers",
+            "send_messages_in_threads"
+          ],
+          "deny": []
+        }
+      ],
+      "1509184232122220604": [
+        {
+          "role_id": "1509186112239698054",
+          "allow": [],
+          "deny": []
+        }
+      ],
+      "1509556268858343674": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": []
+        }
+      ],
+      "1509176740029792366": [
+        {
+          "role_id": "1405196741107781744",
+          "allow": [],
+          "deny": [
+            "add_reactions"
+          ]
+        },
+        {
+          "role_id": "1402982327935832104",
+          "allow": [],
+          "deny": [
+            "add_reactions"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "add_reactions"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [],
+          "deny": [
+            "add_reactions"
+          ]
+        },
+        {
+          "role_id": "1458853102814888142",
+          "allow": [],
+          "deny": [
+            "add_reactions"
+          ]
+        }
+      ],
+      "1508779643971305613": [
+        {
+          "role_id": "1509186112239698054",
+          "allow": [],
+          "deny": [
+            "add_reactions",
+            "send_messages",
+            "embed_links",
+            "mention_everyone",
+            "use_external_emojis",
+            "send_messages_in_threads"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1458853102814888142",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        }
+      ],
+      "1508787065494700122": [
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages"
+          ]
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        },
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages"
+          ]
+        },
+        {
+          "role_id": "1458853102814888142",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages"
+          ]
+        }
+      ],
+      "1512422656170000510": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        },
+        {
+          "role_id": "1458853102814888142",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        }
+      ],
+      "1418923449497161739": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages",
+            "send_messages_in_threads"
+          ]
+        }
+      ],
+      "1481076051554598962": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "send_messages"
+          ]
+        }
+      ],
+      "1333435322603933706": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": [
+            "send_messages"
+          ]
+        }
+      ],
+      "1483654954638905364": [
+        {
+          "role_id": "1333419158485864511",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        },
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        },
+        {
+          "role_id": "1333417449386676306",
+          "allow": [
+            "view_channel"
+          ],
+          "deny": []
+        }
+      ],
+      "1512712237872316478": [
+        {
+          "role_id": "1333251917098520628",
+          "allow": [],
+          "deny": [
+            "view_channel"
+          ]
+        }
+      ]
+    }
+  }
+}

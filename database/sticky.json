@@ -6,6 +6,20 @@
       "content": "Want to share your experience? Use /vouch to leave your feedback!\n\nYour vouch helps build trust and lets others know about your experience with our service.\nPlease be honest and include details if possible.\n\nThank you for supporting us!",
       "color": 5793266,
       "last_message_id": 1488648623016382587
+    },
+    "1476968561019846799": {
+      "name": "Report Bug",
+      "title": "",
+      "content": "Before reporting a bug, please make sure you have a valid error from the console. You can open the console by pressing F9 on PC or by typing /console in the chat on mobile. If there are no errors shown in the console, I won't be able to investigate or entertain the report.",
+      "color": 5793266,
+      "last_message_id": 1521455984676175974
+    },
+    "1530317865423605962": {
+      "name": "Macro",
+      "title": "",
+      "content": "Use /macro to upload your macro JSON and generate a shareable link. Your message will be automatically deleted after a few seconds. Copy the generated link and paste it into the script.",
+      "color": 5793266,
+      "last_message_id": 1531406986120532062
     }
   }
 }

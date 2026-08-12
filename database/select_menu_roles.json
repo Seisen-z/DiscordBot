@@ -6,9 +6,9 @@
       "content": null,
       "embeds": [
         {
-          "title": "\ud83d\udce2 Stay Updated on Scripts!",
+          "title": "📢 Stay Updated on Scripts!",
           "description": [
-            "Select a game below to get instant pings whenever its script receives a new update! \u26a1\ud83c\udfae",
+            "Select a game below to get instant pings whenever its script receives a new update! ⚡🎮",
             "",
             "> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!"
           ],
@@ -48,9 +48,9 @@
       "content": null,
       "embeds": [
         {
-          "title": "\ud83d\udce2 Stay Updated on Scripts!",
+          "title": "📢 Stay Updated on Scripts!",
           "description": [
-            "Select a game below to get instant pings whenever its script receives a new update! \u26a1\ud83c\udfae",
+            "Select a game below to get instant pings whenever its script receives a new update! ⚡🎮",
             "",
             "> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!"
           ],
@@ -90,9 +90,9 @@
       "content": null,
       "embeds": [
         {
-          "title": "\ud83d\udce2 Stay Updated on Scripts!",
+          "title": "📢 Stay Updated on Scripts!",
           "description": [
-            "Select a game below to get instant pings whenever its script receives a new update! \u26a1\ud83c\udfae",
+            "Select a game below to get instant pings whenever its script receives a new update! ⚡🎮",
             "",
             "> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!"
           ],
@@ -132,9 +132,9 @@
       "content": null,
       "embeds": [
         {
-          "title": "\ud83d\udce2 Stay Updated on Scripts!",
+          "title": "📢 Stay Updated on Scripts!",
           "description": [
-            "Select a game below to get instant pings whenever its script receives a new update! \u26a1\ud83c\udfae",
+            "Select a game below to get instant pings whenever its script receives a new update! ⚡🎮",
             "",
             "> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!"
           ],
@@ -157,6 +157,338 @@
                   "label": "a",
                   "value": "1400874393193812100",
                   "description": "a",
+                  "default": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "created_by": 0
+  },
+  "1501670789349507153": {
+    "guild_id": 1333251917098520628,
+    "channel_id": "1367738330355335188",
+    "message_data": {
+      "content": null,
+      "embeds": [
+        {
+          "title": "📢 Stay Updated on Scripts!",
+          "description": [
+            "Select a game below to get instant pings whenever its script receives a new update! ⚡🎮",
+            "",
+            "> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!"
+          ],
+          "color": 5793266,
+          "fields": null
+        }
+      ],
+      "components": [
+        {
+          "type": 1,
+          "components": [
+            {
+              "type": 3,
+              "custom_id": "role_select",
+              "placeholder": "Select a game script to get pinged 📢",
+              "min_values": 1,
+              "max_values": 5,
+              "options": [
+                {
+                  "label": "Anime Eternal",
+                  "value": "1400874393193812100",
+                  "description": "Pinged for Updates on Anime Eternal",
+                  "default": false
+                },
+                {
+                  "label": "Anime Fight",
+                  "value": "1443677748710342818",
+                  "description": "Pinged for updates on Anime Fight",
+                  "default": false
+                },
+                {
+                  "label": "Anime Re:Ranger X",
+                  "value": "1409444925635825736",
+                  "description": "Pinged for updates on Anime Re:Ranger X",
+                  "default": false
+                },
+                {
+                  "label": "Arise Crossover",
+                  "value": "1407632682371776522",
+                  "description": "Pinged for Updates on Arise Crossover",
+                  "default": false
+                },
+                {
+                  "label": "Blue Heater 2",
+                  "value": "1405478042104631327",
+                  "description": "Pinged for updates on Blue Heater 2",
+                  "default": false
+                },
+                {
+                  "label": "Build a Zoo",
+                  "value": "1419647778333659288",
+                  "description": "Pinged for updates on Build a Zoo",
+                  "default": false
+                },
+                {
+                  "label": "Build an Island",
+                  "value": "1404014779647004762",
+                  "description": "Pinged for updates on Build an Island",
+                  "default": false
+                },
+                {
+                  "label": "Dig & Hatch a Brainrot",
+                  "value": "1441044259179597824",
+                  "description": "Pinged for updates on Dig & Hatch a Brainrot",
+                  "default": false
+                },
+                {
+                  "label": "Dig to Earth",
+                  "value": "1437748169361326161",
+                  "description": "Pinged for updates on Dig to Earth",
+                  "default": false
+                },
+                {
+                  "label": "Dungeon Heroes",
+                  "value": "1400874298607931552",
+                  "description": "Pinged for updates on Dungeon Heroes",
+                  "default": false
+                },
+                {
+                  "label": "Fish It",
+                  "value": "1422990721845039216",
+                  "description": "Pinged for updates on",
+                  "default": false
+                },
+                {
+                  "label": "Plant vs Brainrot",
+                  "value": "1431265266834079875",
+                  "description": "Pinged for updates on Plant vs Brainrot",
+                  "default": false
+                },
+                {
+                  "label": "Restaurant Tycoon 3",
+                  "value": "1411716908365119578",
+                  "description": "Pinged for updates on Restaurant Tycoon 3",
+                  "default": false
+                },
+                {
+                  "label": "Swordburst 3",
+                  "value": "1400874363602866216",
+                  "description": "Pinged for updates on Swordburst 3",
+                  "default": false
+                },
+                {
+                  "label": "The Forge",
+                  "value": "1451356109397819443",
+                  "description": "Pinged for updates on The Forge",
+                  "default": false
+                },
+                {
+                  "label": "Re:XL",
+                  "value": "1469638877890216103",
+                  "description": "Pinged for updates on RE:XL",
+                  "default": false
+                },
+                {
+                  "label": "Levelbound",
+                  "value": "1469638786597257322",
+                  "description": "Pinged for updates on Levelbound",
+                  "default": false
+                },
+                {
+                  "label": "Garden Horizon",
+                  "value": "1477240437109424180",
+                  "description": "Pinged for updates on  Garden Horizon",
+                  "default": false
+                },
+                {
+                  "label": "Raft 101 Survive",
+                  "value": "1481286661550641223",
+                  "description": "Pinged for updates on Raft 101 Survive",
+                  "default": false
+                },
+                {
+                  "label": "Summon Heroes",
+                  "value": "1492959355287633940",
+                  "description": "Pinged for updates on Summon Heroes",
+                  "default": false
+                },
+                {
+                  "label": "Slime Seas",
+                  "value": "1496510403189018746",
+                  "description": "Pinged for updates on Summon Heroes",
+                  "default": false
+                },
+                {
+                  "label": "Bee Garden",
+                  "value": "1501668895608803418",
+                  "description": "Pinged for updates on Bee Garden",
+                  "default": false
+                },
+                {
+                  "label": "Slime RNG",
+                  "value": "1510592053321400420",
+                  "description": "Pinged for updates on Slime RNG",
+                  "default": false
+                },
+                {
+                  "label": "Wizard Alchemy",
+                  "value": "1510592247358292080",
+                  "description": "Pinged for updates on Wizard Alchemy",
+                  "default": false
+                },
+                {
+                  "label": "Grow a Garden 2",
+                  "value": "1516735023649259560",
+                  "description": "Pinged for updates on Grow a Garden 2",
+                  "default": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "created_by": 0
+  },
+  "1528779482138279970": {
+    "guild_id": 1333251917098520628,
+    "channel_id": 1367738330355335188,
+    "message_data": {
+      "content": null,
+      "embeds": [
+        {
+          "title": "📢 Stay Updated on Scripts!",
+          "description": [
+            "Select a game below to get instant pings whenever its script receives a new update! ⚡🎮",
+            "",
+            "> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!"
+          ],
+          "color": 5793266,
+          "fields": null
+        }
+      ],
+      "components": [
+        {
+          "type": 1,
+          "components": [
+            {
+              "type": 3,
+              "custom_id": "role_select",
+              "placeholder": "Select a game script to get pinged 📢",
+              "min_values": 1,
+              "max_values": 1,
+              "options": [
+                {
+                  "label": "Anime Expedition",
+                  "value": "1528773755080413325",
+                  "description": "Select this to Access Role Based Channel",
+                  "default": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "created_by": 0
+  },
+  "1528779931029606453": {
+    "guild_id": 1333251917098520628,
+    "channel_id": 1367738330355335188,
+    "message_data": {
+      "content": null,
+      "embeds": [
+        {
+          "title": "📂 Access Game Script Channels",
+          "description": [
+            "Select the games you want access to below. Once you receive a role, the corresponding script channels will automatically become visible."
+          ],
+          "color": 5793266,
+          "fields": null
+        }
+      ],
+      "components": [
+        {
+          "type": 1,
+          "components": [
+            {
+              "type": 3,
+              "custom_id": "role_select",
+              "placeholder": "Select game channels to unlock 🔓",
+              "min_values": 1,
+              "max_values": 1,
+              "options": [
+                {
+                  "label": "Anime Expedition",
+                  "value": "1528773755080413325",
+                  "description": "Select this to Access Role Based Channel",
+                  "default": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "created_by": 0
+  },
+  "1492843462461096119": {
+    "guild_id": 1333251917098520628,
+    "channel_id": "1367738330355335188",
+    "message_data": {
+      "content": null,
+      "embeds": [
+        {
+          "title": "🔔 Choose Your Notification Role",
+          "description": [
+            "Select a role below to start receiving notifications for the type of updates you care about. Stay informed and never miss out!"
+          ],
+          "color": 5793266,
+          "fields": null
+        }
+      ],
+      "components": [
+        {
+          "type": 1,
+          "components": [
+            {
+              "type": 3,
+              "custom_id": "role_select",
+              "placeholder": "Choose roles...",
+              "min_values": 1,
+              "max_values": 3,
+              "options": [
+                {
+                  "label": "Announcement Ping",
+                  "value": "1367737195997171763",
+                  "description": "Get Notified about All Important Announcement",
+                  "default": false
+                },
+                {
+                  "label": "Giveaway Ping",
+                  "value": "1406994889803305001",
+                  "description": "Be the first to know about giveaways and rewards",
+                  "default": false
+                },
+                {
+                  "label": "Showcase Ping",
+                  "value": "1367737203815612531",
+                  "description": "Get Notified about All Video Showcase",
+                  "default": false
+                },
+                {
+                  "label": "Script Update",
+                  "value": "1528448896861212813",
+                  "description": "Get Notified about Script Update of everygame",
+                  "default": false
+                },
+                {
+                  "label": "Sneak Peak",
+                  "value": "1367737213735141437",
+                  "description": "Get Notified for leak of new script and update",
                   "default": false
                 }
               ]

@@ -1,0 +1,55 @@
+{
+  "1530308588617203873": {
+    "guild_id": "1333251917098520628",
+    "stored_file": "440409ee20d3453586a6ba7feaa69871_message.txt",
+    "file_name": "message.txt",
+    "required_units": [
+      "Senku",
+      "Sabo",
+      "Ichiraku",
+      "Frieren",
+      "Yuta"
+    ],
+    "author_id": "442317061104861184"
+  },
+  "1530309441805750273": {
+    "guild_id": "1333251917098520628",
+    "stored_file": "e01fdf4be7634087ad6bc04b0ff29def_message.txt",
+    "file_name": "message.txt",
+    "required_units": [
+      "Senku",
+      "Gowther",
+      "Ichiraku",
+      "Diane",
+      "Frieren",
+      "Kenpachi"
+    ],
+    "author_id": "442317061104861184"
+  },
+  "1530320080104198165": {
+    "guild_id": "1333251917098520628",
+    "required_units": [
+      "Senku (Strength 1)",
+      "Gowther (Range 1)",
+      "Ichiraku (Investor)",
+      "Diane (Unbound)",
+      "Frieren (Unbound)",
+      "Kenpachi (Draconic)"
+    ],
+    "author_id": "442317061104861184",
+    "current_url": "https://cdn.discordapp.com/attachments/1530317865423605962/1530320078137196705/message.txt?ex=6a652522&is=6a63d3a2&hm=c90d104c52ba4575f71cc1fd7d18a6dc50daf255aa6a378cd1ffe211a0033448&"
+  },
+  "1530321120069423295": {
+    "guild_id": "1333251917098520628",
+    "required_units": [
+      "Senku (Strength 1)",
+      "Gowther (Range 1)",
+      "Ichiraku (Investor)",
+      "Diane (Unbound)",
+      "Frieren (Unbound)",
+      "Kenpachi (Draconic)"
+    ],
+    "author_id": "442317061104861184",
+    "current_url": "https://cdn.discordapp.com/attachments/1530317865423605962/1530321118244765917/message.txt?ex=6a65261a&is=6a63d49a&hm=68ff0ab0a654db873dd6261c0e3e83117da2875a35e632b3f7285cc3d9183087&"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "1333251917098520628": {
+    "enabled": true,
+    "protected_user_ids": [
+      "442317061104861184"
+    ],
+    "protect_admins": true,
+    "protected_role_ids": [
+      "1333421502971904020"
+    ],
+    "exempt_role_ids": [
+      "1507954816738131978",
+      "1333419158485864511",
+      "1333417449386676306",
+      "1458853102814888142",
+      "1333421502971904020"
+    ],
+    "exempt_channel_ids": [
+      "1508779643971305613",
+      "1333435322603933706"
+    ],
+    "delete_message": true,
+    "log_channel_id": "1483654954638905364",
+    "dm_user_on_warn": true,
+    "warn_message": "⚠️ Please avoid unnecessarily pinging staff/admins. This is a warning."
+  }
+}

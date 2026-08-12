@@ -1,0 +1,21 @@
+{
+  "1333251917098520628": {
+    "channel_id": 1513170888873345274,
+    "message_id": 1513177012791935127,
+    "log_channel_id": 1513184656839675944,
+    "title": "📋Applications",
+    "description": "📋 Staff/Helper/Tester Application\n\nInterested in joining the Seisen Hub team?\n\nWe're looking for active and dedicated community members who are ready to support users and help keep our Discord server welcoming and organized.\n\nRequirements\n\n• Be active within the community\n• Have a friendly and helpful attitude\n• Be familiar with Seisen Hub scripts and services\n• Be able to assist users with common questions and issues\n\nPerks\n\n• Receive the appropriate role with special permissions\n• Get direct access to the staff team\n• Enjoy early access to upcoming scripts, features, and updates\n\nClick the button below to submit your application! 🚀",
+    "created_at": "2026-06-07T13:40:09.677252+00:00",
+    "accept_roles": {
+      "staff": "1333419158485864511",
+      "tester": "1458853102814888142",
+      "helper": "1333417449386676306"
+    },
+    "interview_category_id": 1513450647230615713,
+    "interviewer_role_ids": [
+      "1333419158485864511",
+      "1333417449386676306",
+      "1458853102814888142"
+    ]
+  }
+}

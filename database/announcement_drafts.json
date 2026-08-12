@@ -2,19 +2,232 @@
   "1333251917098520628": {
     "Levelbound": {
       "title": "Levelbound New Update!!!",
-      "description": "> **Added**\n> \u2022 Kill Aura No Longer Attacks Teammates.\n---\n**FOR PREMIUM ONLY**\n---\n-# **Make sure to leave a [review](https://discord.com/channels/1333251917098520628/1399677245441970238) to help us improve future updates!**",
+      "description": "> **Added**\n> • Kill Aura No Longer Attacks Teammates.\n---\n**FOR PREMIUM ONLY**\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
       "thumbnail_url": "https://tr.rbxcdn.com/180DAY-934f0e0bef90a34c2e1369ca18069f04/256/256/Image/Webp/noFilter",
-      "footer": "\ud83d\udce2 Game Update \u2022 LevelBound",
+      "footer": "📢 Game Update • LevelBound",
       "channel_id": "1367733424227483658",
-      "ping_role_id": "1469638786597257322"
+      "ping_role_id": "1469638786597257322",
+      "content": null,
+      "image_url": "",
+      "images": [],
+      "buttons": []
     },
     "General/Restaurant Tycoon 3": {
-      "title": "Esater Egg Update!",
-      "description": "[+] Added:\n\n> \u2022 Added Easter Egg Teleport to the Events tab.\n> \u2022 Added Auto Collect Egg to the Events tab.\n",
+      "title": "Restaurant  Tycoon 3 Update!",
+      "description": "[+] Fixed:\n> • Auto Rude\n\n[+] Improved:\n> • New UI Improvement\n\n----\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
       "thumbnail_url": "https://tr.rbxcdn.com/180DAY-7cf4ccc55dcd09b6053bf2f6f956156f/256/256/Image/Webp/noFilter",
-      "footer": "Game Update \u2022 Restaurant Tycoon 3",
+      "footer": "Game Update • Restaurant Tycoon 3",
       "channel_id": "1367733424227483658",
-      "ping_role_id": "1411716908365119578"
+      "ping_role_id": "1411716908365119578",
+      "content": null,
+      "image_url": "",
+      "images": [],
+      "buttons": []
+    },
+    "General/Bee Garden": {
+      "title": "Bee Garden [UPDATE]",
+      "description": "[+] Added:\n> • Auto Treasure Hunt Event (Shop, Craft, Playtime)\n\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-1601e3e4763872818825ab3d6368221f/768/432/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Update • Bee Garden",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1501668895608803418",
+      "buttons": []
+    },
+    "Announce/Announce Draft 1": {
+      "title": "LootLabs Down ",
+      "description": "Unfortunately, LootLabs is temporarily unavailable. One of the accounts i use to host LootLabs links has been rate-limited, so the service will remain unavailable until the issue is resolved. Thank you for your patience and understanding.\n",
+      "content": null,
+      "thumbnail_url": "",
+      "image_url": "",
+      "images": [],
+      "footer": "KEY SYSTEM UPDATE",
+      "channel_id": "1333458476709580851",
+      "ping_role_id": "1367737195997171763",
+      "buttons": []
+    },
+    "Announce/Panel": {
+      "title": "",
+      "description": "🚀 SEISTEM ACCOUNT MANAGER\n\nManage multiple Roblox accounts with ease using SEISTEM Account Manager.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n✨ Features\n\n• Multi-Account Management\n• Multi-Instance Support\n• Quick Account Launching\n• Game Selection & Direct Launch\n• Server Selection & Joining\n• Account Backup & Restore\n• Account Favorites & Organization\n• Fast, Lightweight & Easy to Use\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n📥 Download\n\nDownload Here:\n🔗 [Download](https://reiyaa.vercel.app/)\n\n💬 Support\n\nNeed help or found a bug?\nCheck the channel for support or to report bugs.\n🔗 [Help](https://discordapp.com/channels/1333251917098520628/1514115263220420638)\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nBuilt for Roblox players, testers, developers, and users who manage multiple accounts.",
+      "content": null,
+      "thumbnail_url": "",
+      "image_url": "",
+      "images": [],
+      "footer": "",
+      "channel_id": "1510522155710808155",
+      "ping_role_id": null,
+      "buttons": []
+    },
+    "General/Wizard Alchemy": {
+      "title": "Wizard Alchemy Script Update",
+      "description": "[+] Added:\n\n> • Added Venom Spider Lair (World 4) — 7 new spider monsters in a separate Monster World selection (Man-Eating Spider, Frenzied Spider, Deadly Man-Eating Spider, Deadly Cannibal Spider, Cannibal Spider, Plague Spider, Spider Queen).\n> • Added Pirate Hideout (World 3) — pirates are now their own Monster World selection, separate from Sea of Oblivion.\n> • Added Spider Queen to Boss Health Bar detection.\n> • Added Spider Queen to Auto Boss Farm with World 4 teleport. (Premium)\n> • Added 3 new materials to Auto Sell & Auto Gather: Spider Egg, Crystal Orchid Grove, Large Crystal Orchid Grove.\n> • Added World 4 NPC support to Auto Sell — Lambert is now detected in Venom Spider Lair.\n> • Added Tide Drifter and Venom Spider Kin to Auto Race Roll. (Premium)\n> • Added 4 new Equipment Shop buy toggles: Spider Venom Wand Legendary, Venomous Master Legendary Hat, Venomous Master Legendary Clothe, Poison Spider Broom.\n> • Added 2 new Location Teleport buttons: Venom Spider Lair, Spider Queen Boss.\n> • Added Venom Spider Lair (4) to the World Teleport dropdown.\n> • Added Auto Quest: Venom Spider Lair — 5 quests (Web-Weaving Assassin I & II, Venomous Shadow I & II, Queen's Wraith). (Premium)\n\n[*] Fixed:\n\n> • Fixed Spider Queen boss not teleporting to its position — World 4 was not being detected by the world check.  (Premium)\n> • Fixed Farm Position, Farm Distance, and Auto Skill Slots not restoring correctly from saved config.\n\n\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-cbe05e8cd15a5080d304489b02f92018/768/432/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Update• Wizard Alchemy • Seisen Hub",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1510592247358292080",
+      "buttons": []
+    },
+    "General/Slime RNG": {
+      "title": "Slime RNG Script",
+      "description": "> **Improved**:\n> • Auto Shoot\n> • Auto Collect\n\n> **Improved**:\n> • Auto Claim Index\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-b3e07872193b7de060e80e2b300a94ca/768/432/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1510592053321400420",
+      "buttons": []
+    },
+    "General/Dungeon Heroes": {
+      "title": "Dungeon Heroes [UPDATE]",
+      "description": "[+] Added:\n\n> • Live skill fetch with hardcoded fallback\n> • Live dungeon/raid/nightmare fetch with hardcoded fallback\n> • Live Skill Chest fetch with hardcoded fallback\n> • Dungeon dropdown level sorting and level display\n> • Ocean Dungeon display name\n\n[*] Fixed:\n\n> • Fixed Kill Aura\n> • Fixed Auto Skill\n> • Fixed Auto Farm\n> • Fixed missing skills in Auto Skill dropdown\n---\n-# **AGAIN SOLARA & XENO OR OTHER LOWER END EXECUTOR ARE NOT FULLY SUPPORTED**\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-9f33c21946425df951801b23a3209354/256/256/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Update • Dungeon Heroes",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1400874298607931552",
+      "buttons": []
+    },
+    "General/Build a Ring Farm": {
+      "title": " Build A Ring Farm [UPDATE]",
+      "description": "[+] Added:\n\n> • Added Auto Collect Blackhole to the Event tab.\n> • Added Auto Collect Rain to the Event tab.\n\n[*] Fixed:\n\n> • Fixed Auto Roll Seeds only buying one seed per roll instead of every affordable/matching seed you selected.\n> • Fixed Auto Collect Alien Drops not finding or collecting any drops.\n> • Fixed Auto Collect Honeycomb not finding honeycombs to collect.\n> • Fixed Auto Submit Honeycomb not finding the Honey Jar Pot to interact with.\n> • Fixed Auto Collect Wizard Drop potentially colliding with honeycomb collection.\n\n\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-a649838c10d14331168f2fdbb8c2607e/256/256/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Update • Build a Ring Farm",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1513438765522223187",
+      "buttons": []
+    },
+    "General/Library": {
+      "title": "Library Updates",
+      "description": "[+] Added:\n\n> • UI Scale Slider\n> • Toggle UI Key Remapper\n> • Show Notifications Toggle\n> • Config Rename\n> • Config Duplicate\n> • Config Notes\n> • Export Config to Clipboard\n> • Import Config from Clipboard\n\n[*] Fixed:\n\n> • Config dropdown not updating after saving\n> • AutoLoad not working on startup\n> • Config dropdown panel height showing only 1 item\n> • UI not auto-scaling on mobile\n> • IsMobile detection for keybind buttons\n> • Keybind Panel showing on startup when toggle is off\n> • Tab scrollbar disappearing at small UI scale\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "",
+      "image_url": "",
+      "images": [],
+      "footer": "",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1476808253198438473",
+      "buttons": []
+    },
+    "General/Grow a Garden 2": {
+      "title": "Grow a Garden 2 Script Update",
+      "description": "[+] Added:\n\n> • Rocket Pop, Fire Fern, Briar Rose seeds.\n> • Boombox Crate, Fourth Of July Crate, Picture Frame Crate.\n> • Bear, Turtle, Butterfly, Bald Eagle to Pets to Buy.\n> • Pet Finder.\n> • Clear Server List button.\n> • No-Teleport Harvest toggle.\n> • Search bar on large dropdowns.\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-e87bf2524ceeb4909aa2f15f555f38cf/256/256/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Update • Grow a Garden 2 • Seisen Hub",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1516735023649259560",
+      "buttons": []
+    },
+    "General/Account Manager": {
+      "title": "Important Announcement – Reiya Account Manager",
+      "description": "The Account Manager has been completely rebranded and redesigned into Reiya Account Manager! ✨\n\nWe've refactored and remodeled the entire application, bringing a fresh look, improved performance, and a better overall experience.\n\n🆕 New Feature: The latest version now includes a built-in bootstrap system, similar to Fishstrap/Bloxstrap, with our own custom FastFlags integrated for an enhanced experience.\n\n⚠️ Please note: The old Account Manager will no longer receive updates or new features.\n\nIf you're still using the previous version, download the latest Reiya Account Manager from the same website to continue receiving updates and improvements.\n\n🔑 Good news: If your current key is still valid, you c",
+      "content": null,
+      "thumbnail_url": "",
+      "image_url": "",
+      "images": [],
+      "footer": "",
+      "channel_id": "1333458476709580851",
+      "ping_role_id": "1367737195997171763",
+      "buttons": []
+    },
+    "General/Evomon": {
+      "title": "Evomon Update!",
+      "description": "[+] Added:\n\n• Added Auto Equipment Dungeon with Challenge 1 to 4 selection. \n• Added Max Players, Fill Bot, and Friend Only settings for Equipment Dungeon.\n\n[*] Fixed:\n\n• Fixed Auto Claim Battle Pass failing to claim season rewards. \n• Fixed Auto Collect Quest failing to claim completed quests. \n• Fixed Auto Exp Dungeon entering the wrong level. \n• Fixed teleports for Raven Ridge and Flying Territory being swapped.\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-645009a0ed7878ec09816f2b31fb62b0/256/256/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Update • Evomon • Seisen Hub",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1522282405614845973",
+      "buttons": []
+    },
+    "General/+1 Mine Per Click": {
+      "title": "+1 Mine Per Click New Script Release",
+      "description": "Feature :\n\n• Auto Sell\n• Auto Rebirth\n• Auto Upgrade Slot\n• Auto Upgrade Walkspeed\n• Auto Click\n• Auto Dig\n• Auto Collect\n• Auto Buy Pickaxe\n• Auto Buy Aura",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-4faa7c4aed9616a174810fe72d0e9eb1/256/256/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Release • +1 Mine Per Click • Seisen Hub",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1419394693283844216",
+      "buttons": []
+    },
+    "General/Build a Soccer Team": {
+      "title": "New Script Build a Soccer Squad",
+      "description": "Features:\n\n> • Auto Squad Farm\n> • Smart Reroll (Free Reroll)\n> • Sniper Mode\n> • Auto-Build Squad\n> • Keep Team on Bad Slot\n> • Chemistry Priority\n> • Team Hunt (Country/Year Target)\n> • Elite Player Hunt\n> • Reroll Threshold OVR\n> • Target OVR\n> • OVR Floor\n> • Bail After Picks\n> • Use Year Reroll\n> • Use All Rerolls\n> • Auto Rejoin (Periodic + Disconnect Detector)\n> • Anti-AFK\n> • Stats Tracking (Best OVR / Runs)\n",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-02b75033956a85d447096557851f2ef3/384/216/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Release • Build a Soccer Squad • Seisen Hub",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1419394693283844216",
+      "buttons": []
+    },
+    "Panel/Panel Draft 1": {
+      "title": "Seisen Hub Free Script",
+      "description": "╔════════════════╗\nPremium Key & Boosting Information\n╚════════════════╝\nBoosting Options:\n• 1 Boost grants premium key access for a duration of 15 days.\n• 2 Boosts grant premium key access for a duration of 30 days.\n\nAccepted Payment Methods:\n• PayPal\n• GCash\n• Robux\n\nAll purchases and redemptions are handled through our official platforms only. Users are required to open a ticket in the Premium Ticket channel to ensure proper verification and support.\n\nBy purchasing, redeeming, or using a Seisen Hub key, you acknowledge and agree to comply with our Terms of Service and usage policies.\n\n━━━━━━━━━━━━━━━━━━━━━━\nPC Script Loader:\n```loadstring(game:HttpGet(\"https://api.jnkie.com/api/v1/luascripts/public/8ac2e97282ac0718aeeb3bb3856a2821d71dc9e57553690ab508ebdb0d1569da/download\"))()```\n\nMobile Script Loader:\n`loadstring(game:HttpGet(\"https://api.jnkie.com/api/v1/luascripts/public/8ac2e97282ac0718aeeb3bb3856a2821d71dc9e57553690ab508ebdb0d1569da/download\"))()`\n\n\nWebsite & Key Management:\nUse the buttons below to purchase a key, redeem an existing key, or manage your premium access.",
+      "content": null,
+      "thumbnail_url": "",
+      "image_url": "",
+      "images": [],
+      "footer": "Seisen Hub • Premium Access",
+      "channel_id": "1398592467024085063",
+      "ping_role_id": null,
+      "buttons": [
+        {
+          "label": "Buy Key",
+          "url": "https://seisen.vercel.app/premium"
+        },
+        {
+          "label": "Redeem Key",
+          "url": "https://discord.com/channels/1333251917098520628/1434064472695246858"
+        },
+        {
+          "label": "Get Key",
+          "url": "https://seisen.vercel.app/getkey"
+        }
+      ]
+    },
+    "General/Anime Expedition": {
+      "title": "Anime Expedition **Script Update!**",
+      "description": "New Update\n\n[+] Added:\n> • Auto Open Villain Chest in the Lobby tab.\n> • Disable Unit Obtainment Cutscene option in Settings.\n\n[*] Fixed:\n> • The summon cutscene now actually skips instead of still playing.\n> • Saved Map, Act, and Difficulty settings no longer reset after reloading.\n> • Better protection against the \"Connection Lost\" kick.\n\n[~] Improved:\n> • The AFK Mode overlay now fits properly on smaller windows.\n\n\n---\n-# **Make sure to leave a [vouch](https://discord.com/channels/1333251917098520628/1510238868824395878) to help us improve future updates!**",
+      "content": null,
+      "thumbnail_url": "https://tr.rbxcdn.com/180DAY-eeaa105a1844ec3811a2368a362736ec/256/256/Image/Webp/noFilter",
+      "image_url": "",
+      "images": [],
+      "footer": "Game Update • Anim Expedition• Seisen Hub",
+      "channel_id": "1367733424227483658",
+      "ping_role_id": "1528448896861212813",
+      "buttons": []
+    },
+    "Panel/Banning": {
+      "title": "",
+      "description": "",
+      "content": "⚠️ Do not send messages in this channel. Any message posted here will result in an automatic {kick/ban} depending on server settings.",
+      "thumbnail_url": "",
+      "image_url": "",
+      "images": [],
+      "footer": "",
+      "channel_id": "1529181927473680464",
+      "ping_role_id": null,
+      "buttons": []
     }
   }
 }

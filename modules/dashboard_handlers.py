@@ -6,6 +6,7 @@ Handlers for IPC triggers.
 from __future__ import annotations
 
 import base64
+import os
 from datetime import datetime, timezone
 
 import asyncio
@@ -75,6 +76,9 @@ from modules.activity_rewards import manual_reroll_reward, manual_revoke_reward
 from modules.sticky import load_sticky, save_sticky
 
 _bot: commands.Bot | None = None
+_restock_debounce_task: asyncio.Task | None = None
+_restock_latest_payload: dict | None = None
+_restock_lock = asyncio.Lock()
 
 async def resolve_trigger_channel(guild: discord.Guild, payload: dict, key: str = "channel_id") -> tuple[int | None, discord.abc.GuildChannel | None]:
     channel_id = _as_int(payload.get(key))
@@ -89,6 +93,137 @@ async def resolve_trigger_channel(guild: discord.Guild, payload: dict, key: str 
     return channel_id, channel
 
 
+async def _execute_restock_post(guild: discord.Guild):
+    async with _restock_lock:
+        global _restock_latest_payload
+        payload = _restock_latest_payload or {}
+        
+        channel_id_raw = os.getenv("RESTOCK_CHANNEL_ID")
+        if not channel_id_raw or not str(channel_id_raw).isdigit():
+            print("[Restock] RESTOCK_CHANNEL_ID not configured in bot environment.")
+            return
+        
+        channel_id = int(channel_id_raw)
+        channel = None
+        if _bot:
+            channel = _bot.get_channel(channel_id)
+            if not channel:
+                try:
+                    channel = await _bot.fetch_channel(channel_id)
+                except Exception:
+                    pass
+        if not channel:
+            channel = guild.get_channel(channel_id)
+            if not channel:
+                try:
+                    channel = await guild.fetch_channel(channel_id)
+                except Exception:
+                    channel = None
+        
+        if not channel or not hasattr(channel, "send"):
+            print(f"[Restock] Restock channel {channel_id} not found or not text-based.")
+            return
+        
+        # Format embed
+        embed = discord.Embed(
+            title="🌟 SEISEN PREMIUM STOCK UPDATE 🌟",
+            description="Our premium slots have been restocked! Here is the current availability:",
+            color=discord.Color.from_str("#f47fff"),
+            timestamp=datetime.now(timezone.utc)
+        )
+        
+        def get_stock_emoji(key: str, val: int) -> str:
+            if val == 0:
+                return "🔴 Out of stock"
+            elif key in ["gcash", "local_qr", "maya"]:
+                return "🟢 Unlimited"
+            elif val <= 5:
+                return "🟠 Low stock"
+            else:
+                return "🟢 In stock"
+
+        for tier in ["weekly", "monthly", "lifetime"]:
+            tier_stock = payload.get(tier, {})
+            tier_title = f"📅 {tier.capitalize()} Subscription"
+            
+            lines = []
+            methods_display = {
+                "robux": "Robux",
+                "paypal": "PayPal",
+                "gcash": "GCash / Maya",
+                "card": "Card",
+                "local_qr": "Wise"
+            }
+            
+            for key, label in methods_display.items():
+                val = tier_stock.get(key, 0)
+                lines.append(f"• **{label}**: {get_stock_emoji(key, val)}")
+            
+            embed.add_field(name=tier_title, value="\n".join(lines), inline=False)
+        
+        embed.set_footer(text="Purchase instantly at: seisen.vercel.app")
+        
+        # Create second instructions embed
+        embed_info = discord.Embed(
+            title="🛒 How to Purchase Seisen Premium",
+            description=(
+                "To buy or avail premium, visit us on our website! There you can purchase a script key instantly.\n\n"
+                "• **Check Status**: Refer to the status board above to see which payment methods are currently active.\n"
+                "• **Instant Delivery**: All keys are generated and delivered immediately after payment verification.\n"
+                "• **Support**: If you have any issues or want to pay via QR, open a support ticket in our server."
+            ),
+            color=discord.Color.from_str("#b89060"), # Premium gold accent
+            timestamp=datetime.now(timezone.utc)
+        )
+        embed_info.set_footer(text="Seisen Premium • Click the buttons below to purchase")
+
+        # Create interactive link buttons
+        class PurchaseView(discord.ui.View):
+            def __init__(self):
+                super().__init__(timeout=None)
+                self.add_item(discord.ui.Button(
+                    label="Visit Website",
+                    url="https://seisen.vercel.app/",
+                    style=discord.ButtonStyle.link
+                ))
+                self.add_item(discord.ui.Button(
+                    label="Buy Premium",
+                    url="https://seisen.vercel.app/premium",
+                    style=discord.ButtonStyle.link
+                ))
+
+        # Clean up all previous restock messages in this channel sent by the bot to prevent duplicates
+        if _bot and _bot.user:
+            try:
+                async for message in channel.history(limit=50):
+                    if message.author.id == _bot.user.id:
+                        try:
+                            await message.delete()
+                        except Exception as del_err:
+                            print(f"[Restock] Failed to delete old message {message.id}: {del_err}")
+            except Exception as history_err:
+                print(f"[Restock] Failed to fetch channel history for cleanup: {history_err}")
+        
+        # Send both embeds and the buttons view in a single atomic message
+        new_msg = await channel.send(embeds=[embed, embed_info], view=PurchaseView())
+        
+        state_file = "restock_state"
+        state = load_json(state_file, {})
+        state["last_message_id"] = str(new_msg.id)
+        save_json(state_file, state)
+        
+        # Record system-wide audit log
+        from modules.utils import record_audit_log
+        record_audit_log(
+            guild_id=guild.id,
+            category="Restock",
+            action="Updated Premium Stock",
+            actor="System (Website API)",
+            details=f"Posted new restock announcement embeds in #{getattr(channel, 'name', channel_id)}",
+            metadata=payload
+        )
+
+
 async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict):
     print(f"[IPC/Dashboard] Received trigger: {action} for guild {guild.name} ({guild.id})")
 
@@ -96,7 +231,13 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
         payload = {}
 
     try:
-        if action == "announcement":
+        if action == "restock":
+            global _restock_latest_payload
+            _restock_latest_payload = payload
+            await _execute_restock_post(guild)
+            return {"status": "success", "message": "Restock notification posted successfully"}
+
+        elif action == "announcement":
             data = payload
             channel_id, channel = await resolve_trigger_channel(guild, data)
             if not channel or not hasattr(channel, "send"):
@@ -1091,7 +1232,6 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             return {"status": "success", "action": action, "result": result}
 
         elif action == "keypanel_post":
-            import os
             channel_id, channel = await resolve_trigger_channel(guild, payload)
             if not channel or not hasattr(channel, "send"):
                 return {"status": "error", "action": action, "http_status": 404, "message": f"Channel {channel_id} not found."}
@@ -1180,7 +1320,6 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             return {"status": "success", "action": action, "message_id": str(panel_msg.id)}
 
         elif action == "keypanel_update":
-            import os
             message_id = payload.get("message_id")
             if not message_id:
                 return {"status": "error", "action": action, "http_status": 400, "message": "Missing message_id."}

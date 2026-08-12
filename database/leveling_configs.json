@@ -1,1 +1,35 @@
-{}
+{
+  "1333251917098520628": {
+    "enabled": true,
+    "excluded_channel_ids": [
+      "1508793141392572596",
+      "1509556268858343674",
+      "1509184232122220604",
+      "1509176740029792366"
+    ],
+    "cooldown_seconds": 5,
+    "announce_level_up": true,
+    "announce_channel_id": "1452965709842878616",
+    "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+    "tiers": [
+      {
+        "id": "56pbv1hq",
+        "name": "Active",
+        "threshold": 1000,
+        "role_id": "1528535772385382460"
+      },
+      {
+        "id": "5o0chva2",
+        "name": "Loyal",
+        "threshold": 5000,
+        "role_id": "1528535795097403595"
+      },
+      {
+        "id": "8rwjn729",
+        "name": "OG",
+        "threshold": 20000,
+        "role_id": "1528535839033004073"
+      }
+    ]
+  }
+}

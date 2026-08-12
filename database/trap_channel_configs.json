@@ -1,1 +1,21 @@
-{}
+{
+  "1333251917098520628": {
+    "enabled": true,
+    "channel_ids": [
+      "1529181927473680464"
+    ],
+    "action": "kick",
+    "delete_message_hours": 6,
+    "exempt_role_ids": [
+      "1333417449386676306",
+      "1333419158485864511",
+      "1458853102814888142",
+      "1507954816738131978",
+      "1333421502971904020",
+      "1428989955027501089"
+    ],
+    "delete_trigger_message": true,
+    "reason": "Posted in a restricted channel",
+    "log_channel_id": "1483654954638905364"
+  }
+}

@@ -1578,6 +1578,32 @@ def _normalize_giveaway_entry(raw: Dict[str, Any], *, guild_id: str, message_id:
 
 # --- Routes ---
 
+# RESTOCK INTERNAL API
+class InternalRestockRequest(BaseModel):
+    methodStocks: Dict[str, Dict[str, int]]
+    secret: str
+
+@app.post("/api/internal/restock")
+async def post_internal_restock(req: InternalRestockRequest):
+    internal_secret = os.getenv("VERIFICATION_INTERNAL_SECRET")
+    if not internal_secret or req.secret != internal_secret:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    from modules.ipc import _bot, process_dashboard_trigger
+    guild_id = os.getenv("RESTOCK_GUILD_ID")
+    if not guild_id:
+        if _bot and _bot.guilds:
+            guild_id = str(_bot.guilds[0].id)
+        else:
+            raise HTTPException(status_code=503, detail="Bot is not ready yet or not in any guilds")
+    
+    result, status_code = await process_dashboard_trigger("restock", guild_id, req.methodStocks)
+    if status_code != 200:
+        raise HTTPException(status_code=status_code, detail=result.get("message", "Trigger failed"))
+    
+    return result
+
+
 # Bot Guilds (intersection: servers you manage ∩ servers the bot is in)
 @app.get("/api/bot/guilds")
 @app.get("/api/guilds")

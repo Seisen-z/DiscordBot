@@ -1,8 +1,8 @@
 {
   "1333251917098520628": {
     "General/Script Role": {
-      "title": "\ud83d\udce2 Stay Updated on Scripts!",
-      "description": "Select a game below to get instant pings whenever its script receives a new update! \u26a1\ud83c\udfae\n\n> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!",
+      "title": "📢 Stay Updated on Scripts!",
+      "description": "Select a game below to get instant pings whenever its script receives a new update! ⚡🎮\n\n> Only subscribe to the scripts you care about never miss a new feature, fix, or event again!",
       "placeholder": "Choose roles...",
       "min_values": 1,
       "max_values": 5,
@@ -17,6 +17,99 @@
       "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Discord_logo_purple.svg/1200px-Discord_logo_purple.svg.png",
       "footer": "",
       "channel_id": "1333425858395770920"
+    },
+    "Imported/Script ROle": {
+      "title": "📂 Access Game Script Channels",
+      "description": "Select the games you want access to below. Once you receive a role, the corresponding script channels will automatically become visible.",
+      "content": "",
+      "color": "#5865F2",
+      "thumbnail_url": "",
+      "footer": "",
+      "channel_id": "1367738330355335188",
+      "placeholder": "Select game channels to unlock 🔓",
+      "min_values": 1,
+      "max_values": 5,
+      "options": [
+        {
+          "label": "Anime Expedition",
+          "value": "1528773755080413325",
+          "description": "Select this to Access Role Based Channel"
+        }
+      ],
+      "message_id": "1528779931029606453",
+      "name": "Imported/Script ROle"
+    },
+    "Imported/Roblox Update Roles": {
+      "title": "📣 Roblox Update Roles",
+      "description": "Choose this role to start receiving update notifications. Stay informed and never miss out on the latest changes!",
+      "content": "",
+      "color": "#5865F2",
+      "thumbnail_url": "",
+      "footer": "",
+      "channel_id": "1367738330355335188",
+      "placeholder": "Choose roles...",
+      "min_values": 1,
+      "max_values": 3,
+      "options": [
+        {
+          "label": "Windows Update",
+          "value": "1420099841689653460",
+          "description": "Pinged for Updates on Windows Update"
+        },
+        {
+          "label": "Android Update",
+          "value": "1420099757094993990",
+          "description": "Pinged for Updates on Android Update"
+        },
+        {
+          "label": "Game Update",
+          "value": "1419394693283844216",
+          "description": "Pinged for Updates on Game Update"
+        }
+      ],
+      "message_id": "1492847097857179718",
+      "name": "Imported/Roblox Update Roles"
+    },
+    "Imported/Notification Role": {
+      "title": "🔔 Choose Your Notification Role",
+      "description": "Select a role below to start receiving notifications for the type of updates you care about. Stay informed and never miss out!",
+      "content": "",
+      "color": "#5865F2",
+      "thumbnail_url": "",
+      "footer": "",
+      "channel_id": "1367738330355335188",
+      "placeholder": "Choose roles...",
+      "min_values": 1,
+      "max_values": 3,
+      "options": [
+        {
+          "label": "Announcement Ping",
+          "value": "1367737195997171763",
+          "description": "Get Notified about All Important Announcement"
+        },
+        {
+          "label": "Giveaway Ping",
+          "value": "1406994889803305001",
+          "description": "Be the first to know about giveaways and rewards"
+        },
+        {
+          "label": "Showcase Ping",
+          "value": "1367737203815612531",
+          "description": "Get Notified about All Video Showcase"
+        },
+        {
+          "label": "Script Update",
+          "value": "1528448896861212813",
+          "description": "Get Notified about Script Update of everygame"
+        },
+        {
+          "label": "Sneak Peak",
+          "value": "1367737213735141437",
+          "description": "Get Notified for leak of new script and update"
+        }
+      ],
+      "message_id": "1492843462461096119",
+      "name": "Imported/Notification Role"
     }
   }
 }
