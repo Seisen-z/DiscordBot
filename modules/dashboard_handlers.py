@@ -246,7 +246,25 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             title = data.get("title", "")
             desc = data.get("description", "")
             msg_content = data.get("content", "")
-            
+
+            # Resolve Roblox game thumbnail if a game ID is stored
+            thumbnail_game_id = str(data.get("thumbnail_game_id") or "").strip()
+            if thumbnail_game_id and not data.get("thumbnail_url"):
+                try:
+                    import aiohttp as _aiohttp_thumb
+                    async with _aiohttp_thumb.ClientSession() as _ts:
+                        async with _ts.get(
+                            f"https://thumbnails.roblox.com/v1/games/icons?universeIds={thumbnail_game_id}"
+                            f"&returnPolicy=PlaceHolder&size=512x512&format=Png&isCircular=false",
+                            timeout=_aiohttp_thumb.ClientTimeout(total=6),
+                        ) as _tr:
+                            _td = await _tr.json()
+                            _thumb_url = (_td.get("data") or [{}])[0].get("imageUrl")
+                            if _thumb_url:
+                                data = {**data, "thumbnail_url": _thumb_url}
+                except Exception as _te:
+                    print(f"[Announcement] Thumbnail resolve failed: {_te}")
+
             files = []
             thumb = resolve_local_asset(data.get("thumbnail_url"), files)
             image = resolve_local_asset(data.get("image_url"), files)
