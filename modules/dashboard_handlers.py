@@ -339,6 +339,64 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
 
             return {"status": "success", "action": action, "channel_id": str(channel_id), "message_id": str(sent_msg.id)}
 
+        elif action == "site_update":
+            import os, aiohttp as _aiohttp
+            data = payload or {}
+            title   = data.get("title", "").strip()
+            content = data.get("content", "").strip()
+            tag     = data.get("tag", "Update")
+            image_url = data.get("image_url") or None
+
+            if not title or not content:
+                return {"status": "error", "action": action, "http_status": 400, "message": "title and content are required"}
+
+            site_secret = os.getenv("SITE_UPDATE_SECRET", "")
+            site_url    = os.getenv("SEISEN_SITE_URL", "https://seisen.vercel.app")
+
+            # Push to main website
+            website_ok = False
+            try:
+                async with _aiohttp.ClientSession() as session:
+                    async with session.post(
+                        f"{site_url}/api/site-updates",
+                        json={"title": title, "content": content, "tag": tag, "image_url": image_url},
+                        headers={"x-update-secret": site_secret, "Content-Type": "application/json"},
+                        timeout=_aiohttp.ClientTimeout(total=10),
+                    ) as resp:
+                        website_ok = resp.status in (200, 201)
+            except Exception as exc:
+                print(f"[SiteUpdate] Failed to push to website: {exc}")
+
+            # Optionally post to Discord
+            discord_msg_id = None
+            if data.get("post_to_discord") and data.get("channel_id"):
+                disc_channel_id, disc_channel = await resolve_trigger_channel(guild, data)
+                if disc_channel and hasattr(disc_channel, "send"):
+                    tag_colors = {
+                        "Update": 0xc9a97a, "New Script": 0x6ee7b7,
+                        "Patch": 0xfbbf24, "Maintenance": 0xa78bfa, "Announcement": 0x60a5fa,
+                    }
+                    embed = discord.Embed(
+                        title=title,
+                        description=content,
+                        color=tag_colors.get(tag, 0xc9a97a),
+                    )
+                    embed.set_footer(text=f"Seisen • {tag}")
+                    if image_url:
+                        embed.set_image(url=image_url)
+
+                    ping_role_id = data.get("ping_role_id")
+                    mention = f"<@&{ping_role_id}>" if ping_role_id else None
+                    sent = await disc_channel.send(content=mention, embed=embed)
+                    discord_msg_id = str(sent.id)
+
+            return {
+                "status": "success",
+                "action": action,
+                "website_posted": website_ok,
+                "discord_message_id": discord_msg_id,
+            }
+
         elif action in {"auto_post_send", "auto_post_now"}:
             from modules.auto_post import execute_auto_post_send
             success, msg_id, now_iso, err = await execute_auto_post_send(guild, payload)
