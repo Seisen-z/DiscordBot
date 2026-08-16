@@ -368,11 +368,24 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                     _site_url    = _os.getenv("SEISEN_SITE_URL", "https://seisen.vercel.app")
                     _thumbnail   = data.get("thumbnail_url") or None
                     _footer      = data.get("footer") or None
+                    # Resolve game name from game ID if not already stored
+                    _game_name = data.get("thumbnail_game_name") or None
+                    if not _game_name and thumbnail_game_id:
+                        try:
+                            async with _aiohttp.ClientSession() as _gns:
+                                async with _gns.get(
+                                    f"https://games.roblox.com/v1/games?universeIds={thumbnail_game_id}",
+                                    timeout=_aiohttp.ClientTimeout(total=6),
+                                ) as _gnr:
+                                    _gnd = await _gnr.json()
+                                    _game_name = (_gnd.get("data") or [{}])[0].get("name") or None
+                        except Exception:
+                            pass
                     try:
                         async with _aiohttp.ClientSession() as _sess:
                             async with _sess.post(
                                 f"{_site_url}/api/site-updates",
-                                json={"title": _title, "content": _content, "tag": _tag, "image_url": _image, "thumbnail_url": _thumbnail, "footer": _footer},
+                                json={"title": _title, "content": _content, "tag": _tag, "image_url": _image, "thumbnail_url": _thumbnail, "footer": _footer, "game_name": _game_name},
                                 headers={"x-update-secret": _site_secret, "Content-Type": "application/json"},
                                 timeout=_aiohttp.ClientTimeout(total=10),
                             ) as _resp:
