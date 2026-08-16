@@ -337,7 +337,30 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 },
             )
 
-            return {"status": "success", "action": action, "channel_id": str(channel_id), "message_id": str(sent_msg.id)}
+            # Optionally post to Seisen website
+            website_posted = False
+            if data.get("post_to_website"):
+                import os as _os, aiohttp as _aiohttp
+                _title   = title or data.get("name", "Announcement")
+                _content = desc or msg_content or ""
+                _tag     = data.get("website_tag", "Announcement")
+                _image   = data.get("image_url") or None
+                if _title and _content:
+                    _site_secret = _os.getenv("SITE_UPDATE_SECRET", "")
+                    _site_url    = _os.getenv("SEISEN_SITE_URL", "https://seisen.vercel.app")
+                    try:
+                        async with _aiohttp.ClientSession() as _sess:
+                            async with _sess.post(
+                                f"{_site_url}/api/site-updates",
+                                json={"title": _title, "content": _content, "tag": _tag, "image_url": _image},
+                                headers={"x-update-secret": _site_secret, "Content-Type": "application/json"},
+                                timeout=_aiohttp.ClientTimeout(total=10),
+                            ) as _resp:
+                                website_posted = _resp.status in (200, 201)
+                    except Exception as _exc:
+                        print(f"[Announcement→Website] Failed to push: {_exc}")
+
+            return {"status": "success", "action": action, "channel_id": str(channel_id), "message_id": str(sent_msg.id), "website_posted": website_posted}
 
         elif action == "site_update":
             import os, aiohttp as _aiohttp
