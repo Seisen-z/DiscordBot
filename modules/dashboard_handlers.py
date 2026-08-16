@@ -366,11 +366,13 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 if _title and _content:
                     _site_secret = _os.getenv("SITE_UPDATE_SECRET", "")
                     _site_url    = _os.getenv("SEISEN_SITE_URL", "https://seisen.vercel.app")
+                    _thumbnail   = data.get("thumbnail_url") or None
+                    _footer      = data.get("footer") or None
                     try:
                         async with _aiohttp.ClientSession() as _sess:
                             async with _sess.post(
                                 f"{_site_url}/api/site-updates",
-                                json={"title": _title, "content": _content, "tag": _tag, "image_url": _image},
+                                json={"title": _title, "content": _content, "tag": _tag, "image_url": _image, "thumbnail_url": _thumbnail, "footer": _footer},
                                 headers={"x-update-secret": _site_secret, "Content-Type": "application/json"},
                                 timeout=_aiohttp.ClientTimeout(total=10),
                             ) as _resp:
