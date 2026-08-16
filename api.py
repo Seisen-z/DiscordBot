@@ -2254,6 +2254,78 @@ async def delete_announcement_draft(guild_id: str, draft_name: str):
     
     return {"status": "success", "deleted_draft": draft_name}
 
+# ── Website Update Drafts ──────────────────────────────────────────────────────
+
+@app.get("/api/guilds/{guild_id}/website_updates")
+@app.get("/api/bot/guilds/{guild_id}/website_updates")
+async def get_website_update_drafts(guild_id: str):
+    data = load_json("website_update_drafts", {})
+    guild_drafts = data.get(guild_id, {})
+    if not isinstance(guild_drafts, dict):
+        return {}
+    result = {}
+    for key, draft in guild_drafts.items():
+        if isinstance(draft, dict):
+            result[key] = {**draft, "name": draft.get("name", key.split("/")[-1])}
+        else:
+            result[key] = draft
+    return result
+
+@app.put("/api/guilds/{guild_id}/website_updates")
+@app.put("/api/bot/guilds/{guild_id}/website_updates")
+async def update_website_update_drafts(guild_id: str, drafts: Dict[str, Any]):
+    data = load_json("website_update_drafts", {})
+    prev = data.get(guild_id, {})
+    if not isinstance(prev, dict):
+        prev = {}
+    merged = {**prev}
+    for key, draft in drafts.items():
+        if not isinstance(draft, dict):
+            continue
+        merged[key] = {
+            **(merged.get(key) if isinstance(merged.get(key), dict) else {}),
+            **draft,
+        }
+    data[guild_id] = merged
+    save_json("website_update_drafts", data)
+    return {"status": "success"}
+
+@app.post("/api/guilds/{guild_id}/website_updates/{old_name:path}/rename")
+@app.post("/api/bot/guilds/{guild_id}/website_updates/{old_name:path}/rename")
+async def rename_website_update_draft(guild_id: str, old_name: str, body: Dict[str, str] = Body(...)):
+    new_name = body.get("new_name", "").strip()
+    if not new_name:
+        raise HTTPException(status_code=400, detail="new_name is required")
+    data = load_json("website_update_drafts", {})
+    if guild_id not in data:
+        raise HTTPException(status_code=404, detail="Guild not found")
+    guild_drafts = data[guild_id]
+    if old_name not in guild_drafts:
+        raise HTTPException(status_code=404, detail="Draft not found")
+    if new_name in guild_drafts and new_name != old_name:
+        raise HTTPException(status_code=409, detail="A draft with this name already exists")
+    if new_name != old_name:
+        row = guild_drafts[old_name]
+        if isinstance(row, dict):
+            row["name"] = new_name.split("/")[-1]
+        guild_drafts[new_name] = row
+        del guild_drafts[old_name]
+    save_json("website_update_drafts", data)
+    return {"status": "success", "old_name": old_name, "new_name": new_name}
+
+@app.delete("/api/guilds/{guild_id}/website_updates/{draft_name:path}")
+@app.delete("/api/bot/guilds/{guild_id}/website_updates/{draft_name:path}")
+async def delete_website_update_draft(guild_id: str, draft_name: str):
+    data = load_json("website_update_drafts", {})
+    if guild_id not in data:
+        raise HTTPException(status_code=404, detail="Guild not found")
+    guild_drafts = data[guild_id]
+    if draft_name not in guild_drafts:
+        raise HTTPException(status_code=404, detail="Draft not found")
+    del guild_drafts[draft_name]
+    save_json("website_update_drafts", data)
+    return {"status": "success", "deleted_draft": draft_name}
+
 # System-Wide Audit Logs
 @app.get("/api/guilds/{guild_id}/audit_logs")
 @app.get("/api/bot/guilds/{guild_id}/audit_logs")
