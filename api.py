@@ -869,6 +869,10 @@ class AnnouncementDraft(BaseModel):
     ping_role_id: Optional[str] = None
     buttons: List[Dict[str, str]] = Field(default_factory=list)
     auto_reactions: List[str] = Field(default_factory=list)
+    post_to_website: bool = False
+    website_tag: Optional[str] = "Announcement"
+    thumbnail_game_id: Optional[str] = None
+    thumbnail_game_name: Optional[str] = None
 
     @field_validator("channel_id", "ping_role_id", mode="before")
     @classmethod
@@ -2116,6 +2120,10 @@ async def update_announcements(guild_id: str, drafts: Dict[str, Any]):
             "ping_role_id": candidate.get("ping_role_id"),
             "buttons": candidate.get("buttons") or [],
             "auto_reactions": candidate.get("auto_reactions") or [],
+            "post_to_website": bool(candidate.get("post_to_website") or False),
+            "website_tag": candidate.get("website_tag") or "Announcement",
+            "thumbnail_game_id": candidate.get("thumbnail_game_id"),
+            "thumbnail_game_name": candidate.get("thumbnail_game_name"),
         })
 
         normalized_drafts[draft_name] = validated.model_dump()
