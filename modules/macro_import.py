@@ -84,6 +84,7 @@ def _extract_required_units(data: Any) -> Optional[list[str]]:
       A) {"version": 1, "entries": [{"values": [...], "slotUnitName": "...", "slotUnitTrait": "..."}]}
       B) [{"values": [...], "slotUnitName": "...", "slotUnitTrait": "..."}, ...] (raw entries array)
       C) {"<index>": {"Type": "...", "Pos": "UnitName - 1", ...}, ...}
+      D) {"version": 1, "entries": [{"Action": "PlaceTower", "UnitName": "...", "Result": {"Trait": "..."}}]}
     """
     order: list[str] = []
     traits: dict[str, Optional[str]] = {}
@@ -111,9 +112,16 @@ def _extract_required_units(data: Any) -> Optional[list[str]]:
     if isinstance(entries, list):
         saw_action_entry = False
         for entry in entries:
-            if isinstance(entry, dict) and "values" in entry:
+            if not isinstance(entry, dict):
+                continue
+            if "values" in entry:
                 saw_action_entry = True
                 _add(entry.get("slotUnitName"), entry.get("slotUnitTrait"))
+            elif entry.get("Action") == "PlaceTower" and "UnitName" in entry:
+                saw_action_entry = True
+                result = entry.get("Result")
+                trait = result.get("Trait") if isinstance(result, dict) else None
+                _add(entry.get("UnitName"), trait)
         return _formatted() if saw_action_entry else None
 
     # Schema C: every top-level key is a numeric index mapping to an action dict.
