@@ -288,10 +288,12 @@ def _bearer_token(request: Request) -> str:
     auth = request.headers.get("Authorization") or ""
     parts = auth.split(None, 1)
     if len(parts) != 2 or parts[0].lower() != "bearer":
+        print(f"\n[BOT AUTH ERROR] Missing Bearer Token! Request: {_request_meta(request)}\n", flush=True)
         _AUTH_LOGGER.warning("auth_missing_bearer %s", _request_meta(request))
         raise HTTPException(status_code=401, detail="Authorization Bearer token required")
     tok = parts[1].strip()
     if not tok:
+        print(f"\n[BOT AUTH ERROR] Empty Bearer Token! Request: {_request_meta(request)}\n", flush=True)
         _AUTH_LOGGER.warning("auth_empty_bearer %s", _request_meta(request))
         raise HTTPException(status_code=401, detail="Authorization Bearer token required")
     return tok
@@ -316,6 +318,7 @@ async def _fetch_discord_manageable_guild_ids_uncached(
             if resp.status != 200:
                 err_text = await resp.text()
                 if resp.status in {401, 403}:
+                    print(f"\n[BOT AUTH ERROR] Discord /users/@me/guilds rejected token! Status: {resp.status}, Body: {err_text[:200]}, Token: {cache_key[:10]}, Request: {_request_meta(request) if request is not None else 'unknown'}\n", flush=True)
                     _AUTH_LOGGER.warning(
                         "auth_discord_invalid_session discord_status=%s body=%s token=%s %s",
                         resp.status,
@@ -325,6 +328,7 @@ async def _fetch_discord_manageable_guild_ids_uncached(
                     )
                     raise HTTPException(status_code=401, detail="Discord session invalid or expired")
                 if resp.status == 429:
+                    print(f"\n[BOT AUTH ERROR] Discord /users/@me/guilds rate-limited (429)! Token: {cache_key[:10]}, Request: {_request_meta(request) if request is not None else 'unknown'}\n", flush=True)
                     _AUTH_LOGGER.warning(
                         "auth_discord_rate_limited discord_status=429 token=%s %s",
                         cache_key[:10],
@@ -334,6 +338,7 @@ async def _fetch_discord_manageable_guild_ids_uncached(
                         status_code=503,
                         detail="Discord auth check is rate-limited. Retry in a moment.",
                     )
+                print(f"\n[BOT AUTH ERROR] Discord /users/@me/guilds upstream error! Status: {resp.status}, Token: {cache_key[:10]}, Request: {_request_meta(request) if request is not None else 'unknown'}\n", flush=True)
                 _AUTH_LOGGER.warning(
                     "auth_discord_upstream_error discord_status=%s token=%s %s",
                     resp.status,
@@ -465,6 +470,7 @@ async def require_guild_dashboard_access(request: Request, guild_id: str) -> Non
     manageable = await _discord_user_manageable_guild_ids(token, request=request)
     if gid not in manageable:
         token_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()[:10]
+        print(f"\n[BOT AUTH ERROR] Guild Forbidden! User token lacks Manage Server / Admin on Guild {gid}. Token: {token_hash}, Request: {_request_meta(request)}\n", flush=True)
         _AUTH_LOGGER.warning(
             "auth_guild_forbidden guild=%s token=%s %s",
             gid,
