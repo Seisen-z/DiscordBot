@@ -1659,6 +1659,7 @@ async def post_internal_restock(req: InternalRestockRequest):
 
 # Bot Guilds (intersection: servers you manage ∩ servers the bot is in)
 @app.get("/api/bot/dashboard-guilds")
+@app.get("/api/dashboard-guilds")
 async def get_dashboard_guilds(request: Request):
     """One cached source for dashboard guild metadata and bot membership."""
     user_token = _bearer_token(request)
