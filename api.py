@@ -247,6 +247,9 @@ _MANAGEABLE_GUILDS_CACHE_TTL = _float_env("DISCORD_MANAGEABLE_GUILDS_CACHE_TTL",
 # keeps the token rate-limited indefinitely under any sustained traffic.
 _MANAGEABLE_GUILDS_FAILURE_COOLDOWN = _float_env("DISCORD_MANAGEABLE_GUILDS_FAILURE_COOLDOWN", 30.0)
 _user_manageable_guilds_cache: Dict[str, tuple[set[str], float]] = {}
+# Dashboard metadata shares the same Discord /users/@me/guilds request as the
+# authorization IDs so concurrent dashboard components cannot fan out requests.
+_user_manageable_guilds_payload_cache: Dict[str, tuple[list[dict], float]] = {}
 _manageable_guilds_failure_until: Dict[str, float] = {}
 _manageable_guilds_inflight: Dict[str, asyncio.Task] = {}
 _manageable_guilds_sf_lock = asyncio.Lock()
@@ -337,6 +340,7 @@ async def _fetch_discord_manageable_guild_ids_uncached(
     if not isinstance(guilds, list):
         raise HTTPException(status_code=403, detail="Could not read your Discord servers")
     out: set[str] = set()
+    manageable_guilds: list[dict] = []
     for g in guilds:
         gid = str(g.get("id") or "")
         if not gid:
@@ -347,6 +351,8 @@ async def _fetch_discord_manageable_guild_ids_uncached(
             perms = 0
         if perms & PERMISSION_ADMINISTRATOR or perms & PERMISSION_MANAGE_GUILD:
             out.add(gid)
+            manageable_guilds.append(g)
+    _user_manageable_guilds_payload_cache[cache_key] = (manageable_guilds, time.time())
     return out
 
 
@@ -433,6 +439,14 @@ async def _discord_user_manageable_guild_ids(user_token: str, *, request: Reques
             _manageable_guilds_inflight[cache_key] = task
 
     return await task
+
+
+async def _discord_user_manageable_guilds(user_token: str, *, request: Request | None = None) -> list[dict]:
+    """Return cached manageable guild metadata from the shared Discord lookup."""
+    cache_key = hashlib.sha256(user_token.encode("utf-8")).hexdigest()
+    await _discord_user_manageable_guild_ids(user_token, request=request)
+    cached = _user_manageable_guilds_payload_cache.get(cache_key)
+    return list(cached[0]) if cached else []
 
 
 async def require_guild_dashboard_access(request: Request, guild_id: str) -> None:
@@ -1609,6 +1623,23 @@ async def post_internal_restock(req: InternalRestockRequest):
 
 
 # Bot Guilds (intersection: servers you manage ∩ servers the bot is in)
+@app.get("/api/bot/dashboard-guilds")
+async def get_dashboard_guilds(request: Request):
+    """One cached source for dashboard guild metadata and bot membership."""
+    user_token = _bearer_token(request)
+    try:
+        guilds = await _discord_user_manageable_guilds(user_token, request=request)
+    except HTTPException as exc:
+        if exc.status_code in {429, 503}:
+            return {"guilds": [], "bot_guild_ids": [], "rate_limited": True}
+        raise
+    try:
+        bot_ids = await _discord_bot_guild_ids_cached()
+    except HTTPException:
+        bot_ids = set()
+    return {"guilds": guilds, "bot_guild_ids": sorted(bot_ids)}
+
+
 @app.get("/api/bot/guilds")
 @app.get("/api/guilds")
 async def get_bot_guilds(request: Request):
