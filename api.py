@@ -305,9 +305,11 @@ async def _fetch_discord_manageable_guild_ids_uncached(
         headers=_DASHBOARD_UA,
         connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
     ) as session:
+        headers = dict(_DASHBOARD_UA)
+        headers["Authorization"] = f"Bearer {user_token}"
         async with session.get(
             f"{DISCORD_API}/users/@me/guilds",
-            headers={"Authorization": f"Bearer {user_token}"},
+            headers=headers,
         ) as resp:
             if resp.status != 200:
                 if resp.status in {401, 403}:
