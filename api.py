@@ -111,9 +111,11 @@ async def _resolve_actor(request: Request) -> Dict[str, Any]:
             headers=_DASHBOARD_UA,
             connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
         ) as session:
+            full_headers = dict(_DASHBOARD_UA)
+            full_headers["Authorization"] = f"Bearer {token}"
             async with session.get(
                 f"{DISCORD_API}/users/@me",
-                headers={"Authorization": f"Bearer {token}"},
+                headers=full_headers,
             ) as resp:
                 if resp.status == 200:
                     me = await resp.json()
@@ -485,9 +487,11 @@ async def require_guild_member_oauth(request: Request, guild_id: str) -> str:
         headers=_DASHBOARD_UA,
         connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
     ) as session:
+        full_headers = dict(_DASHBOARD_UA)
+        full_headers["Authorization"] = f"Bearer {token}"
         async with session.get(
             f"{DISCORD_API}/users/@me",
-            headers={"Authorization": f"Bearer {token}"},
+            headers=full_headers,
         ) as resp:
             if resp.status != 200:
                 raise HTTPException(status_code=401, detail="Discord session invalid or expired")
@@ -497,7 +501,7 @@ async def require_guild_member_oauth(request: Request, guild_id: str) -> str:
             raise HTTPException(status_code=401, detail="Discord session invalid")
         async with session.get(
             f"{DISCORD_API}/users/@me/guilds",
-            headers={"Authorization": f"Bearer {token}"},
+            headers=full_headers,
         ) as resp:
             if resp.status != 200:
                 raise HTTPException(status_code=401, detail="Could not read your Discord servers")
@@ -518,9 +522,11 @@ async def _validate_authenticated_discord_session(token: str, cache_key: str) ->
             headers=_DASHBOARD_UA,
             connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
         ) as session:
+            full_headers = dict(_DASHBOARD_UA)
+            full_headers["Authorization"] = f"Bearer {token}"
             async with session.get(
                 f"{DISCORD_API}/users/@me",
-                headers={"Authorization": f"Bearer {token}"},
+                headers=full_headers,
             ) as resp:
                 if resp.status != 200:
                     _me_session_ok_until.pop(cache_key, None)
@@ -580,10 +586,12 @@ async def _discord_bot_get_json_with_retry(
     max_attempts: int = 4,
 ) -> tuple[int, Any]:
     """GET with basic 429 Retry-After handling (Discord rate limits)."""
+    full_headers = dict(_DASHBOARD_UA)
+    full_headers.update(headers)
     last_status = 503
     last_body: Any = None
     for attempt in range(max_attempts):
-        async with session.get(url, headers=headers) as resp:
+        async with session.get(url, headers=full_headers) as resp:
             last_status = resp.status
             if resp.status == 429 and attempt + 1 < max_attempts:
                 try:
