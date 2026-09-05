@@ -314,10 +314,12 @@ async def _fetch_discord_manageable_guild_ids_uncached(
             headers=headers,
         ) as resp:
             if resp.status != 200:
+                err_text = await resp.text()
                 if resp.status in {401, 403}:
                     _AUTH_LOGGER.warning(
-                        "auth_discord_invalid_session discord_status=%s token=%s %s",
+                        "auth_discord_invalid_session discord_status=%s body=%s token=%s %s",
                         resp.status,
+                        err_text[:150],
                         cache_key[:10],
                         _request_meta(request) if request is not None else "request=unknown",
                     )
