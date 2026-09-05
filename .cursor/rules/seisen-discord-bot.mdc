@@ -63,7 +63,7 @@ Prefer **hierarchy checks**, **audit-friendly logging**, and **ephemeral errors*
 - **Expired session UX**: when dashboard proxy/auth routes receive Discord/upstream `401`, clear `session_token`/`user_id` cookies so users are forced cleanly back through login without manual logout clicks.
 - **Auth error mapping**: when validating Discord OAuth in `api.py`, only Discord `401/403` should map to "session invalid"; treat Discord `429`/`5xx` as transient upstream failures (5xx family from our API), not a forced logout condition.
 - **Auth logging safety**: if adding auth diagnostics, log only route/method/ip and optional short token fingerprint; never log raw bearer/session tokens.
-- **Dashboard guild lookups**: use `/api/bot/dashboard-guilds` for manageable-guild metadata and bot membership together; do not call Discord's `/users/@me/guilds` from separate dashboard components.
+- **Dashboard guild lookups**: use `/api/bot/dashboard-guilds` for manageable-guild metadata and bot membership together; do not call Discord's `/users/@me/guilds` from separate dashboard components. Keep `@me` session validation single-flight per token because one dashboard page starts many config requests concurrently.
 - **CORS**: set comma-separated **`CORS_ORIGINS`** in `.env` for new dashboard domains (defaults remain in code if unset).
 - **`/api/debug`**: disabled unless **`ENABLE_DEBUG_API=1`**; never add token previews.
 - README documents **three processes**: `python main.py`, `uvicorn api:app`, and `npm run dev` in `seisen/`. Port numbers in docs vs `.env.example` may differ; trust **runtime env** and `ipc.py` resolution when debugging “API not reachable” issues.

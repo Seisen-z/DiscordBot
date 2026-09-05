@@ -256,6 +256,8 @@ _manageable_guilds_sf_lock = asyncio.Lock()
 # After OAuth, we only re-check @me periodically (not every dashboard call).
 _ME_SESSION_TTL_SEC = _float_env("DISCORD_ME_SESSION_TTL_SEC", 600.0)
 _me_session_ok_until: Dict[str, float] = {}
+_me_session_inflight: Dict[str, asyncio.Task[None]] = {}
+_me_session_sf_lock = asyncio.Lock()
 _AUTH_LOGGER = logging.getLogger("seisen.auth")
 _PERSIST_LOGGER = logging.getLogger("seisen.persistence")
 
@@ -505,32 +507,47 @@ async def require_guild_member_oauth(request: Request, guild_id: str) -> str:
     return uid
 
 
+async def _validate_authenticated_discord_session(token: str, cache_key: str) -> None:
+    """Run one Discord @me validation and share it across a dashboard request burst."""
+    timeout = aiohttp.ClientTimeout(total=15)
+    try:
+        async with aiohttp.ClientSession(
+            timeout=timeout,
+            headers=_DASHBOARD_UA,
+            connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
+        ) as session:
+            async with session.get(
+                f"{DISCORD_API}/users/@me",
+                headers={"Authorization": f"Bearer {token}"},
+            ) as resp:
+                if resp.status != 200:
+                    _me_session_ok_until.pop(cache_key, None)
+                    raise HTTPException(status_code=401, detail="Discord session invalid or expired")
+                data = await resp.json()
+                if not isinstance(data, dict) or not data.get("id"):
+                    _me_session_ok_until.pop(cache_key, None)
+                    raise HTTPException(status_code=401, detail="Discord session invalid")
+        _me_session_ok_until[cache_key] = time.time() + _ME_SESSION_TTL_SEC
+    finally:
+        async with _me_session_sf_lock:
+            _me_session_inflight.pop(cache_key, None)
+
+
 async def require_authenticated_discord_user(request: Request) -> str:
-    """Valid Bearer + Discord session. Cached a few minutes to avoid @me on every dashboard call."""
+    """Valid Bearer + Discord session, cached and single-flight per user token."""
     token = _bearer_token(request)
     cache_key = hashlib.sha256(token.encode("utf-8")).hexdigest()
-    now = time.time()
-    if _me_session_ok_until.get(cache_key, 0.0) > now:
+    if _me_session_ok_until.get(cache_key, 0.0) > time.time():
         return token
 
-    timeout = aiohttp.ClientTimeout(total=15)
-    async with aiohttp.ClientSession(
-        timeout=timeout,
-        headers=_DASHBOARD_UA,
-        connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
-    ) as session:
-        async with session.get(
-            f"{DISCORD_API}/users/@me",
-            headers={"Authorization": f"Bearer {token}"},
-        ) as resp:
-            if resp.status != 200:
-                _me_session_ok_until.pop(cache_key, None)
-                raise HTTPException(status_code=401, detail="Discord session invalid or expired")
-            data = await resp.json()
-            if not isinstance(data, dict) or not data.get("id"):
-                _me_session_ok_until.pop(cache_key, None)
-                raise HTTPException(status_code=401, detail="Discord session invalid")
-    _me_session_ok_until[cache_key] = now + _ME_SESSION_TTL_SEC
+    async with _me_session_sf_lock:
+        if _me_session_ok_until.get(cache_key, 0.0) > time.time():
+            return token
+        task = _me_session_inflight.get(cache_key)
+        if task is None:
+            task = asyncio.create_task(_validate_authenticated_discord_session(token, cache_key))
+            _me_session_inflight[cache_key] = task
+    await task
     return token
 
 
