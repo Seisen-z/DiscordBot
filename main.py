@@ -166,6 +166,7 @@ import modules.reaction_roles as reaction_roles
 import modules.select_menu_roles as select_menu_roles
 import modules.ai_help as ai_help
 import modules.roblox_monitor as roblox_monitor
+import modules.roblox_store_monitor as roblox_store_monitor
 import modules.social_monitor as social_monitor
 import modules.onboarding as onboarding
 import modules.ipc as ipc
@@ -210,6 +211,7 @@ def register_all_modules():
     select_menu_roles.register(bot)
     ai_help.register(bot)
     roblox_monitor.register(bot)
+    roblox_store_monitor.register(bot)
     social_monitor.register(bot)
     onboarding.register(bot)
     ipc.register(bot)
@@ -319,6 +321,7 @@ async def on_ready():
     from modules.role_counter import role_counter_update_loop
     from modules.social_monitor import social_update_check
     from modules.roblox_monitor import roblox_update_check_loop
+    from modules.roblox_store_monitor import store_update_check_loop
     from modules.activity_rewards import activity_rewards_draw_loop, activity_rewards_claim_check
     from modules.auto_post import auto_post_check_loop
 
@@ -334,6 +337,8 @@ async def on_ready():
         social_update_check.start()
     if roblox_update_check_loop and not roblox_update_check_loop.is_running():
         roblox_update_check_loop.start()
+    if store_update_check_loop and not store_update_check_loop.is_running():
+        store_update_check_loop.start()
     if not activity_rewards_draw_loop.is_running():
         activity_rewards_draw_loop.start()
     if not activity_rewards_claim_check.is_running():

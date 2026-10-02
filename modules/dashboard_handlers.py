@@ -1001,6 +1001,48 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 return {"status": "error", "action": action, "http_status": 404, "message": f"Channel {channel_id} not found."}
             return {"status": "error", "action": action, "http_status": 400, "message": "Missing universe_id or channel_id."}
 
+        elif action == "robloxstore":
+            import aiohttp as _aiohttp
+            from modules.roblox_store_monitor import (
+                fetch_group_store_items,
+                fetch_group_info,
+                announce_item,
+            )
+
+            group_id = _as_int(payload.get("group_id"))
+            channel_id = _as_int(payload.get("channel_id"))
+            role_id = _as_int(payload.get("role_id"))
+            if not group_id or not channel_id:
+                return {"status": "error", "action": action, "http_status": 400, "message": "Missing group_id or channel_id."}
+
+            _, channel = await resolve_trigger_channel(guild, payload)
+            if not channel or not hasattr(channel, "send"):
+                print(f"[Store Monitor] Force check failed: channel {channel_id} not found.")
+                return {"status": "error", "action": action, "http_status": 404, "message": f"Channel {channel_id} not found."}
+
+            role = guild.get_role(role_id) if role_id else None
+            async with _aiohttp.ClientSession() as session:
+                items = await fetch_group_store_items(session, group_id, limit=10)
+                if not items:
+                    print(f"[Store Monitor] Force check failed: no store items for group {group_id}.")
+                    return {"status": "error", "action": action, "http_status": 404, "message": f"No store items found for group {group_id}."}
+
+                group_name = payload.get("group_name")
+                if not group_name:
+                    info = await fetch_group_info(session, group_id)
+                    group_name = (info or {}).get("name") or str(group_id)
+
+                posted = await announce_item(channel, session, items[0], group_name, role, test=True)
+
+            if not posted:
+                return {"status": "error", "action": action, "http_status": 502, "message": "Could not load item details from Roblox."}
+
+            print(
+                f"[Store Monitor] Force check sent for group {group_id} "
+                f"in guild {guild.id}, channel {channel_id}."
+            )
+            return {"status": "success", "action": action, "channel_id": str(channel_id), "group_id": str(group_id)}
+
         elif action == "social_test_post":
             platform = str(payload.get("platform") or "rss").strip().lower()
             source = str(payload.get("source") or "").strip()

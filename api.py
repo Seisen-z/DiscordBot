@@ -969,6 +969,17 @@ class RobloxMonitor(BaseModel):
     role_id: Optional[str] = None
     last_updated: Optional[str] = None
 
+class RobloxStoreMonitor(BaseModel):
+    name: Optional[str] = None
+    group_id: Optional[str] = None
+    group_name: Optional[str] = None
+    channel_id: Optional[str] = None
+    role_id: Optional[str] = None
+    # Omitted by the dashboard; the server keeps whatever baseline the bot stored.
+    seen_ids: Optional[List[str]] = None
+    seeded: Optional[bool] = None
+    last_checked: Optional[str] = None
+
 class SocialMonitor(BaseModel):
     name: Optional[str] = None
     platform: str = "rss"
@@ -2785,6 +2796,94 @@ async def get_roblox_health(guild_id: str):
         "last_error": health.get("last_error"),
     }
 
+# Roblox Group Store Monitors
+def _store_guild_rows(data: dict, guild_id: str) -> list:
+    rows = data.get(guild_id) or data.get(int(guild_id) if guild_id.isdigit() else guild_id, [])
+    if isinstance(rows, dict):
+        rows = [rows]
+    return rows if isinstance(rows, list) else []
+
+@app.get("/api/guilds/{guild_id}/robloxstore")
+@app.get("/api/bot/guilds/{guild_id}/robloxstore")
+async def get_roblox_store(guild_id: str):
+    data = load_json("roblox_store_monitors", {})
+    normalized = []
+    for row in _store_guild_rows(data, guild_id):
+        if not isinstance(row, dict):
+            continue
+        normalized.append({
+            "name": row.get("name"),
+            "group_id": str(row["group_id"]) if row.get("group_id") else None,
+            "group_name": row.get("group_name"),
+            "channel_id": str(row["channel_id"]) if row.get("channel_id") else None,
+            "role_id": str(row["role_id"]) if row.get("role_id") else None,
+            "seen_count": len(row.get("seen_ids") or []),
+            "last_checked": row.get("last_checked"),
+        })
+    return normalized
+
+@app.put("/api/guilds/{guild_id}/robloxstore")
+@app.put("/api/bot/guilds/{guild_id}/robloxstore")
+async def update_roblox_store(guild_id: str, monitors: List[RobloxStoreMonitor]):
+    data = load_json("roblox_store_monitors", {})
+    # Keep each group's seen-item baseline; dropping it would make the bot
+    # re-announce the group's entire existing store on the next poll.
+    existing_state = {}
+    for row in _store_guild_rows(data, guild_id):
+        if isinstance(row, dict) and row.get("group_id"):
+            existing_state[str(row["group_id"])] = (row.get("seen_ids") or [], bool(row.get("seeded")))
+
+    rows = []
+    for m in monitors:
+        payload = m.model_dump()
+        gid = str(payload.get("group_id") or "").strip()
+        seen, seeded = existing_state.get(gid, ([], False))
+        if payload.get("seen_ids") is None:
+            payload["seen_ids"] = seen
+        if payload.get("seeded") is None:
+            # Unseeded monitors get their baseline on the bot's next poll, so a
+            # newly added group never replays its existing store.
+            payload["seeded"] = seeded
+        rows.append(payload)
+
+    data[guild_id] = rows
+    save_json("roblox_store_monitors", data)
+    return {"status": "success"}
+
+@app.get("/api/guilds/{guild_id}/robloxstore/health")
+@app.get("/api/bot/guilds/{guild_id}/robloxstore/health")
+async def get_roblox_store_health(guild_id: str):
+    monitors_data = load_json("roblox_store_monitors", {})
+    guild_monitors = _store_guild_rows(monitors_data, guild_id)
+
+    health = load_json("roblox_store_monitor_health", {})
+    last_poll_started = health.get("last_poll_started")
+    last_poll_finished = health.get("last_poll_finished")
+
+    last_poll_dt = parse_iso_datetime(last_poll_finished)
+    age_seconds = None
+    if last_poll_dt is not None:
+        age_seconds = max(0, int((datetime.now(timezone.utc) - last_poll_dt).total_seconds()))
+
+    # Poll interval is 5m; consider stale after 11m to allow jitter/restarts.
+    stale_after_seconds = 11 * 60
+    is_stale = age_seconds is None or age_seconds > stale_after_seconds
+    has_error = bool(health.get("last_error"))
+    loop_healthy = not is_stale and not has_error
+
+    return {
+        "monitor_count": len(guild_monitors),
+        "loop_healthy": loop_healthy,
+        "is_stale": is_stale,
+        "age_seconds": age_seconds,
+        "loop_started_at": health.get("loop_started_at"),
+        "last_poll_started": last_poll_started,
+        "last_poll_finished": last_poll_finished,
+        "last_poll_seconds": health.get("last_poll_seconds"),
+        "last_notifications": health.get("last_notifications", 0),
+        "last_error": health.get("last_error"),
+    }
+
 # Social Monitors
 @app.get("/api/guilds/{guild_id}/social")
 @app.get("/api/bot/guilds/{guild_id}/social")
@@ -2988,6 +3087,7 @@ async def update_onboarding(guild_id: str, request: Request, payload: Dict[str, 
     return {"status": "success"}
 
 @app.get("/api/roblox/{universe_id}")
+@app.get("/api/bot/roblox/{universe_id}")
 async def get_roblox_info(request: Request, universe_id: str):
     """Proxy to fetch Roblox game info and thumbnail to bypass CORS for the dashboard."""
     await require_authenticated_discord_user(request)
@@ -3019,6 +3119,100 @@ async def get_roblox_info(request: Request, universe_id: str):
             "playing": gameInfo.get("playing", 0),
             "visits": gameInfo.get("visits", 0),
             "thumbnail_url": thumbnail
+        }
+
+@app.get("/api/robloxgroup/{group_id}")
+@app.get("/api/bot/robloxgroup/{group_id}")
+async def get_roblox_group_info(request: Request, group_id: str):
+    """Proxy for group details, icon and newest store item (bypasses CORS for the dashboard)."""
+    await require_authenticated_discord_user(request)
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+        ),
+        "Accept": "application/json",
+    }
+    async with aiohttp.ClientSession(
+        timeout=aiohttp.ClientTimeout(total=20),
+        connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
+    ) as session:
+        async with session.get(f"https://groups.roblox.com/v1/groups/{group_id}", headers=headers) as resp:
+            if resp.status != 200:
+                raise HTTPException(status_code=404, detail="Group not found")
+            group = await resp.json()
+
+        icon = None
+        try:
+            icon_url = (
+                f"https://thumbnails.roblox.com/v1/groups/icons?groupIds={group_id}"
+                "&size=420x420&format=Png&isCircular=false"
+            )
+            async with session.get(icon_url, headers=headers) as resp:
+                items = (await resp.json()).get("data", []) if resp.status == 200 else []
+                icon = items[0].get("imageUrl") if items else None
+        except Exception:
+            pass
+
+        # Newest store item, used for the dashboard's embed preview.
+        latest = None
+        try:
+            search_url = (
+                "https://catalog.roblox.com/v1/search/items"
+                f"?category=All&creatorTargetId={group_id}&creatorType=Group&limit=10&sortType=3"
+            )
+            async with session.get(search_url, headers=headers) as resp:
+                entries = (await resp.json()).get("data", []) if resp.status == 200 else []
+
+            if entries:
+                first = entries[0]
+                item_id = first.get("id")
+                if first.get("itemType") == "Bundle":
+                    detail_url = f"https://catalog.roblox.com/v1/bundles/{item_id}/details"
+                    thumb_url = (
+                        f"https://thumbnails.roblox.com/v1/bundles/thumbnails?bundleIds={item_id}"
+                        "&size=420x420&format=Png&isCircular=false"
+                    )
+                else:
+                    detail_url = f"https://economy.roblox.com/v2/assets/{item_id}/details"
+                    thumb_url = (
+                        f"https://thumbnails.roblox.com/v1/assets?assetIds={item_id}"
+                        "&size=420x420&format=Png&isCircular=false"
+                    )
+
+                async with session.get(detail_url, headers=headers) as resp:
+                    detail = await resp.json() if resp.status == 200 else {}
+                async with session.get(thumb_url, headers=headers) as resp:
+                    thumbs = (await resp.json()).get("data", []) if resp.status == 200 else []
+
+                if first.get("itemType") == "Bundle":
+                    product = detail.get("product") or {}
+                    latest = {
+                        "id": str(item_id),
+                        "name": detail.get("name"),
+                        "description": detail.get("description") or "",
+                        "price": product.get("priceInRobux"),
+                        "url": f"https://www.roblox.com/bundles/{item_id}/",
+                    }
+                else:
+                    latest = {
+                        "id": str(item_id),
+                        "name": detail.get("Name"),
+                        "description": detail.get("Description") or "",
+                        "price": detail.get("PriceInRobux"),
+                        "url": f"https://www.roblox.com/catalog/{item_id}/",
+                    }
+                if latest and thumbs:
+                    latest["thumbnail_url"] = thumbs[0].get("imageUrl")
+        except Exception:
+            latest = None
+
+        return {
+            "name": group.get("name"),
+            "description": group.get("description") or "",
+            "member_count": group.get("memberCount", 0),
+            "thumbnail_url": icon,
+            "latest_item": latest,
         }
 
 # Sticky
