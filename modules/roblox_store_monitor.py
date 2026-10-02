@@ -438,6 +438,70 @@ def _register_commands(bot: discord.ext.commands.Bot):
             )
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
+    @store_group.command(name="backfill", description="Announce the newest store items that were never posted")
+    @app_commands.describe(
+        group_id="Group ID",
+        count="How many of the newest items to post (1-10)",
+        ping="Ping the configured role (default: no)",
+    )
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def store_backfill(interaction: discord.Interaction, group_id: str, count: int = 1, ping: bool = False):
+        await interaction.response.defer(ephemeral=True)
+        gid = _as_int(group_id)
+        count = max(1, min(10, count))
+
+        monitors = load_store_monitors()
+        guild_key = str(interaction.guild.id)
+        cfg = next((c for c in monitors.get(guild_key, []) if c["group_id"] == gid), None)
+        if not cfg:
+            await interaction.followup.send("❌ That group is not being monitored.", ephemeral=True)
+            return
+
+        channel = interaction.guild.get_channel(cfg["channel_id"])
+        if not channel:
+            await interaction.followup.send("❌ Configured channel no longer exists.", ephemeral=True)
+            return
+
+        role = interaction.guild.get_role(cfg["role_id"]) if (ping and cfg.get("role_id")) else None
+        group_name = cfg.get("group_name") or str(gid)
+
+        async with aiohttp.ClientSession() as session:
+            try:
+                items = await fetch_group_store_items(session, gid)
+            except StoreFetchError as e:
+                await interaction.followup.send(f"❌ Could not read that group's store: {e}", ephemeral=True)
+                return
+            if not items:
+                await interaction.followup.send("❌ That group's store has no items.", ephemeral=True)
+                return
+
+            payloads = []
+            for item in items:
+                payload = await build_item_payload(session, item)
+                if payload:
+                    payloads.append(payload)
+
+            # Newest `count` items, then posted oldest-first like a normal batch.
+            chosen = sort_payloads_by_upload_time(payloads)[-count:]
+            posted = 0
+            for payload in chosen:
+                try:
+                    await announce_payload(channel, session, payload, group_name, role)
+                except Exception as e:
+                    print(f"[Store Monitor] Backfill failed for item {payload['id']}: {e}")
+                    continue
+                posted += 1
+                # Record them so the next poll does not announce them again.
+                if str(payload["id"]) not in cfg.get("seen_ids", []):
+                    cfg.setdefault("seen_ids", []).append(str(payload["id"]))
+
+        save_store_monitors(monitors)
+        await interaction.followup.send(
+            f"✅ Posted {posted} item(s) to {channel.mention}." if posted
+            else "❌ Could not post any items — check the bot's permissions in that channel.",
+            ephemeral=True,
+        )
+
     @store_group.command(name="test", description="Post the group's newest store item as a test")
     @app_commands.describe(group_id="Group ID")
     @app_commands.checks.has_permissions(manage_guild=True)

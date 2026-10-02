@@ -39,6 +39,7 @@ OWNER_LOCKED_COMMANDS = {
     "ticket setup", "ticket close",
     "roblox setup", "roblox remove", "roblox status", "roblox list", "roblox test",
     "robloxstore setup", "robloxstore remove", "robloxstore status", "robloxstore test",
+    "robloxstore backfill",
     "sticky remove", "sticky message",
     "boost setlog", "boost addrole", "boost removerole", "boost test", "boost close",
     "vouch_setup", "vouch",
