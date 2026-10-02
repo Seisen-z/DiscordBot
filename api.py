@@ -3121,6 +3121,55 @@ async def get_roblox_info(request: Request, universe_id: str):
             "thumbnail_url": thumbnail
         }
 
+@app.get("/api/robloxitem/{item_id}")
+@app.get("/api/bot/robloxitem/{item_id}")
+async def get_roblox_item_info(request: Request, item_id: str):
+    """Proxy one catalog asset's details and thumbnail (used for the dashboard's sample preview)."""
+    await require_authenticated_discord_user(request)
+    from modules.roblox_store_monitor import ASSET_TYPE_NAMES
+
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+        ),
+        "Accept": "application/json",
+    }
+    async with aiohttp.ClientSession(
+        timeout=aiohttp.ClientTimeout(total=20),
+        connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
+    ) as session:
+        async with session.get(
+            f"https://economy.roblox.com/v2/assets/{item_id}/details", headers=headers
+        ) as resp:
+            if resp.status != 200:
+                raise HTTPException(status_code=404, detail="Item not found")
+            detail = await resp.json()
+
+        thumbnail = None
+        try:
+            thumb_url = (
+                f"https://thumbnails.roblox.com/v1/assets?assetIds={item_id}"
+                "&size=420x420&format=Png&isCircular=false"
+            )
+            async with session.get(thumb_url, headers=headers) as resp:
+                thumbs = (await resp.json()).get("data", []) if resp.status == 200 else []
+                thumbnail = thumbs[0].get("imageUrl") if thumbs else None
+        except Exception:
+            pass
+
+    return {
+        "id": str(item_id),
+        "name": detail.get("Name"),
+        "description": detail.get("Description") or "",
+        "price": detail.get("PriceInRobux"),
+        "type_label": ASSET_TYPE_NAMES.get(
+            detail.get("AssetTypeId"), detail.get("ProductType") or "Item"
+        ),
+        "url": f"https://www.roblox.com/catalog/{item_id}/",
+        "thumbnail_url": thumbnail,
+    }
+
 @app.get("/api/robloxgroup/{group_id}")
 @app.get("/api/bot/robloxgroup/{group_id}")
 async def get_roblox_group_info(request: Request, group_id: str):
@@ -3185,6 +3234,9 @@ async def get_roblox_group_info(request: Request, group_id: str):
                 async with session.get(thumb_url, headers=headers) as resp:
                     thumbs = (await resp.json()).get("data", []) if resp.status == 200 else []
 
+                # Same label the bot puts on the real embed, so the preview matches.
+                from modules.roblox_store_monitor import ASSET_TYPE_NAMES
+
                 if first.get("itemType") == "Bundle":
                     product = detail.get("product") or {}
                     latest = {
@@ -3192,6 +3244,7 @@ async def get_roblox_group_info(request: Request, group_id: str):
                         "name": detail.get("name"),
                         "description": detail.get("description") or "",
                         "price": product.get("priceInRobux"),
+                        "type_label": detail.get("bundleType") or "Bundle",
                         "url": f"https://www.roblox.com/bundles/{item_id}/",
                     }
                 else:
@@ -3200,6 +3253,9 @@ async def get_roblox_group_info(request: Request, group_id: str):
                         "name": detail.get("Name"),
                         "description": detail.get("Description") or "",
                         "price": detail.get("PriceInRobux"),
+                        "type_label": ASSET_TYPE_NAMES.get(
+                            detail.get("AssetTypeId"), detail.get("ProductType") or "Item"
+                        ),
                         "url": f"https://www.roblox.com/catalog/{item_id}/",
                     }
                 if latest and thumbs:

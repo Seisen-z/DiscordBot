@@ -32,7 +32,7 @@ _MAX_POSTS_PER_CYCLE = 5
 # Items remembered per monitor before the oldest ids are dropped.
 _SEEN_HISTORY_LIMIT = 500
 
-_ASSET_TYPE_NAMES = {
+ASSET_TYPE_NAMES = {
     2: "T-Shirt", 8: "Hat", 11: "Shirt", 12: "Pants", 17: "Head", 18: "Face",
     19: "Gear", 41: "Hair Accessory", 42: "Face Accessory", 43: "Neck Accessory",
     44: "Shoulder Accessory", 45: "Front Accessory", 46: "Back Accessory",
@@ -171,7 +171,7 @@ async def build_item_payload(session: aiohttp.ClientSession, item: dict) -> dict
         return None
     return {
         "id": item_id,
-        "type_label": _ASSET_TYPE_NAMES.get(details.get("AssetTypeId"), details.get("ProductType") or "Item"),
+        "type_label": ASSET_TYPE_NAMES.get(details.get("AssetTypeId"), details.get("ProductType") or "Item"),
         "name": details.get("Name") or "Unknown Item",
         "description": details.get("Description") or "",
         "price": details.get("PriceInRobux"),
