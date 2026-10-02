@@ -6,6 +6,7 @@ Watches a Roblox group's store (catalog) and posts newly uploaded items to Disco
 from __future__ import annotations
 
 import asyncio
+import os
 from datetime import datetime, timezone
 
 import aiohttp
@@ -91,24 +92,58 @@ async def fetch_group_info(session: aiohttp.ClientSession, group_id: int) -> dic
         return await resp.json()
 
 
+class StoreFetchError(Exception):
+    """Raised when a group's store could not be read, as opposed to being empty."""
+
+
+def _catalog_hosts() -> tuple[str, ...]:
+    """
+    Roblox fronts catalog.roblox.com with bot protection that refuses many
+    datacenter IPs, so a host that reaches groups.roblox.com fine can still be
+    blocked here. Fall back to a mirror when that happens; set
+    ROBLOX_CATALOG_MIRROR to another host, or to "off" to disable the fallback.
+    """
+    mirror = os.getenv("ROBLOX_CATALOG_MIRROR", "catalog.roproxy.com").strip()
+    if mirror.lower() in {"off", "none", "0", "false", ""}:
+        return ("catalog.roblox.com",)
+    return ("catalog.roblox.com", mirror)
+
+
 async def fetch_group_store_items(session: aiohttp.ClientSession, group_id: int, limit: int = 30) -> list[dict]:
-    """Newest-first list of ``{"id": int, "itemType": "Asset"|"Bundle"}`` for a group's store.
+    """Items in a group's store as ``{"id": int, "itemType": "Asset"|"Bundle"}``.
+
+    An empty store returns ``[]``; a store that could not be read raises
+    ``StoreFetchError``. Callers must tell those apart, because recording an
+    empty baseline off a failed request would make the entire store look new on
+    the following poll.
 
     Roblox only accepts a fixed set of page sizes, so anything else is rounded up
     to the next allowed one and the result trimmed locally.
     """
     page_size = next((allowed for allowed in (10, 28, 30, 60, 120) if allowed >= limit), 120)
-    url = (
-        "https://catalog.roblox.com/v1/search/items"
-        f"?category=All&creatorTargetId={group_id}&creatorType=Group"
-        f"&limit={page_size}&sortType=3"
-    )
-    async with session.get(url, headers=_HEADERS, timeout=_TIMEOUT) as resp:
-        if resp.status != 200:
-            return []
-        data = await resp.json()
+    failures = []
+    for host in _catalog_hosts():
+        url = (
+            f"https://{host}/v1/search/items"
+            f"?category=All&creatorTargetId={group_id}&creatorType=Group"
+            f"&limit={page_size}&sortType=3"
+        )
+        try:
+            async with session.get(url, headers=_HEADERS, timeout=_TIMEOUT) as resp:
+                if resp.status != 200:
+                    failures.append(f"{host} HTTP {resp.status}")
+                    continue
+                data = await resp.json()
+        except Exception as e:
+            failures.append(f"{host} {type(e).__name__}: {e}")
+            continue
+
+        if failures:
+            print(f"[Store Monitor] Catalog fallback to {host} after: {'; '.join(failures)}")
         items = [i for i in data.get("data", []) if isinstance(i, dict) and i.get("id")]
         return items[:limit]
+
+    raise StoreFetchError("; ".join(failures) or "no catalog host configured")
 
 
 async def fetch_asset_details(session: aiohttp.ClientSession, asset_id: int) -> dict | None:
@@ -315,8 +350,13 @@ def _register_commands(bot: discord.ext.commands.Bot):
                 return
             try:
                 existing = await fetch_group_store_items(session, gid)
-            except Exception:
+                seeded = True
+            except Exception as e:
+                # Do not claim an empty baseline we could not verify, or the whole
+                # store would be announced as new later. The loop seeds instead.
+                print(f"[Store Monitor] Setup could not read store for group {gid}: {e}")
                 existing = []
+                seeded = False
 
         # Seed with what is already on sale so setup does not replay the backlog.
         monitors[guild_key].append({
@@ -325,7 +365,7 @@ def _register_commands(bot: discord.ext.commands.Bot):
             "channel_id": channel.id,
             "role_id": role.id if role else None,
             "seen_ids": [str(i["id"]) for i in existing],
-            "seeded": True,
+            "seeded": seeded,
             "last_checked": datetime.now(timezone.utc).isoformat(),
         })
         save_store_monitors(monitors)
@@ -335,7 +375,15 @@ def _register_commands(bot: discord.ext.commands.Bot):
         embed.add_field(name="Group ID", value=str(gid), inline=True)
         embed.add_field(name="Channel", value=channel.mention, inline=True)
         embed.add_field(name="Ping Role", value=role.mention if role else "None", inline=True)
-        embed.add_field(name="Baseline", value=f"{len(existing)} existing item(s) ignored", inline=False)
+        embed.add_field(
+            name="Baseline",
+            value=(
+                f"{len(existing)} existing item(s) ignored"
+                if seeded
+                else "⚠️ Could not read the store right now — the baseline will be taken on the next check."
+            ),
+            inline=False,
+        )
         await interaction.followup.send(embed=embed, ephemeral=True)
 
     @store_group.command(name="remove", description="Stop monitoring a Roblox group store")
@@ -409,7 +457,11 @@ def _register_commands(bot: discord.ext.commands.Bot):
 
         role = interaction.guild.get_role(cfg["role_id"]) if cfg.get("role_id") else None
         async with aiohttp.ClientSession() as session:
-            items = await fetch_group_store_items(session, gid, limit=1)
+            try:
+                items = await fetch_group_store_items(session, gid, limit=1)
+            except StoreFetchError as e:
+                await interaction.followup.send(f"❌ Could not read that group's store: {e}", ephemeral=True)
+                return
             if not items:
                 await interaction.followup.send("❌ That group's store has no items.", ephemeral=True)
                 return
@@ -434,6 +486,7 @@ def get_store_update_loop(bot_instance: discord.ext.commands.Bot):
         started_at = datetime.now(timezone.utc)
         notifications_sent = 0
         monitor_count = 0
+        fetch_errors: list[str] = []
         await asyncio.to_thread(set_store_health, last_poll_started=started_at.isoformat(), last_error=None)
 
         try:
@@ -459,21 +512,31 @@ def get_store_update_loop(bot_instance: discord.ext.commands.Bot):
 
                         try:
                             items = await fetch_group_store_items(session, group_id)
+                        except StoreFetchError as e:
+                            # Surfaced on the dashboard: a blocked host looks exactly
+                            # like an empty store otherwise, and nothing would post.
+                            fetch_errors.append(f"group {group_id}: {e}")
+                            print(f"[Store Monitor] Could not read store for group {group_id}: {e}")
+                            continue
                         except Exception as e:
+                            fetch_errors.append(f"group {group_id}: {type(e).__name__}: {e}")
                             print(f"[Store Monitor] Fetch failed for group {group_id}: {e}")
                             continue
 
                         cfg["last_checked"] = datetime.now(timezone.utc).isoformat()
                         changed = True
-                        if not items:
-                            continue
 
                         # A monitor added from the dashboard has no baseline yet.
-                        # Record the current store once instead of announcing all of it.
+                        # Record the current store once instead of announcing all of
+                        # it. An empty store seeds an empty baseline, so the group's
+                        # very first upload still gets announced.
                         if not cfg.get("seeded"):
                             cfg["seen_ids"] = [str(i["id"]) for i in items]
                             cfg["seeded"] = True
                             print(f"[Store Monitor] Seeded baseline of {len(items)} item(s) for group {group_id}.")
+                            continue
+
+                        if not items:
                             continue
 
                         seen = set(cfg.get("seen_ids", []))
@@ -521,13 +584,15 @@ def get_store_update_loop(bot_instance: discord.ext.commands.Bot):
                 except Exception as e:
                     print(f"[Store Monitor] Failed to save monitors: {e}")
             finished_at = datetime.now(timezone.utc)
-            await asyncio.to_thread(
-                set_store_health,
-                last_poll_finished=finished_at.isoformat(),
-                last_poll_seconds=round((finished_at - started_at).total_seconds(), 2),
-                last_notifications=notifications_sent,
-                monitor_count=monitor_count,
-            )
+            health_updates = {
+                "last_poll_finished": finished_at.isoformat(),
+                "last_poll_seconds": round((finished_at - started_at).total_seconds(), 2),
+                "last_notifications": notifications_sent,
+                "monitor_count": monitor_count,
+            }
+            if fetch_errors:
+                health_updates["last_error"] = " | ".join(fetch_errors[:3])
+            await asyncio.to_thread(set_store_health, **health_updates)
 
     @store_update_check.before_loop
     async def before_store_update_check():

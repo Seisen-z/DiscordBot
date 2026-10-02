@@ -1007,6 +1007,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 fetch_group_store_items,
                 fetch_group_info,
                 announce_item,
+                StoreFetchError,
             )
 
             group_id = _as_int(payload.get("group_id"))
@@ -1022,7 +1023,11 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
 
             role = guild.get_role(role_id) if role_id else None
             async with _aiohttp.ClientSession() as session:
-                items = await fetch_group_store_items(session, group_id, limit=10)
+                try:
+                    items = await fetch_group_store_items(session, group_id, limit=10)
+                except StoreFetchError as e:
+                    print(f"[Store Monitor] Force check failed: could not read store for group {group_id}: {e}")
+                    return {"status": "error", "action": action, "http_status": 502, "message": f"Could not read that group's store: {e}"}
                 if not items:
                     print(f"[Store Monitor] Force check failed: no store items for group {group_id}.")
                     return {"status": "error", "action": action, "http_status": 404, "message": f"No store items found for group {group_id}."}
