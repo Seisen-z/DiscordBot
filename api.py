@@ -3126,35 +3126,26 @@ async def get_roblox_info(request: Request, universe_id: str):
 async def get_roblox_item_info(request: Request, item_id: str):
     """Proxy one catalog asset's details and thumbnail (used for the dashboard's sample preview)."""
     await require_authenticated_discord_user(request)
-    from modules.roblox_store_monitor import ASSET_TYPE_NAMES
+    # Shared with the bot so a host blocked by Roblox falls back the same way.
+    from modules.roblox_store_monitor import ASSET_TYPE_NAMES, StoreFetchError, roblox_get_json
 
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-        ),
-        "Accept": "application/json",
-    }
     async with aiohttp.ClientSession(
         timeout=aiohttp.ClientTimeout(total=20),
         connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
     ) as session:
-        async with session.get(
-            f"https://economy.roblox.com/v2/assets/{item_id}/details", headers=headers
-        ) as resp:
-            if resp.status != 200:
-                raise HTTPException(status_code=404, detail="Item not found")
-            detail = await resp.json()
+        try:
+            detail = await roblox_get_json(session, "economy.roblox.com", f"/v2/assets/{item_id}/details")
+        except StoreFetchError as e:
+            raise HTTPException(status_code=404, detail=f"Item not found: {e}")
 
         thumbnail = None
         try:
-            thumb_url = (
-                f"https://thumbnails.roblox.com/v1/assets?assetIds={item_id}"
-                "&size=420x420&format=Png&isCircular=false"
-            )
-            async with session.get(thumb_url, headers=headers) as resp:
-                thumbs = (await resp.json()).get("data", []) if resp.status == 200 else []
-                thumbnail = thumbs[0].get("imageUrl") if thumbs else None
+            thumbs = (await roblox_get_json(
+                session,
+                "thumbnails.roblox.com",
+                f"/v1/assets?assetIds={item_id}&size=420x420&format=Png&isCircular=false",
+            )).get("data", [])
+            thumbnail = thumbs[0].get("imageUrl") if thumbs else None
         except Exception:
             pass
 
@@ -3175,67 +3166,63 @@ async def get_roblox_item_info(request: Request, item_id: str):
 async def get_roblox_group_info(request: Request, group_id: str):
     """Proxy for group details, icon and newest store item (bypasses CORS for the dashboard)."""
     await require_authenticated_discord_user(request)
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-        ),
-        "Accept": "application/json",
-    }
+    # Shared with the bot so a host blocked by Roblox falls back the same way;
+    # without this the dashboard reports "no store items found" on a blocked host
+    # while the bot, which does fall back, posts those same items fine.
+    from modules.roblox_store_monitor import ASSET_TYPE_NAMES, StoreFetchError, roblox_get_json
+
     async with aiohttp.ClientSession(
         timeout=aiohttp.ClientTimeout(total=20),
         connector=aiohttp.TCPConnector(ssl=_SOCIAL_SSL_CTX),
     ) as session:
-        async with session.get(f"https://groups.roblox.com/v1/groups/{group_id}", headers=headers) as resp:
-            if resp.status != 200:
-                raise HTTPException(status_code=404, detail="Group not found")
-            group = await resp.json()
+        try:
+            group = await roblox_get_json(session, "groups.roblox.com", f"/v1/groups/{group_id}")
+        except StoreFetchError as e:
+            raise HTTPException(status_code=404, detail=f"Group not found: {e}")
 
         icon = None
         try:
-            icon_url = (
-                f"https://thumbnails.roblox.com/v1/groups/icons?groupIds={group_id}"
-                "&size=420x420&format=Png&isCircular=false"
-            )
-            async with session.get(icon_url, headers=headers) as resp:
-                items = (await resp.json()).get("data", []) if resp.status == 200 else []
-                icon = items[0].get("imageUrl") if items else None
+            items = (await roblox_get_json(
+                session,
+                "thumbnails.roblox.com",
+                f"/v1/groups/icons?groupIds={group_id}&size=420x420&format=Png&isCircular=false",
+            )).get("data", [])
+            icon = items[0].get("imageUrl") if items else None
         except Exception:
             pass
 
         # Newest store item, used for the dashboard's embed preview.
         latest = None
         try:
-            search_url = (
-                "https://catalog.roblox.com/v1/search/items"
-                f"?category=All&creatorTargetId={group_id}&creatorType=Group&limit=10&sortType=3"
-            )
-            async with session.get(search_url, headers=headers) as resp:
-                entries = (await resp.json()).get("data", []) if resp.status == 200 else []
+            entries = (await roblox_get_json(
+                session,
+                "catalog.roblox.com",
+                f"/v1/search/items?category=All&creatorTargetId={group_id}"
+                "&creatorType=Group&limit=10&sortType=3",
+            )).get("data", [])
 
             if entries:
                 first = entries[0]
                 item_id = first.get("id")
                 if first.get("itemType") == "Bundle":
-                    detail_url = f"https://catalog.roblox.com/v1/bundles/{item_id}/details"
-                    thumb_url = (
-                        f"https://thumbnails.roblox.com/v1/bundles/thumbnails?bundleIds={item_id}"
-                        "&size=420x420&format=Png&isCircular=false"
+                    detail = await roblox_get_json(
+                        session, "catalog.roblox.com", f"/v1/bundles/{item_id}/details"
                     )
+                    thumbs = (await roblox_get_json(
+                        session,
+                        "thumbnails.roblox.com",
+                        f"/v1/bundles/thumbnails?bundleIds={item_id}"
+                        "&size=420x420&format=Png&isCircular=false",
+                    )).get("data", [])
                 else:
-                    detail_url = f"https://economy.roblox.com/v2/assets/{item_id}/details"
-                    thumb_url = (
-                        f"https://thumbnails.roblox.com/v1/assets?assetIds={item_id}"
-                        "&size=420x420&format=Png&isCircular=false"
+                    detail = await roblox_get_json(
+                        session, "economy.roblox.com", f"/v2/assets/{item_id}/details"
                     )
-
-                async with session.get(detail_url, headers=headers) as resp:
-                    detail = await resp.json() if resp.status == 200 else {}
-                async with session.get(thumb_url, headers=headers) as resp:
-                    thumbs = (await resp.json()).get("data", []) if resp.status == 200 else []
-
-                # Same label the bot puts on the real embed, so the preview matches.
-                from modules.roblox_store_monitor import ASSET_TYPE_NAMES
+                    thumbs = (await roblox_get_json(
+                        session,
+                        "thumbnails.roblox.com",
+                        f"/v1/assets?assetIds={item_id}&size=420x420&format=Png&isCircular=false",
+                    )).get("data", [])
 
                 if first.get("itemType") == "Bundle":
                     product = detail.get("product") or {}

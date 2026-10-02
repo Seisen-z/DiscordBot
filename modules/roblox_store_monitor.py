@@ -84,29 +84,52 @@ def set_store_health(**updates):
 
 # ── Roblox API ────────────────────────────────────────────────────────────────
 
-async def fetch_group_info(session: aiohttp.ClientSession, group_id: int) -> dict | None:
-    url = f"https://groups.roblox.com/v1/groups/{group_id}"
-    async with session.get(url, headers=_HEADERS, timeout=_TIMEOUT) as resp:
-        if resp.status != 200:
-            return None
-        return await resp.json()
-
-
 class StoreFetchError(Exception):
-    """Raised when a group's store could not be read, as opposed to being empty."""
+    """Raised when a Roblox endpoint could not be read, as opposed to being empty."""
 
 
-def _catalog_hosts() -> tuple[str, ...]:
+def _hosts_for(host: str) -> tuple[str, ...]:
     """
-    Roblox fronts catalog.roblox.com with bot protection that refuses many
-    datacenter IPs, so a host that reaches groups.roblox.com fine can still be
-    blocked here. Fall back to a mirror when that happens; set
-    ROBLOX_CATALOG_MIRROR to another host, or to "off" to disable the fallback.
+    Roblox fronts its APIs with protection that refuses many datacenter IPs, and
+    it does not refuse them uniformly: a server can read groups.roblox.com while
+    catalog.roblox.com and thumbnails.roblox.com reject it. That looks like an
+    empty store with no images rather than like being blocked. Fall back to the
+    matching mirror host when the real one refuses us. Set ROBLOX_API_MIRROR to
+    another domain, or to "off" to disable the fallback.
     """
-    mirror = os.getenv("ROBLOX_CATALOG_MIRROR", "catalog.roproxy.com").strip()
-    if mirror.lower() in {"off", "none", "0", "false", ""}:
-        return ("catalog.roblox.com",)
-    return ("catalog.roblox.com", mirror)
+    mirror_domain = os.getenv("ROBLOX_API_MIRROR", "roproxy.com").strip()
+    if mirror_domain.lower() in {"off", "none", "0", "false", ""}:
+        return (host,)
+    return (host, host.replace("roblox.com", mirror_domain))
+
+
+async def roblox_get_json(session: aiohttp.ClientSession, host: str, path: str):
+    """GET a Roblox JSON endpoint, falling back to the mirror host when blocked."""
+    failures = []
+    for candidate in _hosts_for(host):
+        try:
+            async with session.get(f"https://{candidate}{path}", headers=_HEADERS, timeout=_TIMEOUT) as resp:
+                if resp.status != 200:
+                    failures.append(f"{candidate} HTTP {resp.status}")
+                    continue
+                data = await resp.json()
+        except Exception as e:
+            failures.append(f"{candidate} {type(e).__name__}: {e}")
+            continue
+
+        if failures:
+            print(f"[Store Monitor] Fell back to {candidate} after: {'; '.join(failures)}")
+        return data
+
+    raise StoreFetchError("; ".join(failures) or f"no host available for {host}")
+
+
+async def fetch_group_info(session: aiohttp.ClientSession, group_id: int) -> dict | None:
+    try:
+        return await roblox_get_json(session, "groups.roblox.com", f"/v1/groups/{group_id}")
+    except StoreFetchError as e:
+        print(f"[Store Monitor] Group {group_id} info unavailable: {e}")
+        return None
 
 
 async def fetch_group_store_items(session: aiohttp.ClientSession, group_id: int, limit: int = 30) -> list[dict]:
@@ -121,61 +144,48 @@ async def fetch_group_store_items(session: aiohttp.ClientSession, group_id: int,
     to the next allowed one and the result trimmed locally.
     """
     page_size = next((allowed for allowed in (10, 28, 30, 60, 120) if allowed >= limit), 120)
-    failures = []
-    for host in _catalog_hosts():
-        url = (
-            f"https://{host}/v1/search/items"
-            f"?category=All&creatorTargetId={group_id}&creatorType=Group"
-            f"&limit={page_size}&sortType=3"
-        )
-        try:
-            async with session.get(url, headers=_HEADERS, timeout=_TIMEOUT) as resp:
-                if resp.status != 200:
-                    failures.append(f"{host} HTTP {resp.status}")
-                    continue
-                data = await resp.json()
-        except Exception as e:
-            failures.append(f"{host} {type(e).__name__}: {e}")
-            continue
-
-        if failures:
-            print(f"[Store Monitor] Catalog fallback to {host} after: {'; '.join(failures)}")
-        items = [i for i in data.get("data", []) if isinstance(i, dict) and i.get("id")]
-        return items[:limit]
-
-    raise StoreFetchError("; ".join(failures) or "no catalog host configured")
+    data = await roblox_get_json(
+        session,
+        "catalog.roblox.com",
+        f"/v1/search/items?category=All&creatorTargetId={group_id}"
+        f"&creatorType=Group&limit={page_size}&sortType=3",
+    )
+    items = [i for i in data.get("data", []) if isinstance(i, dict) and i.get("id")]
+    return items[:limit]
 
 
 async def fetch_asset_details(session: aiohttp.ClientSession, asset_id: int) -> dict | None:
-    url = f"https://economy.roblox.com/v2/assets/{asset_id}/details"
-    async with session.get(url, headers=_HEADERS, timeout=_TIMEOUT) as resp:
-        if resp.status != 200:
-            return None
-        return await resp.json()
+    try:
+        return await roblox_get_json(session, "economy.roblox.com", f"/v2/assets/{asset_id}/details")
+    except StoreFetchError as e:
+        print(f"[Store Monitor] Asset {asset_id} details unavailable: {e}")
+        return None
 
 
 async def fetch_bundle_details(session: aiohttp.ClientSession, bundle_id: int) -> dict | None:
-    url = f"https://catalog.roblox.com/v1/bundles/{bundle_id}/details"
-    async with session.get(url, headers=_HEADERS, timeout=_TIMEOUT) as resp:
-        if resp.status != 200:
-            return None
-        return await resp.json()
+    try:
+        return await roblox_get_json(session, "catalog.roblox.com", f"/v1/bundles/{bundle_id}/details")
+    except StoreFetchError as e:
+        print(f"[Store Monitor] Bundle {bundle_id} details unavailable: {e}")
+        return None
 
 
 async def fetch_item_thumbnail(session: aiohttp.ClientSession, item_id: int, item_type: str) -> str | None:
     if item_type == "Bundle":
-        url = f"https://thumbnails.roblox.com/v1/bundles/thumbnails?bundleIds={item_id}&size=420x420&format=Png&isCircular=false"
+        path = f"/v1/bundles/thumbnails?bundleIds={item_id}&size=420x420&format=Png&isCircular=false"
     else:
-        url = f"https://thumbnails.roblox.com/v1/assets?assetIds={item_id}&size=420x420&format=Png&isCircular=false"
-    async with session.get(url, headers=_HEADERS, timeout=_TIMEOUT) as resp:
-        if resp.status != 200:
-            return None
-        data = await resp.json()
-        items = data.get("data", [])
-        if not items:
-            return None
-        entry = items[0]
-        return entry.get("imageUrl") if entry.get("state") == "Completed" else None
+        path = f"/v1/assets?assetIds={item_id}&size=420x420&format=Png&isCircular=false"
+    try:
+        data = await roblox_get_json(session, "thumbnails.roblox.com", path)
+    except StoreFetchError as e:
+        # Without this the embed silently loses its avatar render.
+        print(f"[Store Monitor] Thumbnail for {item_id} unavailable: {e}")
+        return None
+    items = data.get("data", [])
+    if not items:
+        return None
+    entry = items[0]
+    return entry.get("imageUrl") if entry.get("state") == "Completed" else None
 
 
 async def build_item_payload(session: aiohttp.ClientSession, item: dict) -> dict | None:
@@ -610,6 +620,13 @@ def get_store_update_loop(bot_instance: discord.ext.commands.Bot):
 
                         role_id = cfg.get("role_id")
                         role = guild.get_role(role_id) if role_id else None
+
+                        # Monitors added from the dashboard may have no group name
+                        # stored, which would title the embed with a bare id.
+                        if not cfg.get("group_name"):
+                            info = await fetch_group_info(session, group_id)
+                            if info and info.get("name"):
+                                cfg["group_name"] = info["name"]
                         group_name = cfg.get("group_name") or str(group_id)
 
                         # Details carry the upload time, which is the only reliable
