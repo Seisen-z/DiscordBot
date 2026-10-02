@@ -157,6 +157,7 @@ async def build_item_payload(session: aiohttp.ClientSession, item: dict) -> dict
         product = details.get("product") or {}
         return {
             "id": item_id,
+            "item_type": item_type,
             "type_label": details.get("bundleType") or "Bundle",
             "name": details.get("name") or "Unknown Bundle",
             "description": details.get("description") or "",
@@ -171,6 +172,7 @@ async def build_item_payload(session: aiohttp.ClientSession, item: dict) -> dict
         return None
     return {
         "id": item_id,
+        "item_type": item_type,
         "type_label": ASSET_TYPE_NAMES.get(details.get("AssetTypeId"), details.get("ProductType") or "Item"),
         "name": details.get("Name") or "Unknown Item",
         "description": details.get("Description") or "",
@@ -222,6 +224,47 @@ def build_store_embed(payload: dict, group_name: str, thumbnail: str | None, *, 
     return embed
 
 
+def parse_item_created(payload: dict) -> datetime | None:
+    """Upload time of an item, or None when Roblox does not report one (bundles)."""
+    created = payload.get("created")
+    if not created:
+        return None
+    try:
+        return datetime.fromisoformat(str(created).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def sort_payloads_by_upload_time(payloads: list[dict]) -> list[dict]:
+    """
+    Oldest upload first, so a shirt and the pants uploaded after it post in that
+    order. Roblox's catalog search does not return items in upload order, so the
+    order has to come from each item's own Created timestamp. Items without one
+    keep their original relative position (Python's sort is stable).
+    """
+    return sorted(
+        payloads,
+        key=lambda p: (parse_item_created(p) is None, parse_item_created(p) or datetime.min.replace(tzinfo=timezone.utc)),
+    )
+
+
+async def announce_payload(
+    channel: discord.abc.Messageable,
+    session: aiohttp.ClientSession,
+    payload: dict,
+    group_name: str,
+    role: discord.Role | None,
+    *,
+    test: bool = False,
+) -> None:
+    try:
+        thumbnail = await fetch_item_thumbnail(session, payload["id"], payload.get("item_type") or "Asset")
+    except Exception:
+        thumbnail = None
+    embed = build_store_embed(payload, group_name, thumbnail, test=test)
+    await channel.send(content=role.mention if role else None, embed=embed)
+
+
 async def announce_item(
     channel: discord.abc.Messageable,
     session: aiohttp.ClientSession,
@@ -234,12 +277,7 @@ async def announce_item(
     payload = await build_item_payload(session, item)
     if not payload:
         return False
-    try:
-        thumbnail = await fetch_item_thumbnail(session, payload["id"], item.get("itemType") or "Asset")
-    except Exception:
-        thumbnail = None
-    embed = build_store_embed(payload, group_name, thumbnail, test=test)
-    await channel.send(content=role.mention if role else None, embed=embed)
+    await announce_payload(channel, session, payload, group_name, role, test=test)
     return True
 
 
@@ -439,8 +477,7 @@ def get_store_update_loop(bot_instance: discord.ext.commands.Bot):
                             continue
 
                         seen = set(cfg.get("seen_ids", []))
-                        # Oldest first so a burst of uploads posts in upload order.
-                        new_items = [i for i in reversed(items) if str(i["id"]) not in seen]
+                        new_items = [i for i in items if str(i["id"]) not in seen]
                         if not new_items:
                             continue
 
@@ -448,18 +485,29 @@ def get_store_update_loop(bot_instance: discord.ext.commands.Bot):
                         role = guild.get_role(role_id) if role_id else None
                         group_name = cfg.get("group_name") or str(group_id)
 
-                        for item in new_items[:_MAX_POSTS_PER_CYCLE]:
+                        # Details carry the upload time, which is the only reliable
+                        # way to post a batch in the order it was uploaded.
+                        payloads = []
+                        for item in new_items:
                             try:
-                                posted = await announce_item(channel, session, item, group_name, role)
+                                payload = await build_item_payload(session, item)
+                            except Exception as e:
+                                print(f"[Store Monitor] Item {item['id']} lookup failed: {e}")
+                                continue
+                            if payload:
+                                payloads.append(payload)
+
+                        for payload in sort_payloads_by_upload_time(payloads)[:_MAX_POSTS_PER_CYCLE]:
+                            try:
+                                await announce_payload(channel, session, payload, group_name, role)
                             except discord.HTTPException as e:
-                                print(f"[Store Monitor] Send failed for item {item['id']}: {e}")
+                                print(f"[Store Monitor] Send failed for item {payload['id']}: {e}")
                                 break
                             except Exception as e:
-                                print(f"[Store Monitor] Item {item['id']} failed: {e}")
+                                print(f"[Store Monitor] Item {payload['id']} failed: {e}")
                                 continue
-                            if posted:
-                                notifications_sent += 1
-                                cfg.setdefault("seen_ids", []).append(str(item["id"]))
+                            notifications_sent += 1
+                            cfg.setdefault("seen_ids", []).append(str(payload["id"]))
 
                         if len(cfg.get("seen_ids", [])) > _SEEN_HISTORY_LIMIT:
                             cfg["seen_ids"] = cfg["seen_ids"][-_SEEN_HISTORY_LIMIT:]
