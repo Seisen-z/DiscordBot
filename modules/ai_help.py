@@ -385,7 +385,9 @@ async def _collect_recent_context(message: discord.Message, max_lines: int = MAX
     lines: list[str] = []
     try:
         async for prev in message.channel.history(limit=14, before=message.created_at):
-            if prev.author.bot:
+            # Only the asker's own earlier messages count as context; other members' chatter
+            # must never leak into the answer.
+            if prev.author.bot or prev.author.id != message.author.id:
                 continue
             content = str(prev.content or "").strip()
             if not content:
@@ -444,6 +446,180 @@ def _build_user_prompt(
         ])
 
     return "\n".join(parts)
+
+
+# ── Live update feed (Seisen website) ─────────────────────────────────────────
+
+SITE_UPDATES_URL = str(os.getenv("SEISEN_SITE_UPDATES_URL") or "https://seisen.vercel.app/api/site-updates?limit=200").strip()
+SITE_UPDATES_TTL_SECONDS = 300
+SITE_UPDATES_TIMEOUT_SECONDS = 8
+UPDATE_ENTRY_MAX_CHARS = 700
+UPDATE_ENTRIES_PER_GAME = 3
+UPDATE_ENTRIES_GENERAL = 5
+UPDATE_ENTRIES_MATCHED_CAP = 6
+
+_SITE_UPDATES_CACHE: dict[str, object] = {"expires_at": 0.0, "rows": []}
+
+_UPDATE_INTENT_RE = re.compile(
+    r"\b(updat\w*|patch\w*|changelog|latest|newest|recent|what'?s new|whats new|new (?:script|game|feature)s?|"
+    r"release\w*|version|outdated|fixed|added)\b",
+    re.IGNORECASE,
+)
+_GAME_STOPWORDS = {"the", "a", "an", "of", "to", "and", "script", "scripts", "hub", "update", "new", "game", "release", "general"}
+
+
+_QUERY_FILLER = {
+    "latest", "last", "recent", "newest", "what", "whats", "new", "any", "is", "it", "did", "does", "do", "when", "was",
+    "were", "there", "has", "have", "got", "get", "any", "about", "for", "on", "in", "i", "me", "you", "can", "tell",
+    "show", "please", "pls", "update", "updat", "updated", "patch", "patche", "changelog", "release", "version", "fixed",
+    "added", "outdated", "working", "work", "still", "now", "today", "yet", "recently", "ago", "date", "time", "day", "s",
+}
+_SMALL_WORDS = {"the", "a", "an", "and", "of", "to"}
+
+
+def _acronyms(source: str) -> set[str]:
+    """Abbreviations derived from a game name: "Pet Simulator 99" -> ps99, "Anime Astral Simulator" -> aas."""
+    cleaned = re.sub(r"\[[^\]]*\]", " ", str(source or "").lower())
+    tokens = re.findall(r"[a-z0-9]+", cleaned)
+    out: set[str] = set()
+    for variant in (tokens, [t for t in tokens if t not in _SMALL_WORDS]):
+        acr = "".join(t if t.isdigit() else t[0] for t in variant)
+        if len(acr) >= 3:
+            out.add(acr)
+    return out
+
+
+def _compact(text: str) -> str:
+    cleaned = re.sub(r"\[[^\]]*\]", " ", str(text or "").lower())
+    return re.sub(r"[^a-z0-9]+", "", cleaned).replace("s", "")
+
+
+async def _fetch_site_updates() -> list[dict]:
+    """Return the website's update posts (newest first), cached; falls back to stale data on failure."""
+    now = time.time()
+    if now < float(_SITE_UPDATES_CACHE["expires_at"]):
+        return list(_SITE_UPDATES_CACHE["rows"])  # type: ignore[arg-type]
+    try:
+        timeout = aiohttp.ClientTimeout(total=SITE_UPDATES_TIMEOUT_SECONDS)
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.get(SITE_UPDATES_URL, headers={"Accept": "application/json"}) as resp:
+                if resp.status != 200:
+                    raise RuntimeError(f"HTTP {resp.status}")
+                data = await resp.json(content_type=None)
+        rows = [r for r in data if isinstance(r, dict)] if isinstance(data, list) else []
+        _SITE_UPDATES_CACHE["rows"] = rows
+        _SITE_UPDATES_CACHE["expires_at"] = now + SITE_UPDATES_TTL_SECONDS
+        return list(rows)
+    except Exception as err:
+        print(f"[AI Help] Could not fetch site updates: {err}")
+        _SITE_UPDATES_CACHE["expires_at"] = now + 60  # retry soon, keep serving the last good copy
+        return list(_SITE_UPDATES_CACHE["rows"])  # type: ignore[arg-type]
+
+
+def _normalize_words(text: str) -> set[str]:
+    cleaned = re.sub(r"\[[^\]]*\]", " ", str(text or ""))  # drop [UPDATE] / [BETA] style tags
+    cleaned = re.sub(r"[^a-z0-9+]+", " ", cleaned.lower())
+    words: set[str] = set()
+    for w in cleaned.split():
+        w = w.strip("+") or w
+        if w in _GAME_STOPWORDS:
+            continue
+        words.add(w[:-1] if len(w) > 3 and w.endswith("s") else w)
+    return words
+
+
+def _update_game_keys(row: dict) -> list[tuple[set[str], str, set[str]]]:
+    """Candidate (word set, run-together name, abbreviations) for an update row (website names are decorated and inconsistent)."""
+    keys: list[tuple[set[str], str, set[str]]] = []
+    title = re.sub(r"(?i)new (?:game )?script(?: release)?", " ", str(row.get("title") or ""))
+    for source in (row.get("game_name"), title):
+        words = _normalize_words(source or "")
+        if words:
+            keys.append((words, _compact(source or ""), _acronyms(source or "")))
+    return keys
+
+
+def _format_update_entry(row: dict, max_chars: int) -> str:
+    created = str(row.get("created_at") or "")[:10] or "unknown date"
+    label = str(row.get("game_name") or row.get("title") or "General").strip()
+    label = re.sub(r"\s+", " ", label)
+    tag = str(row.get("tag") or "Update").strip()
+    body = str(row.get("content") or "")
+    body = body.split("\n----")[0]  # drop the vouch footer
+    body = re.sub(r"\n{2,}", "\n", body).strip()
+    if len(body) > max_chars:
+        body = body[:max_chars].rstrip() + "..."
+    return f"- Posted {created} | {label} | {tag}\n{body}"
+
+
+async def _build_update_feed_block(user_message: str) -> str:
+    """Live update data to append to the system prompt, only for update-related questions."""
+    if not _UPDATE_INTENT_RE.search(user_message or ""):
+        return ""
+    rows = await _fetch_site_updates()
+    if not rows:
+        return ""
+
+    msg_words = _normalize_words(user_message)
+    msg_compact = _compact(user_message)
+    msg_tokens = set(re.findall(r"[a-z0-9]+", str(user_message).lower()))
+    matched: list[tuple[set[str], dict]] = []
+    for row in rows:
+        for key, ckey, acr in _update_game_keys(row):
+            # Full name as words ("anime dice"), run together ("animeorigin"), or its abbreviation ("ps99", "aas").
+            if key and (key <= msg_words or (len(ckey) >= 6 and ckey in msg_compact) or (acr & msg_tokens)):
+                matched.append((key, row))
+                break
+
+    if not matched:
+        # Partial name ("slayer", "anime astral"): every non-filler word of the question is part of the game name.
+        query = {w for w in msg_words if w not in _QUERY_FILLER}
+        if query and any(len(w) >= 4 or w.isdigit() for w in query):
+            for row in rows:
+                for key, _, _ in _update_game_keys(row):
+                    # Each word is a game-name word or a prefix of one ("pet sim 99", "anim astral").
+                    if key and all(any(kw == q or (len(q) >= 3 and kw.startswith(q)) for kw in key) for q in query):
+                        matched.append((key, row))
+                        break
+
+    if matched:
+        # Prefer the most specific game when one name is a subset of another ("forge" vs "loot forge").
+        keys = [k for k, _ in matched]
+        specific = [(k, r) for k, r in matched if not any(k < other for other in keys)]
+        per_game: dict[frozenset, int] = {}
+        picked: list[dict] = []
+        for key, row in specific:
+            fk = frozenset(key)
+            if per_game.get(fk, 0) >= UPDATE_ENTRIES_PER_GAME:
+                continue
+            per_game[fk] = per_game.get(fk, 0) + 1
+            picked.append(row)
+            if len(picked) >= UPDATE_ENTRIES_MATCHED_CAP:
+                break
+        scope = "Updates matching the game in the user's question"
+        max_chars = UPDATE_ENTRY_MAX_CHARS
+    else:
+        picked = rows[:UPDATE_ENTRIES_GENERAL]
+        scope = (
+            "The most recent updates across all games. These are NOT updates for any specific game the user may have named: "
+            "if the user named a game, say there is no recent update post for it and do not substitute these"
+        )
+        max_chars = 350
+
+    if not picked:
+        return ""
+
+    entries = "\n\n".join(_format_update_entry(r, max_chars) for r in picked)
+    return (
+        "\n\nLIVE UPDATE FEED (official update posts from the Seisen website, newest first; "
+        "this is current data and overrides anything else about update dates):\n"
+        f"{scope}:\n{entries}\n\n"
+        "UPDATE FEED RULES:\n"
+        "- For questions about the latest update or what changed, answer only from this feed: name the game, "
+        "give the exact posted date, and list the key changes briefly.\n"
+        "- If the user's game has no entry in this feed, say there is no recent update post for that game and point to the update-log channel.\n"
+        "- Never invent dates, versions, or changes that are not in this feed."
+    )
 
 
 def _build_ai_help_embeds(reply_text: str, thumbnail_url: str | None = None) -> list[discord.Embed]:
@@ -541,6 +717,7 @@ async def _generate_ai_reply(message: discord.Message, config: dict, g_cfg: dict
     user_prompt = _build_user_prompt(raw_prompt, attachment_urls, recent_context)
 
     system_prompt = _build_system_instructions(config, g_cfg)
+    system_prompt += await _build_update_feed_block(raw_prompt)
     model_candidates = _unique_model_list(config, g_cfg)
     if not model_candidates:
         raise RuntimeError("No AI model is configured.")
@@ -614,6 +791,13 @@ async def on_ai_help_message(message: discord.Message):
     matches, g_cfg = is_ai_help_channel(message, config)
 
     if not matches or not g_cfg:
+        return
+
+    # A member replying to another member is a conversation between them, not a question for the bot.
+    ref = getattr(message, "reference", None)
+    ref_msg = getattr(ref, "resolved", None) if ref else None
+    ref_author = getattr(ref_msg, "author", None)
+    if ref_author is not None and not ref_author.bot and ref_author.id != message.author.id:
         return
 
     try:

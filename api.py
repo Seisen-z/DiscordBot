@@ -1989,6 +1989,7 @@ async def update_autoreply(guild_id: str, rules: List[AutoReplyRule], request: R
 
 # AI Help
 @app.get("/api/ai_help")
+@app.get("/api/bot/ai_help")
 async def get_ai_help(request: Request):
     user_token = await require_authenticated_discord_user(request)
     manageable = await _discord_user_manageable_guild_ids(user_token)
@@ -2008,6 +2009,7 @@ async def get_ai_help(request: Request):
 
 
 @app.put("/api/ai_help")
+@app.put("/api/bot/ai_help")
 async def update_ai_help(request: Request, config: AIHelpConfig):
     user_token = await require_authenticated_discord_user(request)
     manageable = await _discord_user_manageable_guild_ids(user_token)
@@ -2049,6 +2051,7 @@ async def update_ai_help(request: Request, config: AIHelpConfig):
     return {"status": "success"}
 
 @app.get("/api/ai_help/models")
+@app.get("/api/bot/ai_help/models")
 async def get_available_models(request: Request):
     """Get list of available AI models."""
     await require_authenticated_discord_user(request)

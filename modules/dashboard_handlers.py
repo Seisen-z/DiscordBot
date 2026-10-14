@@ -135,24 +135,19 @@ async def _execute_restock_post(guild: discord.Guild):
         def get_stock_emoji(key: str, val: int) -> str:
             if val == 0:
                 return "🔴 Out of stock"
-            elif key in ["gcash", "local_qr", "maya"]:
-                return "🟢 Unlimited"
             elif val <= 5:
                 return "🟠 Low stock"
             else:
                 return "🟢 In stock"
 
-        for tier in ["weekly", "monthly", "lifetime"]:
+        for tier in ["monthly", "lifetime"]:
             tier_stock = payload.get(tier, {})
             tier_title = f"📅 {tier.capitalize()} Subscription"
             
             lines = []
             methods_display = {
                 "robux": "Robux",
-                "paypal": "PayPal",
-                "gcash": "GCash / Maya",
-                "card": "Card",
-                "local_qr": "Wise"
+                "paypal": "PayPal"
             }
             
             for key, label in methods_display.items():
@@ -170,7 +165,7 @@ async def _execute_restock_post(guild: discord.Guild):
                 "To buy or avail premium, visit us on our website! There you can purchase a script key instantly.\n\n"
                 "• **Check Status**: Refer to the status board above to see which payment methods are currently active.\n"
                 "• **Instant Delivery**: All keys are generated and delivered immediately after payment verification.\n"
-                "• **Support**: If you have any issues or want to pay via QR, open a support ticket in our server."
+                "• **Support**: If you have any issues with your purchase, open a support ticket in our server."
             ),
             color=discord.Color.from_str("#b89060"), # Premium gold accent
             timestamp=datetime.now(timezone.utc)
@@ -236,6 +231,13 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             _restock_latest_payload = payload
             await _execute_restock_post(guild)
             return {"status": "success", "message": "Restock notification posted successfully"}
+
+        elif action == "script_status":
+            from modules.script_status import post_script_status
+            posted, message = await post_script_status(guild, force=True)
+            if not posted:
+                return {"status": "error", "action": action, "http_status": 400, "message": message}
+            return {"status": "success", "message": "Supported games board posted"}
 
         elif action == "announcement":
             data = payload

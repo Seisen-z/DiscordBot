@@ -185,6 +185,7 @@ import modules.key_panel as key_panel
 import modules.generate_key as generate_key
 import modules.applications as applications
 import modules.auto_post as auto_post
+import modules.script_status as script_status
 
 # Try to import fun module - if it fails, continue without it
 fun = None
@@ -230,6 +231,7 @@ def register_all_modules():
     generate_key.register(bot)
     applications.register(bot)
     auto_post.register(bot)
+    script_status.register(bot)
     # Register fun module only if it was successfully imported
     if fun is not None and hasattr(fun, 'setup'):
         fun.setup(bot)
@@ -324,6 +326,7 @@ async def on_ready():
     from modules.roblox_store_monitor import store_update_check_loop
     from modules.activity_rewards import activity_rewards_draw_loop, activity_rewards_claim_check
     from modules.auto_post import auto_post_check_loop
+    from modules.script_status import script_status_check_loop
 
     if not giveaway_end_check.is_running():
         giveaway_end_check.start()
@@ -345,6 +348,8 @@ async def on_ready():
         activity_rewards_claim_check.start()
     if not auto_post_check_loop.is_running():
         auto_post_check_loop.start()
+    if not script_status_check_loop.is_running():
+        script_status_check_loop.start()
 
 if __name__ == "__main__":
     if not TOKEN:

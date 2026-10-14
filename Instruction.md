@@ -125,7 +125,7 @@ Execute the script in Roblox, locate the **key textbox** in the script panel, pa
 - Access to all premium scripts including **Levelbound** and any future premium-only games.
 - Premium scripts are more feature-rich and receive priority updates.
 - One key covers all supported premium games — no separate keys per game.
-- Premium keys do not expire on weekly/monthly plans until the plan period ends.
+- Premium keys do not expire on monthly plans until the plan period ends.
 - When a premium plan ends, access stops immediately. To continue, purchase a new key at **[seisen.vercel.app](https://seisen.vercel.app/)**.
 
 ---
@@ -1107,11 +1107,10 @@ If none of the above works, install Opera manually — it is a fast install and 
 Purchase at **[seisen.vercel.app](https://seisen.vercel.app/)** or through <#1461051868959735868>. Your key is delivered instantly — redeem it in <#1421560929425817662>.
 
 **Pricing:**
-- Weekly: 3 Euro
-- Monthly: 6 Euro
-- Lifetime: 12 Euro
+- Monthly: 6 Euro (PayPal) or 1,900 Robux
+- Lifetime: 12 Euro (PayPal) or 2,600 Robux
 
-**Payment methods:** PayPal, GCash, Maya, and PayPal Card. Robux payment is not yet available but is coming soon.
+**Payment methods:** PayPal and Robux. For Robux, buy the item on Roblox, then verify your Roblox account on the checkout page to get your key. GCash, Maya, card and Wise are no longer accepted.
 
 **Key delivery:** Once payment is completed successfully, your key is delivered instantly through the website. A guide on how to redeem it is available on the website as well.
 
