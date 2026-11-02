@@ -398,9 +398,9 @@ async def _on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     embed.add_field(
         name="✅ If the trade was successful",
         value=(
-            "**Both** of you press **Complete Trade**, then press **👍 Vouch (+rep)** for the other trader "
-            "(or 👎 if it went badly). You can also post a written review with `/vouch`, "
-            "and check anyone's record with `/trading stats`."
+            "**Both** of you press **Complete Trade**. Once you both have, the **👍 Vouch (+rep)** and "
+            "**👎 Downvote** buttons appear in a new message below. Press one for the other trader. "
+            "You can also post a written review with `/vouch` and check anyone's record with `/trading stats`."
         ),
         inline=False,
     )
