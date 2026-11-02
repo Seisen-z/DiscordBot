@@ -15,12 +15,12 @@ Data (database/*.json):
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import discord
 from discord import app_commands
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 from modules.utils import load_json, save_json
 
@@ -31,6 +31,8 @@ REP_FILE = "trading_reputation"
 
 DEFAULT_EMOJI = "🤝"
 MAX_THREAD_NAME = 90
+TRADE_TTL = timedelta(hours=3)  # an open trade nobody completes is deleted after this long
+EXPIRE_CHECK_MINUTES = 5
 
 DEFAULT_SETTINGS: dict[str, Any] = {
     "enabled": True,
@@ -389,7 +391,8 @@ async def _on_raw_reaction_add(payload: discord.RawReactionActionEvent):
         description=(
             f"{message.author.mention} ⇄ {partner.mention}\n\n"
             f"**Listing:**\n{snippet}\n\n"
-            "Discuss and complete your trade here."
+            "Discuss and complete your trade here. This thread is deleted automatically after "
+            "**3 hours** if the trade isn't completed."
         ),
         color=discord.Color.blurple(),
     )
@@ -616,6 +619,65 @@ async def trading_top(interaction: discord.Interaction, category: app_commands.C
     await interaction.response.send_message(embed=embed, allowed_mentions=discord.AllowedMentions.none())
 
 
+# ── Auto-expire ──────────────────────────────────────────────────────────────
+
+@tasks.loop(minutes=EXPIRE_CHECK_MINUTES)
+async def expire_trades_loop():
+    """Delete trade threads still open after TRADE_TTL. No rep or trade count is recorded."""
+    if _bot is None:
+        return
+    now = datetime.now(timezone.utc)
+    trades = load_json(THREADS_FILE, {})
+    changed = False
+    for thread_id, trade in trades.items():
+        if trade.get("status") != "open":
+            continue
+        try:
+            created = datetime.fromisoformat(trade["created_at"])
+        except (KeyError, ValueError):
+            continue
+        if now - created < TRADE_TTL:
+            continue
+
+        guild = _bot.get_guild(int(trade["guild_id"]))
+        if guild is None:
+            continue
+        thread = guild.get_thread(int(thread_id))
+        try:
+            if thread is None:
+                thread = await _bot.fetch_channel(int(thread_id))
+            await thread.delete(reason="Trade expired without being completed")
+        except discord.NotFound:
+            pass  # someone already deleted it
+        except discord.HTTPException as exc:
+            print(f"[Trading] could not delete expired thread {thread_id}: {exc}")
+            continue
+
+        trade["status"] = "cancelled"
+        trade["expired"] = True
+        changed = True
+        # Let the listing be picked up again.
+        try:
+            channel = guild.get_channel(int(trade["channel_id"]))
+            msg = await channel.fetch_message(int(trade["message_id"]))
+            await msg.add_reaction(get_settings(guild.id)["emoji"])
+        except Exception:
+            pass
+    if changed:
+        save_json(THREADS_FILE, trades)
+
+
+@expire_trades_loop.before_loop
+async def _before_expire_loop():
+    if _bot is not None:
+        await _bot.wait_until_ready()
+
+
+async def _start_expire_loop():
+    if not expire_trades_loop.is_running():
+        expire_trades_loop.start()
+
+
 # ── Registration ─────────────────────────────────────────────────────────────
 
 def register(bot: commands.Bot):
@@ -627,3 +689,4 @@ def register(bot: commands.Bot):
     bot.add_view(RatingView())
     bot.add_listener(_on_message, "on_message")
     bot.add_listener(_on_raw_reaction_add, "on_raw_reaction_add")
+    bot.add_listener(_start_expire_loop, "on_ready")
