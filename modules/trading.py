@@ -196,6 +196,30 @@ class TradeControlView(discord.ui.View):
         )
         await interaction.response.send_message(embed=embed, view=RatingView())
 
+    @discord.ui.button(label="Report Scam", style=discord.ButtonStyle.secondary, emoji="🚨",
+                       custom_id="trading:scam")
+    async def report_scam(self, interaction: discord.Interaction, button: discord.ui.Button):
+        trade = _get_trade(interaction.channel_id)
+        if not await _can_use(interaction, trade):
+            return
+        if interaction.user.id not in (int(trade["owner_id"]), int(trade["partner_id"])):
+            await interaction.response.send_message("❌ Only the two traders can report a scam.", ephemeral=True)
+            return
+        reports = trade.setdefault("scam_reports", [])
+        if interaction.user.id in reports:
+            await interaction.response.send_message("You already reported this trade. Staff were called.", ephemeral=True)
+            return
+        reports.append(interaction.user.id)
+        _save_trade(interaction.channel_id, trade)
+
+        other = int(trade["partner_id"]) if interaction.user.id == int(trade["owner_id"]) else int(trade["owner_id"])
+        staff = " ".join(f"<@&{r}>" for r in get_settings(interaction.guild_id)["staff_role_ids"])
+        await interaction.response.send_message(
+            f"🚨 {staff}\n{interaction.user.mention} reported a possible **scam** by <@{other}>. "
+            "Staff, please review this thread. Traders: post your proof here and do not complete the trade.",
+            allowed_mentions=discord.AllowedMentions(users=True, roles=True),
+        )
+
     @discord.ui.button(label="Close Trade", style=discord.ButtonStyle.danger, emoji="🔒",
                        custom_id="trading:close")
     async def close(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -365,13 +389,29 @@ async def _on_raw_reaction_add(payload: discord.RawReactionActionEvent):
         description=(
             f"{message.author.mention} ⇄ {partner.mention}\n\n"
             f"**Listing:**\n{snippet}\n\n"
-            "Discuss and complete your trade here. When it is done, **both** of you press "
-            "**Complete Trade**, then rate each other."
+            "Discuss and complete your trade here."
         ),
         color=discord.Color.blurple(),
     )
     embed.add_field(name=message.author.display_name, value=_rep_text(guild.id, message.author.id), inline=True)
     embed.add_field(name=partner.display_name, value=_rep_text(guild.id, partner.id), inline=True)
+    embed.add_field(
+        name="✅ If the trade was successful",
+        value=(
+            "**Both** of you press **Complete Trade**, then press **👍 Vouch (+rep)** for the other trader "
+            "(or 👎 if it went badly). You can also post a written review with `/vouch`, "
+            "and check anyone's record with `/trading stats`."
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="🚨 If it was a scam",
+        value=(
+            "Do **not** press Complete Trade. Press **Report Scam** and staff will be called. "
+            "Keep your screenshots and proof in this thread."
+        ),
+        inline=False,
+    )
     embed.set_footer(text="Never trade outside this thread. Staff can see this conversation.")
     await thread.send(
         content=f"{message.author.mention} {partner.mention} {staff_mentions}".strip(),
