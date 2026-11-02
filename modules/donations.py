@@ -62,6 +62,7 @@ DEFAULT_SETTINGS: dict[str, Any] = {
     "role_min_total": 0,  # total donated (EUR) needed for the role; 0 = any donation
     "announce": True,
     "dm_thanks": True,
+    "bump_panel": False,  # re-post the panel under each thank-you so the button stays at the bottom
 }
 
 
@@ -259,8 +260,12 @@ def build_panel_embed(settings: dict[str, Any]) -> discord.Embed:
     return embed
 
 
-async def publish_panel(guild: discord.Guild) -> tuple[bool, str, str | None]:
-    """Post the panel, or edit the live one in place. Returns (ok, message, message_id)."""
+async def publish_panel(guild: discord.Guild, repost: bool = False) -> tuple[bool, str, str | None]:
+    """Post the panel, or edit the live one in place. Returns (ok, message, message_id).
+
+    With ``repost`` the panel is always sent as a new message (so it lands at the bottom of the
+    channel) and the previous one is deleted afterwards.
+    """
     settings = get_settings(guild.id)
     channel_id = settings.get("channel_id")
     channel = guild.get_channel(int(channel_id)) if str(channel_id).isdigit() else None
@@ -271,7 +276,7 @@ async def publish_panel(guild: discord.Guild) -> tuple[bool, str, str | None]:
     view = DonationPanelView(button_label=settings.get("button_label") or "Donate")
 
     existing_id = settings.get("message_id")
-    if str(existing_id).isdigit():
+    if str(existing_id).isdigit() and not repost:
         try:
             message = await channel.fetch_message(int(existing_id))
             await message.edit(embed=embed, view=view)
@@ -288,6 +293,14 @@ async def publish_panel(guild: discord.Guild) -> tuple[bool, str, str | None]:
 
     settings["message_id"] = str(message.id)
     save_settings(guild.id, settings)
+
+    if repost and str(existing_id).isdigit():
+        # Delete the old panel only after the new one exists, so there is never a gap without a button.
+        try:
+            old = await channel.fetch_message(int(existing_id))
+            await old.delete()
+        except Exception:
+            pass
     return True, "Panel posted.", str(message.id)
 
 
@@ -470,6 +483,13 @@ async def _announce(order_id: str, record: dict, amount: str, total: Decimal) ->
                 )
             except Exception as exc:
                 print(f"[Donations] Could not announce {order_id}: {exc}")
+            else:
+                # Only bump when the thank-you landed in the panel's own channel, otherwise the panel is
+                # already at the bottom of its channel.
+                if settings.get("bump_panel") and str(channel.id) == str(settings.get("channel_id")):
+                    ok, message, _ = await publish_panel(guild, repost=True)
+                    if not ok:
+                        print(f"[Donations] Could not move panel to the bottom: {message}")
 
     if settings.get("dm_thanks", True):
         try:

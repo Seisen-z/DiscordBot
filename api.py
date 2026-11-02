@@ -2748,6 +2748,7 @@ class DonationSettingsConfig(BaseModel):
     role_min_total: float = 0
     announce: bool = True
     dm_thanks: bool = True
+    bump_panel: bool = False
 
 @app.get("/api/guilds/{guild_id}/donations")
 @app.get("/api/bot/guilds/{guild_id}/donations")
