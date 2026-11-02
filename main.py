@@ -187,6 +187,7 @@ import modules.applications as applications
 import modules.auto_post as auto_post
 import modules.script_status as script_status
 import modules.donations as donations
+import modules.trading as trading
 
 # Try to import fun module - if it fails, continue without it
 fun = None
@@ -234,6 +235,7 @@ def register_all_modules():
     auto_post.register(bot)
     script_status.register(bot)
     donations.register(bot)
+    trading.register(bot)
     # Register fun module only if it was successfully imported
     if fun is not None and hasattr(fun, 'setup'):
         fun.setup(bot)

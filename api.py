@@ -2779,6 +2779,30 @@ async def update_donations(guild_id: str, config: DonationSettingsConfig):
 # Roblox Monitors
 @app.get("/api/guilds/{guild_id}/roblox")
 @app.get("/api/bot/guilds/{guild_id}/roblox")
+class TradingSettingsConfig(BaseModel):
+    enabled: bool = True
+    channel_ids: List[str] = []
+    stats_channel_ids: List[str] = []
+    staff_role_ids: List[str] = []
+    emoji: str = "🤝"
+
+@app.get("/api/guilds/{guild_id}/trading")
+@app.get("/api/bot/guilds/{guild_id}/trading")
+async def get_trading(guild_id: str):
+    from modules import trading
+    return {"settings": trading.get_settings(guild_id), "stats": trading.guild_stats(guild_id)}
+
+@app.put("/api/guilds/{guild_id}/trading")
+@app.put("/api/bot/guilds/{guild_id}/trading")
+async def update_trading(guild_id: str, config: TradingSettingsConfig):
+    from modules import trading
+    if not config.emoji.strip():
+        raise HTTPException(status_code=400, detail="Trade emoji cannot be empty.")
+    settings = trading.get_settings(guild_id)
+    settings.update(config.model_dump())
+    trading.save_settings(guild_id, settings)
+    return {"status": "success"}
+
 async def get_roblox(guild_id: str):
     data = load_json("roblox_monitors", {})
     # Stored data may use an int guild_id; match by string comparison.

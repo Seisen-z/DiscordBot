@@ -47,6 +47,7 @@ OWNER_LOCKED_COMMANDS = {
     "giveaway create", "giveaway end", "giveaway reroll", "giveaway delete", "giveaway list",
     "keypanel setup", "keypanel list", "keypanel delete",
     "donationpanel setup", "donationpanel delete",
+    "trading setup", "trading remove", "trading staff_add", "trading staff_remove", "trading toggle", "trading channels", "trading status",
     "import", "macroimport status", "macroimport toggle", "macroimport add-channel", "macroimport remove-channel",
     "membercounter create", "membercounter configure", "membercounter remove", "membercounter status",
     "membercounter set", "membercounter sync", "membercounter disable",
