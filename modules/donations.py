@@ -243,11 +243,9 @@ def _parse_color(raw: Any) -> discord.Color:
 
 
 def build_panel_embed(settings: dict[str, Any]) -> discord.Embed:
-    minimum, maximum = amount_limits(settings)
-    limits = f"Minimum **€{minimum:.2f}**" + (f" · Maximum **€{maximum:.2f}**" if maximum else " · No maximum")
     embed = discord.Embed(
         title=settings.get("title") or DEFAULT_SETTINGS["title"],
-        description=f"{settings.get('description') or ''}\n\n{limits}".strip(),
+        description=(settings.get("description") or "").strip(),
         color=_parse_color(settings.get("embed_color")),
     )
     if settings.get("embed_thumbnail"):
