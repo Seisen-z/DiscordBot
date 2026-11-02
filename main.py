@@ -244,6 +244,7 @@ def register_all_modules():
         print("[System] Fun commands not available")
 
 register_all_modules()
+access_control.hide_admin_commands(bot)
 
 
 # ── Global state ──────────────────────────────────────────────────────────────

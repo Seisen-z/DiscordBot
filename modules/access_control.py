@@ -47,7 +47,7 @@ OWNER_LOCKED_COMMANDS = {
     "giveaway create", "giveaway end", "giveaway reroll", "giveaway delete", "giveaway list",
     "keypanel setup", "keypanel list", "keypanel delete",
     "donationpanel setup", "donationpanel delete",
-    "trading setup", "trading remove", "trading staff_add", "trading staff_remove", "trading toggle", "trading channels", "trading status",
+    "tradeadmin setup", "tradeadmin remove", "tradeadmin staff_add", "tradeadmin staff_remove", "tradeadmin toggle", "tradeadmin channels", "tradeadmin status",
     "import", "macroimport status", "macroimport toggle", "macroimport add-channel", "macroimport remove-channel",
     "membercounter create", "membercounter configure", "membercounter remove", "membercounter status",
     "membercounter set", "membercounter sync", "membercounter disable",
@@ -310,6 +310,23 @@ def register(bot: discord.ext.commands.Bot):
     bot.tree.add_command(role_group)
     bot.tree.add_command(access_group)
     bot.tree.interaction_check = owner_or_allowed_for_locked_commands
+
+
+# Top-level commands only admins need. Discord hides them from everyone without the permission, so
+# regular members just see the public commands. (Permission can only be set on a top-level command/group.)
+ADMIN_ONLY_COMMANDS = {
+    "access", "ai_help", "announce", "announce_draft", "apppanel", "application", "autoreply",
+    "automod_hash", "automod_status", "boost", "bot_profile", "donationpanel", "generatekeypremium",
+    "generatekeyregular", "keypanel", "membercounter", "reaction_roles", "report-fixed", "roblox",
+    "robloxstore", "role", "say", "select_roles", "sticky", "tradeadmin", "vouch_setup",
+}
+
+
+def hide_admin_commands(bot: discord.ext.commands.Bot):
+    """Mark admin-only commands so Discord hides them from regular members. Call after all modules register."""
+    for cmd in bot.tree.get_commands():
+        if cmd.name in ADMIN_ONLY_COMMANDS and cmd.default_permissions is None:
+            cmd.default_permissions = discord.Permissions(manage_guild=True)
 
 
 def get_allowed_role_ids(guild_id: int, command_name: str) -> list[int]:

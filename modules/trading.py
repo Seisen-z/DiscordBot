@@ -391,10 +391,14 @@ async def _on_raw_reaction_add(payload: discord.RawReactionActionEvent):
 
 # ── Slash commands ───────────────────────────────────────────────────────────
 
-trading_group = app_commands.Group(name="trading", description="Trading channels with private trade threads")
+trading_group = app_commands.Group(name="trading", description="Trading stats and leaderboards")
+tradeadmin_group = app_commands.Group(
+    name="tradeadmin", description="Configure trading channels and staff",
+    default_permissions=discord.Permissions(manage_guild=True),
+)
 
 
-@trading_group.command(name="setup", description="Make a channel a trading channel")
+@tradeadmin_group.command(name="setup", description="Make a channel a trading channel")
 @app_commands.describe(channel="Channel where members post trade offers", emoji="Reaction used to start a trade")
 @app_commands.checks.has_permissions(manage_guild=True)
 async def trading_setup(interaction: discord.Interaction, channel: discord.TextChannel, emoji: str | None = None):
@@ -419,7 +423,7 @@ async def trading_setup(interaction: discord.Interaction, channel: discord.TextC
     )
 
 
-@trading_group.command(name="remove", description="Stop treating a channel as a trading channel")
+@tradeadmin_group.command(name="remove", description="Stop treating a channel as a trading channel")
 @app_commands.checks.has_permissions(manage_guild=True)
 async def trading_remove(interaction: discord.Interaction, channel: discord.TextChannel):
     settings = get_settings(interaction.guild_id)
@@ -428,7 +432,7 @@ async def trading_remove(interaction: discord.Interaction, channel: discord.Text
     await interaction.response.send_message(f"🗑️ {channel.mention} removed from trading channels.", ephemeral=True)
 
 
-@trading_group.command(name="staff_add", description="Add a staff role (moderator, helper, support...) to every trade thread")
+@tradeadmin_group.command(name="staff_add", description="Add a staff role (moderator, helper, support...) to every trade thread")
 @app_commands.checks.has_permissions(manage_guild=True)
 async def trading_staff_add(interaction: discord.Interaction, role: discord.Role):
     settings = get_settings(interaction.guild_id)
@@ -444,7 +448,7 @@ async def trading_staff_add(interaction: discord.Interaction, role: discord.Role
                                             allowed_mentions=discord.AllowedMentions.none())
 
 
-@trading_group.command(name="staff_remove", description="Remove a staff role from trade threads")
+@tradeadmin_group.command(name="staff_remove", description="Remove a staff role from trade threads")
 @app_commands.checks.has_permissions(manage_guild=True)
 async def trading_staff_remove(interaction: discord.Interaction, role: discord.Role):
     settings = get_settings(interaction.guild_id)
@@ -454,7 +458,7 @@ async def trading_staff_remove(interaction: discord.Interaction, role: discord.R
                                             allowed_mentions=discord.AllowedMentions.none())
 
 
-@trading_group.command(name="toggle", description="Enable or disable trading in this server")
+@tradeadmin_group.command(name="toggle", description="Enable or disable trading in this server")
 @app_commands.checks.has_permissions(manage_guild=True)
 async def trading_toggle(interaction: discord.Interaction):
     settings = get_settings(interaction.guild_id)
@@ -465,7 +469,7 @@ async def trading_toggle(interaction: discord.Interaction):
     )
 
 
-@trading_group.command(name="status", description="Show the trading configuration")
+@tradeadmin_group.command(name="status", description="Show the trading configuration")
 @app_commands.checks.has_permissions(manage_guild=True)
 async def trading_status(interaction: discord.Interaction):
     s = get_settings(interaction.guild_id)
@@ -511,7 +515,7 @@ class ChannelPickerView(discord.ui.View):
         return select
 
 
-@trading_group.command(name="channels", description="Pick the trading channels and the stats channels (multi-select)")
+@tradeadmin_group.command(name="channels", description="Pick the trading channels and the stats channels (multi-select)")
 @app_commands.checks.has_permissions(manage_guild=True)
 async def trading_channels(interaction: discord.Interaction):
     await interaction.response.send_message(
@@ -578,6 +582,7 @@ def register(bot: commands.Bot):
     global _bot
     _bot = bot
     bot.tree.add_command(trading_group)
+    bot.tree.add_command(tradeadmin_group)
     bot.add_view(TradeControlView())
     bot.add_view(RatingView())
     bot.add_listener(_on_message, "on_message")
