@@ -46,6 +46,7 @@ OWNER_LOCKED_COMMANDS = {
     "poll create", "poll end",
     "giveaway create", "giveaway end", "giveaway reroll", "giveaway delete", "giveaway list",
     "keypanel setup", "keypanel list", "keypanel delete",
+    "donationpanel setup", "donationpanel delete",
     "import", "macroimport status", "macroimport toggle", "macroimport add-channel", "macroimport remove-channel",
     "membercounter create", "membercounter configure", "membercounter remove", "membercounter status",
     "membercounter set", "membercounter sync", "membercounter disable",

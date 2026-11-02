@@ -1597,6 +1597,13 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                         pass
             return {"status": "success", "action": action}
 
+        elif action == "donation_publish":
+            from modules import donations
+            ok, message, message_id = await donations.publish_panel(guild)
+            if not ok:
+                return {"status": "error", "action": action, "http_status": 400, "message": message}
+            return {"status": "success", "action": action, "message": message, "message_id": message_id}
+
         elif action == "apppanel_post":
             channel_id, channel = await resolve_trigger_channel(guild, payload)
             if not channel or not hasattr(channel, "send"):

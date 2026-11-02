@@ -2730,6 +2730,51 @@ async def delete_key_panel(guild_id: str, message_id: str):
     else:
         raise HTTPException(status_code=404, detail="Key panel not found")
 
+# Donations
+class DonationSettingsConfig(BaseModel):
+    enabled: bool = True
+    channel_id: str = ""
+    announce_channel_id: str = ""
+    title: str = ""
+    description: str = ""
+    button_label: str = "Donate"
+    embed_color: Optional[str] = None
+    embed_thumbnail: Optional[str] = None
+    embed_image: Optional[str] = None
+    embed_footer: Optional[str] = None
+    min_amount: float = 1
+    max_amount: float = 0  # 0 = no maximum
+    donor_role_id: str = ""
+    role_min_total: float = 0
+    announce: bool = True
+    dm_thanks: bool = True
+
+@app.get("/api/guilds/{guild_id}/donations")
+@app.get("/api/bot/guilds/{guild_id}/donations")
+async def get_donations(guild_id: str):
+    from modules import donations
+    return {
+        "settings": donations.get_settings(guild_id),
+        "stats": donations.guild_stats(guild_id),
+        "paypal": donations.paypal_mode(),
+    }
+
+@app.put("/api/guilds/{guild_id}/donations")
+@app.put("/api/bot/guilds/{guild_id}/donations")
+async def update_donations(guild_id: str, config: DonationSettingsConfig):
+    from modules import donations
+    if config.min_amount < 1:
+        raise HTTPException(status_code=400, detail="Minimum amount cannot be below 1 EUR.")
+    if config.max_amount < 0 or (config.max_amount and config.max_amount < config.min_amount):
+        raise HTTPException(status_code=400, detail="Maximum must be empty/0 (no limit) or at least the minimum.")
+    if config.role_min_total < 0:
+        raise HTTPException(status_code=400, detail="Role threshold cannot be negative.")
+
+    settings = donations.get_settings(guild_id)  # keeps message_id, which the dashboard does not edit
+    settings.update(config.model_dump())
+    donations.save_settings(guild_id, settings)
+    return {"status": "success"}
+
 # Roblox Monitors
 @app.get("/api/guilds/{guild_id}/roblox")
 @app.get("/api/bot/guilds/{guild_id}/roblox")
