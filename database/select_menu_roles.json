@@ -419,11 +419,17 @@
               "custom_id": "role_select",
               "placeholder": "Select game channels to unlock 🔓",
               "min_values": 1,
-              "max_values": 1,
+              "max_values": 2,
               "options": [
                 {
                   "label": "Anime Expedition",
                   "value": "1528773755080413325",
+                  "description": "Select this to Access Role Based Channel",
+                  "default": false
+                },
+                {
+                  "label": "Anime Origin",
+                  "value": "1540070124118081597",
                   "description": "Select this to Access Role Based Channel",
                   "default": false
                 }

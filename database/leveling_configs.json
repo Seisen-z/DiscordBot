@@ -31,5 +31,14 @@
         "role_id": "1528535839033004073"
       }
     ]
+  },
+  "728292110259716177": {
+    "enabled": true,
+    "excluded_channel_ids": [],
+    "cooldown_seconds": 5,
+    "announce_level_up": true,
+    "announce_channel_id": null,
+    "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+    "tiers": []
   }
 }

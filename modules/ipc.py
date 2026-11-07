@@ -116,7 +116,17 @@ async def handle_dashboard_trigger(request: web.Request):
         data = await request.json()
     except Exception:
         return web.Response(status=400, text="Invalid JSON")
+    if not isinstance(data, dict):
+        return web.json_response({"detail": "JSON object required"}, status=400)
     guild_id_str = data.get("guild_id")
+    # Legacy HTTP triggers must enforce the same guild permissions as FastAPI.
+    from api import HTTPException, require_guild_dashboard_access
+    try:
+        await require_guild_dashboard_access(request, guild_id_str)
+    except HTTPException as exc:
+        return web.json_response({"detail": exc.detail}, status=exc.status_code)
+    if action in {"auto_post_now", "auto_post_send"}:
+        return web.json_response({"detail": "Use the named auto-post post_now endpoint"}, status=400)
     payload = data.get("payload")
     result, status_code = await process_dashboard_trigger(action, guild_id_str, payload)
 
@@ -138,9 +148,9 @@ async def start_ipc_server():
         ipc_app.router.add_post('/trigger/{action}', handle_dashboard_trigger)
         runner = web.AppRunner(ipc_app)
         await runner.setup()
-        site = web.TCPSite(runner, '0.0.0.0', ipc_port)
+        site = web.TCPSite(runner, '127.0.0.1', ipc_port)
         await site.start()
-        print(f"[IPC] Bot Internal Server started on http://0.0.0.0:{ipc_port}")
+        print(f"[IPC] Bot Internal Server started on http://127.0.0.1:{ipc_port}")
     except OSError as e:
         print(f"[IPC] Failed to bind {ipc_port}: {e}. Bot will continue running.")
 

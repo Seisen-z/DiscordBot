@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 import aiohttp
+from modules.http_safety import safe_public_get
 import discord
 from discord.ext import tasks
 from modules.utils import _as_int, load_json, save_json
@@ -225,7 +226,7 @@ async def _resolve_youtube_channel_id(source: str, session: aiohttp.ClientSessio
         return None
 
     try:
-        async with session.get(
+        async with safe_public_get(session,
             src,
             ssl=_SSL_CTX,
             timeout=aiohttp.ClientTimeout(total=15),
@@ -279,7 +280,7 @@ async def _scrape_youtube_channel_latest_video_id(channel_id: str, session: aioh
     """
     url = f"https://www.youtube.com/channel/{channel_id}/videos"
     try:
-        async with session.get(
+        async with safe_public_get(session,
             url,
             ssl=_SSL_CTX,
             timeout=aiohttp.ClientTimeout(total=15),
@@ -309,7 +310,7 @@ async def _fetch_youtube_video_oembed(video_id: str, fallback_author: str, sessi
     author = fallback_author
 
     try:
-        async with session.get(oembed_url, ssl=_SSL_CTX, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+        async with safe_public_get(session, oembed_url, ssl=_SSL_CTX, timeout=aiohttp.ClientTimeout(total=10)) as resp:
             if resp.status == 200:
                 data = await resp.json(content_type=None)
                 title = data.get("title") or title
@@ -359,7 +360,7 @@ async def fetch_youtube_latest_entry(
     rss_error = None
 
     try:
-        async with session.get(feed_url, ssl=_SSL_CTX, timeout=aiohttp.ClientTimeout(total=20)) as resp:
+        async with safe_public_get(session, feed_url, ssl=_SSL_CTX, timeout=aiohttp.ClientTimeout(total=20)) as resp:
             if resp.status == 200:
                 xml_text = await resp.text()
                 try:
@@ -466,7 +467,7 @@ def resolve_social_source_url(
 
 
 async def fetch_source_latest_entry(source_url: str, session: aiohttp.ClientSession) -> dict | None:
-    async with session.get(
+    async with safe_public_get(session,
         source_url,
         ssl=_SSL_CTX,
         timeout=aiohttp.ClientTimeout(total=20),

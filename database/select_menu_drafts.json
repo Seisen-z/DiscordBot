@@ -34,6 +34,11 @@
           "label": "Anime Expedition",
           "value": "1528773755080413325",
           "description": "Select this to Access Role Based Channel"
+        },
+        {
+          "label": "Anime Origin",
+          "value": "1540070124118081597",
+          "description": "Select this to Access Role Based Channel"
         }
       ],
       "message_id": "1528779931029606453",

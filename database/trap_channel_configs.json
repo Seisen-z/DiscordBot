@@ -5,7 +5,7 @@
       "1529181927473680464"
     ],
     "action": "kick",
-    "delete_message_hours": 6,
+    "delete_message_hours": 168,
     "exempt_role_ids": [
       "1333417449386676306",
       "1333419158485864511",

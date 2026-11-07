@@ -462,7 +462,7 @@ _SITE_UPDATES_CACHE: dict[str, object] = {"expires_at": 0.0, "rows": []}
 
 _UPDATE_INTENT_RE = re.compile(
     r"\b(updat\w*|patch\w*|changelog|latest|newest|recent|what'?s new|whats new|new (?:script|game|feature)s?|"
-    r"release\w*|version|outdated|fixed|added)\b",
+    r"release\w*|version|outdated|fixed|added|any news|how about|what about|hows? (?:it|the)|working\??|still work\w*)\b",
     re.IGNORECASE,
 )
 _GAME_STOPWORDS = {"the", "a", "an", "of", "to", "and", "script", "scripts", "hub", "update", "new", "game", "release", "general"}

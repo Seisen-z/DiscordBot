@@ -8674,6 +8674,379 @@
       "actor_id": "442317061104861184",
       "actor_name": "Seisen",
       "actor_token_hash": "336f5905d7"
+    },
+    {
+      "at": "2026-08-08T16:00:26.405445+00:00",
+      "guild_id": "1333251917098520628",
+      "module": "leveling",
+      "changed_keys": [],
+      "before": {
+        "enabled": true,
+        "excluded_channel_ids": [
+          "1508793141392572596",
+          "1509556268858343674",
+          "1509184232122220604",
+          "1509176740029792366"
+        ],
+        "cooldown_seconds": 5,
+        "announce_level_up": true,
+        "announce_channel_id": "1452965709842878616",
+        "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+        "tiers": [
+          {
+            "id": "56pbv1hq",
+            "name": "Active",
+            "threshold": 1000,
+            "role_id": "1528535772385382460"
+          },
+          {
+            "id": "5o0chva2",
+            "name": "Loyal",
+            "threshold": 5000,
+            "role_id": "1528535795097403595"
+          },
+          {
+            "id": "8rwjn729",
+            "name": "OG",
+            "threshold": 20000,
+            "role_id": "1528535839033004073"
+          }
+        ]
+      },
+      "after": {
+        "enabled": true,
+        "excluded_channel_ids": [
+          "1508793141392572596",
+          "1509556268858343674",
+          "1509184232122220604",
+          "1509176740029792366"
+        ],
+        "cooldown_seconds": 5,
+        "announce_level_up": true,
+        "announce_channel_id": "1452965709842878616",
+        "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+        "tiers": [
+          {
+            "id": "56pbv1hq",
+            "name": "Active",
+            "threshold": 1000,
+            "role_id": "1528535772385382460"
+          },
+          {
+            "id": "5o0chva2",
+            "name": "Loyal",
+            "threshold": 5000,
+            "role_id": "1528535795097403595"
+          },
+          {
+            "id": "8rwjn729",
+            "name": "OG",
+            "threshold": 20000,
+            "role_id": "1528535839033004073"
+          }
+        ]
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "c00e129156"
+    },
+    {
+      "at": "2026-08-09T16:03:34.378250+00:00",
+      "guild_id": "1333251917098520628",
+      "module": "automod",
+      "changed_keys": [],
+      "before": {
+        "enabled": true,
+        "action": "timeout",
+        "timeout_minutes": 10,
+        "log_channel_id": "1483654954638905364",
+        "exempt_role_ids": [
+          "1333421502971904020",
+          "1333419158485864511",
+          "1333417449386676306",
+          "1458853102814888142"
+        ],
+        "exempt_channel_ids": [],
+        "scan_links": true,
+        "scan_images": false,
+        "blocked_domains": [],
+        "whitelist_domains": [],
+        "blocked_image_hashes": [],
+        "dm_user_on_action": true,
+        "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+      },
+      "after": {
+        "enabled": true,
+        "action": "timeout",
+        "timeout_minutes": 10,
+        "log_channel_id": "1483654954638905364",
+        "exempt_role_ids": [
+          "1333421502971904020",
+          "1333419158485864511",
+          "1333417449386676306",
+          "1458853102814888142"
+        ],
+        "exempt_channel_ids": [],
+        "scan_links": true,
+        "scan_images": false,
+        "blocked_domains": [],
+        "whitelist_domains": [],
+        "blocked_image_hashes": [],
+        "dm_user_on_action": true,
+        "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "c00e129156"
+    },
+    {
+      "at": "2026-08-09T16:06:55.288974+00:00",
+      "guild_id": "1333251917098520628",
+      "module": "automod",
+      "changed_keys": [],
+      "before": {
+        "enabled": true,
+        "action": "timeout",
+        "timeout_minutes": 10,
+        "log_channel_id": "1483654954638905364",
+        "exempt_role_ids": [
+          "1333421502971904020",
+          "1333419158485864511",
+          "1333417449386676306",
+          "1458853102814888142"
+        ],
+        "exempt_channel_ids": [],
+        "scan_links": true,
+        "scan_images": false,
+        "blocked_domains": [],
+        "whitelist_domains": [],
+        "blocked_image_hashes": [],
+        "dm_user_on_action": true,
+        "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+      },
+      "after": {
+        "enabled": true,
+        "action": "timeout",
+        "timeout_minutes": 10,
+        "log_channel_id": "1483654954638905364",
+        "exempt_role_ids": [
+          "1333421502971904020",
+          "1333419158485864511",
+          "1333417449386676306",
+          "1458853102814888142"
+        ],
+        "exempt_channel_ids": [],
+        "scan_links": true,
+        "scan_images": false,
+        "blocked_domains": [],
+        "whitelist_domains": [],
+        "blocked_image_hashes": [],
+        "dm_user_on_action": true,
+        "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "c00e129156"
+    },
+    {
+      "at": "2026-08-21T20:21:10.006407+00:00",
+      "guild_id": "1333251917098520628",
+      "module": "trap_channel",
+      "changed_keys": [
+        "delete_message_hours"
+      ],
+      "before": {
+        "enabled": true,
+        "channel_ids": [
+          "1529181927473680464"
+        ],
+        "action": "kick",
+        "delete_message_hours": 6,
+        "exempt_role_ids": [
+          "1333417449386676306",
+          "1333419158485864511",
+          "1458853102814888142",
+          "1507954816738131978",
+          "1333421502971904020",
+          "1428989955027501089"
+        ],
+        "delete_trigger_message": true,
+        "reason": "Posted in a restricted channel",
+        "log_channel_id": "1483654954638905364"
+      },
+      "after": {
+        "enabled": true,
+        "channel_ids": [
+          "1529181927473680464"
+        ],
+        "action": "kick",
+        "delete_message_hours": 168,
+        "exempt_role_ids": [
+          "1333417449386676306",
+          "1333419158485864511",
+          "1458853102814888142",
+          "1507954816738131978",
+          "1333421502971904020",
+          "1428989955027501089"
+        ],
+        "delete_trigger_message": true,
+        "reason": "Posted in a restricted channel",
+        "log_channel_id": "1483654954638905364"
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "88b020f680"
+    },
+    {
+      "at": "2026-08-21T20:21:18.447165+00:00",
+      "guild_id": "1333251917098520628",
+      "module": "trap_channel",
+      "changed_keys": [],
+      "before": {
+        "enabled": true,
+        "channel_ids": [
+          "1529181927473680464"
+        ],
+        "action": "kick",
+        "delete_message_hours": 168,
+        "exempt_role_ids": [
+          "1333417449386676306",
+          "1333419158485864511",
+          "1458853102814888142",
+          "1507954816738131978",
+          "1333421502971904020",
+          "1428989955027501089"
+        ],
+        "delete_trigger_message": true,
+        "reason": "Posted in a restricted channel",
+        "log_channel_id": "1483654954638905364"
+      },
+      "after": {
+        "enabled": true,
+        "channel_ids": [
+          "1529181927473680464"
+        ],
+        "action": "kick",
+        "delete_message_hours": 168,
+        "exempt_role_ids": [
+          "1333417449386676306",
+          "1333419158485864511",
+          "1458853102814888142",
+          "1507954816738131978",
+          "1333421502971904020",
+          "1428989955027501089"
+        ],
+        "delete_trigger_message": true,
+        "reason": "Posted in a restricted channel",
+        "log_channel_id": "1483654954638905364"
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "88b020f680"
+    },
+    {
+      "at": "2026-10-24T08:28:59.745915+00:00",
+      "guild_id": "1333251917098520628",
+      "module": "automod",
+      "changed_keys": [],
+      "before": {
+        "enabled": true,
+        "action": "timeout",
+        "timeout_minutes": 10,
+        "log_channel_id": "1483654954638905364",
+        "exempt_role_ids": [
+          "1333421502971904020",
+          "1333419158485864511",
+          "1333417449386676306",
+          "1458853102814888142"
+        ],
+        "exempt_channel_ids": [],
+        "scan_links": true,
+        "scan_images": false,
+        "blocked_domains": [],
+        "whitelist_domains": [],
+        "blocked_image_hashes": [],
+        "dm_user_on_action": true,
+        "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+      },
+      "after": {
+        "enabled": true,
+        "action": "timeout",
+        "timeout_minutes": 10,
+        "log_channel_id": "1483654954638905364",
+        "exempt_role_ids": [
+          "1333421502971904020",
+          "1333419158485864511",
+          "1333417449386676306",
+          "1458853102814888142"
+        ],
+        "exempt_channel_ids": [],
+        "scan_links": true,
+        "scan_images": false,
+        "blocked_domains": [],
+        "whitelist_domains": [],
+        "blocked_image_hashes": [],
+        "dm_user_on_action": true,
+        "dm_message": "Your message was removed because it contained prohibited content (scam/phishing)."
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "188cd6084f"
+    }
+  ],
+  "728292110259716177": [
+    {
+      "at": "2026-08-08T15:53:25.100901+00:00",
+      "guild_id": "728292110259716177",
+      "module": "leveling",
+      "changed_keys": [
+        "announce_level_up",
+        "cooldown_seconds",
+        "enabled",
+        "excluded_channel_ids",
+        "level_up_message",
+        "tiers"
+      ],
+      "before": {},
+      "after": {
+        "enabled": true,
+        "excluded_channel_ids": [],
+        "cooldown_seconds": 5,
+        "announce_level_up": true,
+        "announce_channel_id": null,
+        "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+        "tiers": []
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "b5eb37a123"
+    },
+    {
+      "at": "2026-08-08T15:53:31.949894+00:00",
+      "guild_id": "728292110259716177",
+      "module": "leveling",
+      "changed_keys": [],
+      "before": {
+        "enabled": true,
+        "excluded_channel_ids": [],
+        "cooldown_seconds": 5,
+        "announce_level_up": true,
+        "announce_channel_id": null,
+        "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+        "tiers": []
+      },
+      "after": {
+        "enabled": true,
+        "excluded_channel_ids": [],
+        "cooldown_seconds": 5,
+        "announce_level_up": true,
+        "announce_channel_id": null,
+        "level_up_message": "🎉 {mention} just reached **{tier_name}** ({messages} messages) and unlocked {role_mention}!",
+        "tiers": []
+      },
+      "actor_id": "442317061104861184",
+      "actor_name": "Seisen",
+      "actor_token_hash": "b5eb37a123"
     }
   ]
 }

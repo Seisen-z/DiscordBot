@@ -1,0 +1,16 @@
+{
+  "5CE561282B143930V": {
+    "status": "completed",
+    "user_id": 442317061104861184,
+    "guild_id": 1333251917098520628,
+    "amount": "1.00",
+    "currency": "EUR",
+    "note": "1",
+    "created_at": "2026-11-02T15:46:57.122461+00:00",
+    "captured_amount": "1.00",
+    "captured_currency": "EUR",
+    "transaction_id": "1AK100289S159672Y",
+    "payer_email": "sb-wytn147986075@personal.example.com",
+    "finished_at": "2026-11-02T15:47:20.144725+00:00"
+  }
+}

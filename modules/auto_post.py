@@ -13,6 +13,7 @@ from discord.ext import commands, tasks
 from typing import Optional, Dict, Any
 
 from modules.utils import load_json, save_json, _as_int
+from modules.post_state import auto_posts_lock
 from modules.dashboard_handlers import resolve_local_asset, resolve_trigger_channel
 
 _bot: commands.Bot | None = None
@@ -38,14 +39,7 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
     if not channel or not hasattr(channel, "send"):
         return False, None, None, f"Channel {channel_id} not found or not text-based."
 
-    # Delete previous message if it exists
     old_msg_id = data.get("last_message_id")
-    if old_msg_id and str(old_msg_id).isdigit():
-        try:
-            old_msg = await channel.fetch_message(int(old_msg_id))
-            await old_msg.delete()
-        except Exception:
-            pass
 
     # Build content, embeds, attachments, and buttons
     post_type = str(data.get("post_type") or "embed").strip().lower()
@@ -54,9 +48,9 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
     msg_content = data.get("content", "")
 
     files = []
-    thumb = resolve_local_asset(data.get("thumbnail_url"), files)
-    image = resolve_local_asset(data.get("image_url"), files)
-    images = [resolve_local_asset(img, files) for img in data.get("images", [])]
+    thumb = resolve_local_asset(data.get("thumbnail_url"), files, guild.id)
+    image = resolve_local_asset(data.get("image_url"), files, guild.id)
+    images = [resolve_local_asset(img, files, guild.id) for img in data.get("images", [])]
     footer = data.get("footer")
     role_id = data.get("ping_role_id")
 
@@ -117,6 +111,14 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
             view=view,
             files=files or None,
         )
+        # Preserve the old post if validation or sending fails. Delete only our own message.
+        if old_msg_id and str(old_msg_id).isdigit() and str(old_msg_id) != str(new_msg.id):
+            try:
+                old_msg = await channel.fetch_message(int(old_msg_id))
+                if guild.me and old_msg.author.id == guild.me.id:
+                    await old_msg.delete()
+            except Exception:
+                pass
         now_iso = datetime.now(timezone.utc).isoformat()
         return True, str(new_msg.id), now_iso, None
     except Exception as exc:
@@ -128,108 +130,109 @@ async def execute_auto_post_send(guild: discord.Guild, data: dict) -> tuple[bool
 @tasks.loop(seconds=30)
 async def auto_post_check_loop():
     """Background task loop checking active auto-posts across all guilds."""
-    if _bot is None or not _bot.is_ready():
-        return
-
-    try:
-        data = load_json(AUTO_POST_DB, {})
-        if not isinstance(data, dict):
+    async with auto_posts_lock:
+        if _bot is None or not _bot.is_ready():
             return
 
-        modified = False
-        now = datetime.now(timezone.utc)
+        try:
+            data = load_json(AUTO_POST_DB, {})
+            if not isinstance(data, dict):
+                return
 
-        for guild_id_str, guild_posts in data.items():
-            if not isinstance(guild_posts, dict):
-                continue
+            modified = False
+            now = datetime.now(timezone.utc)
 
-            try:
-                guild_id = int(guild_id_str)
-                guild = _bot.get_guild(guild_id)
+            for guild_id_str, guild_posts in data.items():
+                if not isinstance(guild_posts, dict):
+                    continue
+
+                try:
+                    guild_id = int(guild_id_str)
+                    guild = _bot.get_guild(guild_id)
+                    if not guild:
+                        try:
+                            guild = await _bot.fetch_guild(guild_id)
+                        except Exception:
+                            guild = None
+                except ValueError:
+                    guild = None
+
                 if not guild:
-                    try:
-                        guild = await _bot.fetch_guild(guild_id)
-                    except Exception:
-                        guild = None
-            except ValueError:
-                guild = None
-
-            if not guild:
-                continue
-
-            for post_key, post_cfg in guild_posts.items():
-                if not isinstance(post_cfg, dict):
                     continue
 
-                if not post_cfg.get("enabled", False):
-                    continue
+                for post_key, post_cfg in guild_posts.items():
+                    if not isinstance(post_cfg, dict):
+                        continue
 
-                channel_id = post_cfg.get("channel_id")
-                if not channel_id:
-                    continue
+                    if not post_cfg.get("enabled", False):
+                        continue
 
-                # Calculate interval in seconds (minimum 5 minutes to prevent spam)
-                interval_minutes = post_cfg.get("interval_minutes")
-                if interval_minutes is None:
-                    interval_hours = post_cfg.get("interval_hours", 1)
-                    interval_minutes = float(interval_hours) * 60.0
-                else:
-                    interval_minutes = float(interval_minutes)
+                    channel_id = post_cfg.get("channel_id")
+                    if not channel_id:
+                        continue
 
-                if interval_minutes < 5:
-                    interval_minutes = 5.0
-
-                interval_seconds = interval_minutes * 60.0
-
-                # Check last posted time
-                last_posted_at_raw = post_cfg.get("last_posted_at")
-                should_post = False
-
-                if not last_posted_at_raw:
-                    should_post = True
-                else:
-                    try:
-                        last_posted_dt = datetime.fromisoformat(str(last_posted_at_raw).replace("Z", "+00:00"))
-                        if last_posted_dt.tzinfo is None:
-                            last_posted_dt = last_posted_dt.replace(tzinfo=timezone.utc)
-                        elapsed = (now - last_posted_dt).total_seconds()
-                        if elapsed >= interval_seconds:
-                            should_post = True
-                    except Exception:
-                        should_post = True
-
-                if should_post:
-                    success, new_msg_id, now_iso, err = await execute_auto_post_send(guild, post_cfg)
-                    if success:
-                        post_cfg["last_message_id"] = new_msg_id
-                        post_cfg["last_posted_at"] = now_iso
-                        modified = True
-
-                        from modules.utils import record_audit_log
-                        record_audit_log(
-                            guild_id=guild.id,
-                            category="Auto-Post",
-                            action="Scheduled Auto-Post Reposted",
-                            actor="Bot Task Loop",
-                            details=f"Auto-reposted '{post_key}' to channel",
-                            metadata={
-                                "post_key": post_key,
-                                "message_id": new_msg_id,
-                                "channel_id": str(post_cfg.get("channel_id")),
-                            },
-                        )
+                    # Calculate interval in seconds (minimum 5 minutes to prevent spam)
+                    interval_minutes = post_cfg.get("interval_minutes")
+                    if interval_minutes is None:
+                        interval_hours = post_cfg.get("interval_hours", 1)
+                        interval_minutes = float(interval_hours) * 60.0
                     else:
-                        # Save the attempt time even on failure so we don't
-                        # retry every 30 seconds and spam the channel.
-                        post_cfg["last_posted_at"] = now.isoformat()
-                        modified = True
-                        print(f"[AutoPost] Failed scheduled post '{post_key}': {err}")
+                        interval_minutes = float(interval_minutes)
 
-        if modified:
-            save_json(AUTO_POST_DB, data)
+                    if interval_minutes < 5:
+                        interval_minutes = 5.0
 
-    except Exception as exc:
-        print(f"[AutoPost] Error in background task loop: {exc}")
+                    interval_seconds = interval_minutes * 60.0
+
+                    # Check last posted time
+                    last_posted_at_raw = post_cfg.get("last_posted_at")
+                    should_post = False
+
+                    if not last_posted_at_raw:
+                        should_post = True
+                    else:
+                        try:
+                            last_posted_dt = datetime.fromisoformat(str(last_posted_at_raw).replace("Z", "+00:00"))
+                            if last_posted_dt.tzinfo is None:
+                                last_posted_dt = last_posted_dt.replace(tzinfo=timezone.utc)
+                            elapsed = (now - last_posted_dt).total_seconds()
+                            if elapsed >= interval_seconds:
+                                should_post = True
+                        except Exception:
+                            should_post = True
+
+                    if should_post:
+                        success, new_msg_id, now_iso, err = await execute_auto_post_send(guild, post_cfg)
+                        if success:
+                            post_cfg["last_message_id"] = new_msg_id
+                            post_cfg["last_posted_at"] = now_iso
+                            modified = True
+
+                            from modules.utils import record_audit_log
+                            record_audit_log(
+                                guild_id=guild.id,
+                                category="Auto-Post",
+                                action="Scheduled Auto-Post Reposted",
+                                actor="Bot Task Loop",
+                                details=f"Auto-reposted '{post_key}' to channel",
+                                metadata={
+                                    "post_key": post_key,
+                                    "message_id": new_msg_id,
+                                    "channel_id": str(post_cfg.get("channel_id")),
+                                },
+                            )
+                        else:
+                            # Save the attempt time even on failure so we don't
+                            # retry every 30 seconds and spam the channel.
+                            post_cfg["last_posted_at"] = now.isoformat()
+                            modified = True
+                            print(f"[AutoPost] Failed scheduled post '{post_key}': {err}")
+
+            if modified:
+                save_json(AUTO_POST_DB, data)
+
+        except Exception as exc:
+            print(f"[AutoPost] Error in background task loop: {exc}")
 
 
 @auto_post_check_loop.before_loop

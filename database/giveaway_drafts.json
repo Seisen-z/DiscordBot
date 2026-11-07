@@ -2,11 +2,11 @@
   "1333251917098520628": {
     "Giveaway 1": {
       "name": "Monthly key",
-      "reward_title": "1 Week Key",
-      "reward_description": "Another 1 Week Key Giveaway for you lot\nReact with 🎉 to enter. Winners will be picked automatically at the end time.\n@wonder of u.. giveaway her winning reward key",
+      "reward_title": "1x Monthly Key",
+      "reward_description": "",
       "channel_id": "1408051026677727345",
       "winner_count": 1,
-      "duration_minutes": 1440,
+      "duration_minutes": 720,
       "ping_role_id": "1405196741107781744",
       "key_log_channel_id": "1483654954638905364",
       "emoji": "🎉",
@@ -26,15 +26,27 @@
     },
     "Giveaway 3": {
       "name": "Giveaway",
-      "reward_title": "1x Lifetime Premium Key",
-      "reward_description": "@217388905006104577 Giving away his premium lifetime key ",
+      "reward_title": "2x KVIP VS PHONE",
+      "reward_description": "KVIP VS PHONE GIVEAWAY! React with 🎉 to enter for a chance to win 1× KVIP VS PHONE. 2 winners will be selected automatically when the giveaway ends. Good luck everyone!",
       "channel_id": "1408051026677727345",
-      "winner_count": 1,
-      "duration_minutes": 420,
+      "winner_count": 2,
+      "duration_minutes": 720,
       "ping_role_id": "1405196741107781744",
-      "key_log_channel_id": "",
+      "key_log_channel_id": "1483654954638905364",
       "emoji": "🎉",
       "key_tier": "none"
+    },
+    "Giveaway 4": {
+      "name": "Weekly Key",
+      "reward_title": "3x Weekly Key",
+      "reward_description": "",
+      "channel_id": "1408051026677727345",
+      "winner_count": 3,
+      "duration_minutes": 720,
+      "ping_role_id": "1405196741107781744",
+      "key_log_channel_id": "1483654954638905364",
+      "emoji": "🎉",
+      "key_tier": "weekly"
     }
   }
 }

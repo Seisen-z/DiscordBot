@@ -14,6 +14,7 @@ import os
 import aiohttp
 import discord
 from discord import app_commands
+from discord.ext import tasks
 
 from modules.utils import load_json, save_json, BOOST_CONFIG_FILE
 
@@ -128,6 +129,114 @@ async def _request_boost_key(webhook_url: str, webhook_secret: str | None) -> st
     return None
 
 
+async def _request_boost_key_with_retry(webhook_url: str, webhook_secret: str | None, attempts: int = 3) -> str | None:
+    """A single transient webhook failure used to mean the booster got no key at all."""
+    for attempt in range(attempts):
+        key = await _request_boost_key(webhook_url, webhook_secret)
+        if key:
+            return key
+        if attempt < attempts - 1:
+            await asyncio.sleep(2 * (attempt + 1))
+    return None
+
+
+# ── Unboost penalty ───────────────────────────────────────────────────────────
+
+DEFAULT_PENALTY = {"mode": "warn", "days": 30}
+
+
+def _record_key_claim(guild_id: int, user_id: int):
+    """Remember who was given a key so an unboost can be told apart from a
+    booster who predates this tracking. Only the fact is stored, never the key."""
+    cfg = load_boost_config()
+    gcfg = cfg.get(str(guild_id))
+    if gcfg is None:
+        return
+    gcfg.setdefault("key_claims", {})[str(user_id)] = discord.utils.utcnow().isoformat()
+    save_boost_config(cfg)
+
+
+async def _notify_penalty(guild: discord.Guild, member: discord.abc.User, text: str):
+    cfg = load_boost_config().get(str(guild.id), {})
+    channel_id = _parse_id(cfg.get("channel_id"))
+    channel = guild.get_channel(channel_id) if channel_id else None
+    if channel:
+        try:
+            await channel.send(text)
+        except Exception as e:
+            print(f"[Boost] Failed to send penalty log: {e}")
+
+
+async def apply_unboost_penalty(guild: discord.Guild, member: discord.abc.User):
+    """Warn or temp-ban someone who received a boost key and then stopped boosting."""
+    cfg = load_boost_config()
+    gcfg = cfg.get(str(guild.id))
+    if not gcfg:
+        return
+    claims = gcfg.get("key_claims", {})
+    if str(member.id) not in claims:
+        return  # never got a key from us (or boosted before tracking existed)
+
+    penalty = {**DEFAULT_PENALTY, **gcfg.get("penalty", {})}
+    # Consume the claim so a rejoin/re-boost starts clean and this can't fire twice.
+    del claims[str(member.id)]
+
+    if penalty["mode"] == "ban":
+        days = int(penalty["days"])
+        expires = discord.utils.utcnow().timestamp() + days * 86400
+        gcfg.setdefault("temp_bans", {})[str(member.id)] = expires
+        save_boost_config(cfg)
+        try:
+            await member.send(
+                f"You removed your boost from **{guild.name}** after receiving a boost key. "
+                f"Keys can't be taken back, so you've been banned for {days} days."
+            )
+        except Exception:
+            pass
+        try:
+            await guild.ban(member, reason=f"Removed server boost after claiming key ({days}-day ban)", delete_message_days=0)
+            await _notify_penalty(guild, member, f"🔨 {member.mention} (`{member.id}`) removed their boost after receiving a key and was banned for {days} days.")
+        except Exception as e:
+            print(f"[Boost] Failed to ban {member.id}: {e}")
+            await _notify_penalty(guild, member, f"⚠️ {member.mention} removed their boost after receiving a key, but the ban failed: {e}")
+    else:
+        save_boost_config(cfg)
+        try:
+            await member.send(
+                f"⚠️ You removed your boost from **{guild.name}** after receiving a boost key. "
+                "Keys can't be taken back. Please keep boosting, or you may be banned if this happens again."
+            )
+        except Exception:
+            pass
+        await _notify_penalty(guild, member, f"⚠️ {member.mention} (`{member.id}`) removed their boost after receiving a key and was warned.")
+
+
+async def _expire_temp_bans(bot: discord.Client):
+    now = discord.utils.utcnow().timestamp()
+    cfg = load_boost_config()
+    changed = False
+    for guild_id, gcfg in cfg.items():
+        bans = gcfg.get("temp_bans", {})
+        due = [uid for uid, exp in bans.items() if exp <= now]
+        if not due:
+            continue
+        guild = bot.get_guild(int(guild_id))
+        if guild is None:
+            continue
+        for uid in due:
+            try:
+                await guild.unban(discord.Object(id=int(uid)), reason="Boost penalty ban expired")
+            except discord.NotFound:
+                pass  # already unbanned manually
+            except Exception as e:
+                print(f"[Boost] Failed to unban {uid}: {e}")
+                continue
+            del bans[uid]
+            changed = True
+    if changed:
+        save_boost_config(cfg)
+
+
 # ── on_member_update handler ─────────────────────────────────────────────────
 
 async def deliver_boost_reward(guild: discord.Guild, member: discord.Member, is_test: bool = False):
@@ -145,26 +254,41 @@ async def deliver_boost_reward(guild: discord.Guild, member: discord.Member, is_
     generated_key = None
     # Key delivery is now available to all configured servers.
     if webhook_url:
-        generated_key = await _request_boost_key(webhook_url, webhook_secret)
+        generated_key = await _request_boost_key_with_retry(webhook_url, webhook_secret)
 
     if generated_key:
         if guild.id not in _unclaimed_keys:
             _unclaimed_keys[guild.id] = {}
         _unclaimed_keys[guild.id][member.id] = generated_key
+        if not is_test:
+            _record_key_claim(guild.id, member.id)
+    else:
+        print(f"[Boost] No key generated for {member} ({member.id}) in {guild.name} - webhook missing or failed.")
+
+    async def _dm_fallback(reason: str):
+        # Without this a missing config/channel silently swallowed the key.
+        if not generated_key:
+            return
+        try:
+            await member.send(f"Thanks for boosting **{guild.name}**! Your Premium Key:\n```{generated_key}```")
+        except Exception as e:
+            print(f"[Boost] {reason}; could not DM key to {member.id}: {e}")
 
     cfg = load_boost_config()
     guild_id_str = str(guild.id)
     # Strict check: only proceed if the guild has explicitly saved a boost configuration.
     if guild_id_str not in cfg:
         print(f"[Boost] Skipping {guild.name} ({guild.id}) - no configuration found.")
-        return
+        await _dm_fallback("no configuration")
+        return generated_key
 
     guild_cfg = cfg.get(guild_id_str, {})
     channel_id = int(guild_cfg["channel_id"]) if guild_cfg.get("channel_id") else None
-    
+
     if not channel_id:
         print(f"[Boost] Skipping {guild.name} ({guild.id}) - no log channel configured.")
-        return
+        await _dm_fallback("no log channel")
+        return generated_key
 
     channel = guild.get_channel(channel_id)
     if channel is None:
@@ -172,7 +296,8 @@ async def deliver_boost_reward(guild: discord.Guild, member: discord.Member, is_
             channel = await guild.fetch_channel(channel_id)
         except:
             print(f"[Boost] Could not find configured channel {channel_id} in {guild.name}.")
-            return
+            await _dm_fallback("log channel not found")
+            return generated_key
 
     allowed_roles = [int(r) for r in guild_cfg.get("roles", [])]
     category_id = int(guild_cfg["category_id"]) if guild_cfg.get("category_id") else None
@@ -252,6 +377,9 @@ async def deliver_boost_reward(guild: discord.Guild, member: discord.Member, is_
     except Exception as e:
         print(f"[Boost] Failed to send log message: {e}")
 
+    if generated_key and not ticket_channel:
+        await _dm_fallback("no ticket channel")
+
     return generated_key
 
 async def handle_member_update(before: discord.Member, after: discord.Member):
@@ -270,6 +398,13 @@ async def handle_member_update(before: discord.Member, after: discord.Member):
                 await after.remove_roles(boost_role, reason="Stopped boosting the server")
             except Exception as e:
                 print(f"[Boost] Failed to remove boost role from {after.display_name}: {e}")
+        await apply_unboost_penalty(guild, after)
+
+
+async def handle_member_remove(member: discord.Member):
+    """Leaving the server also drops the boost, so it counts as unboosting."""
+    if member.premium_since is not None:
+        await apply_unboost_penalty(member.guild, member)
 
 
 # ── Slash commands ────────────────────────────────────────────────────────────
@@ -384,6 +519,40 @@ async def boost_close(interaction: discord.Interaction):
     await interaction.channel.delete(reason=f"Boost ticket closed by {interaction.user}")
 
 
+@boost_group.command(name="penalty", description="Set what happens when someone who got a boost key removes their boost")
+@app_commands.describe(mode="Warn them, or ban them temporarily", days="Ban length in days (ban mode only)")
+@app_commands.choices(mode=[
+    app_commands.Choice(name="Warn", value="warn"),
+    app_commands.Choice(name="Temporary ban", value="ban"),
+])
+@app_commands.checks.has_permissions(administrator=True)
+async def boost_penalty(interaction: discord.Interaction, mode: app_commands.Choice[str], days: app_commands.Range[int, 1, 365] = 30):
+    cfg = load_boost_config()
+    gcfg = cfg.get(str(interaction.guild_id))
+    if gcfg is None:
+        await interaction.response.send_message("❌ Set up boost logging first with `/boost setlog`.", ephemeral=True)
+        return
+    gcfg["penalty"] = {"mode": mode.value, "days": days}
+    save_boost_config(cfg)
+    detail = f"banned for **{days} days**" if mode.value == "ban" else "**warned**"
+    await interaction.response.send_message(f"✅ Members who unboost after getting a key will be {detail}.", ephemeral=True)
+
+
+@boost_group.command(name="grant", description="Manually give a booster their key (if they never received one)")
+@app_commands.describe(member="The booster to give a key to")
+@app_commands.checks.has_permissions(manage_guild=True)
+async def boost_grant(interaction: discord.Interaction, member: discord.Member):
+    if member.premium_since is None:
+        await interaction.response.send_message("❌ That member isn't currently boosting.", ephemeral=True)
+        return
+    await interaction.response.defer(ephemeral=True)
+    key = await deliver_boost_reward(interaction.guild, member, is_test=False)
+    if key:
+        await interaction.followup.send(f"✅ Key delivered to {member.mention}.", ephemeral=True)
+    else:
+        await interaction.followup.send("❌ Could not generate a key. Check `WEBHOOK_URL` / the key service and the bot console.", ephemeral=True)
+
+
 @boost_group.command(name="test", description="Test the server boost webhook and logging system")
 async def boost_test(interaction: discord.Interaction):
     await interaction.response.defer(ephemeral=True)
@@ -400,4 +569,15 @@ async def boost_test(interaction: discord.Interaction):
 def register(bot: discord.ext.commands.Bot):
     bot.tree.add_command(boost_group)
     bot.add_listener(handle_member_update, 'on_member_update')
+    bot.add_listener(handle_member_remove, 'on_member_remove')
     bot.add_view(CloseTicketView())
+
+    @tasks.loop(hours=1)
+    async def _unban_loop():
+        await _expire_temp_bans(bot)
+
+    async def _start_unban_loop():
+        if not _unban_loop.is_running():
+            _unban_loop.start()
+
+    bot.add_listener(_start_unban_loop, 'on_ready')

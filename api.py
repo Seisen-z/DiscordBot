@@ -17,6 +17,8 @@ import uuid
 import base64
 import logging
 import aiohttp
+from modules.http_safety import safe_public_get
+from modules.post_state import auto_posts_lock
 import certifi
 import ssl
 import xml.etree.ElementTree as ET
@@ -382,18 +384,8 @@ async def _run_manageable_guild_ids_task(
         if exc.status_code in {429, 503}:
             # Discord is rate-limiting this token. Don't let the next request retry
             # immediately — that's what turns one 429 into a permanent outage under
-            # any steady traffic. Serve the last known-good guild list (if any) and
-            # hold off on hitting Discord again until the cooldown elapses.
+            # any steady traffic. Fail closed until the cooldown elapses.
             _manageable_guilds_failure_until[cache_key] = time.time() + _MANAGEABLE_GUILDS_FAILURE_COOLDOWN
-            stale = _user_manageable_guilds_cache.get(cache_key)
-            if stale is not None:
-                if request is not None:
-                    _AUTH_LOGGER.warning(
-                        "auth_manageable_guilds_stale_fallback token=%s %s",
-                        cache_key[:10],
-                        _request_meta(request),
-                    )
-                return set(stale[0])
         raise
     finally:
         async with _manageable_guilds_sf_lock:
@@ -417,12 +409,9 @@ async def _discord_user_manageable_guild_ids(user_token: str, *, request: Reques
             )
         return set(cached[0])
 
-    # Still cooling down from a recent 429 — reuse stale data instead of retrying
-    # Discord (which would just get 429'd again and reset the cooldown clock).
+    # Expired authorization cannot be reused during an upstream failure.
     failure_until = _manageable_guilds_failure_until.get(cache_key)
     if failure_until is not None and now < failure_until:
-        if cached is not None:
-            return set(cached[0])
         raise HTTPException(status_code=503, detail="Discord auth check is rate-limited. Retry in a moment.")
 
     async with _manageable_guilds_sf_lock:
@@ -439,8 +428,6 @@ async def _discord_user_manageable_guild_ids(user_token: str, *, request: Reques
 
         failure_until = _manageable_guilds_failure_until.get(cache_key)
         if failure_until is not None and now < failure_until:
-            if cached is not None:
-                return set(cached[0])
             raise HTTPException(status_code=503, detail="Discord auth check is rate-limited. Retry in a moment.")
 
         if cache_key in _manageable_guilds_inflight:
@@ -1331,7 +1318,7 @@ async def _social_resolve_youtube_channel_id(source: str, session: aiohttp.Clien
         return None
 
     try:
-        async with session.get(
+        async with safe_public_get(session,
             src,
             ssl=_SOCIAL_SSL_CTX,
             timeout=aiohttp.ClientTimeout(total=15),
@@ -1392,7 +1379,7 @@ async def _social_fetch_latest_youtube_entry(source: str, session: aiohttp.Clien
 
     feed_url = f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}"
 
-    async with session.get(
+    async with safe_public_get(session,
         feed_url,
         ssl=_SOCIAL_SSL_CTX,
         timeout=aiohttp.ClientTimeout(total=20),
@@ -1466,7 +1453,7 @@ def _social_resolve_source_url(
 
 
 async def _social_fetch_latest_source_entry(source_url: str, session: aiohttp.ClientSession) -> Optional[Dict[str, Any]]:
-    async with session.get(
+    async with safe_public_get(session,
         source_url,
         ssl=_SOCIAL_SSL_CTX,
         timeout=aiohttp.ClientTimeout(total=20),
@@ -2116,6 +2103,9 @@ async def get_available_models(request: Request):
         if any(term in lowered for term in blocked_terms):
             continue
 
+        if model_id != "openrouter/auto" and not model_id.endswith(":free"):
+            continue
+
         seen_ids.add(model_id)
         model_name = str(row.get("name") or model_id)
         recommended = model_id == "openrouter/auto" or model_id.endswith(":free")
@@ -2282,9 +2272,11 @@ async def list_guild_assets(guild_id: str, request: Request):
 @app.get("/api/assets/{guild_id}/{filename}")
 @app.get("/api/bot/assets/{guild_id}/{filename}")
 async def get_uploaded_asset(guild_id: str, filename: str):
-    safe_name = Path(filename).name
-    asset_path = _LOCAL_ASSET_ROOT / guild_id / safe_name
-    if not asset_path.is_file():
+    if not guild_id.isascii() or not guild_id.isdigit() or not re.fullmatch(r"[A-Za-z0-9_-]+\.[A-Za-z0-9]{1,8}", filename):
+        raise HTTPException(status_code=404, detail="Asset not found")
+    guild_root = _LOCAL_ASSET_ROOT.resolve() / guild_id
+    asset_path = (guild_root / filename).resolve()
+    if not asset_path.is_relative_to(guild_root) or not asset_path.is_file():
         raise HTTPException(status_code=404, detail="Asset not found")
 
     media_type = mimetypes.guess_type(asset_path.name)[0] or "application/octet-stream"
@@ -2459,11 +2451,9 @@ def _merge_auto_post_nested_guild(prev: Any, patch: Dict[str, Any]) -> Dict[str,
         if isinstance(v, dict):
             prev_row = prev_dict.get(k) if isinstance(prev_dict.get(k), dict) else {}
             merged_row = {**v}
-            # Preserve server-side runtime state if present on server and missing/null in client payload
-            if prev_row.get("last_message_id") and not v.get("last_message_id"):
-                merged_row["last_message_id"] = prev_row["last_message_id"]
-            if prev_row.get("last_posted_at") and not v.get("last_posted_at"):
-                merged_row["last_posted_at"] = prev_row["last_posted_at"]
+            # Runtime fields are server-owned, including for newly created posts.
+            for field in ("last_message_id", "last_posted_at"):
+                merged_row[field] = prev_row.get(field)
             out[k] = merged_row
         else:
             out[k] = v
@@ -2480,86 +2470,86 @@ async def get_auto_posts(guild_id: str):
 @app.put("/api/guilds/{guild_id}/auto_posts")
 @app.put("/api/bot/guilds/{guild_id}/auto_posts")
 async def update_auto_posts(guild_id: str, posts: Dict[str, Any]):
-    data = load_json("auto_posts", {})
-    patch = posts if isinstance(posts, dict) else {}
-    data[guild_id] = _merge_auto_post_nested_guild(data.get(guild_id), patch)
-    try:
-        save_json("auto_posts", data)
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Failed to save auto_posts: {exc}") from exc
-    return {"status": "success"}
+    async with auto_posts_lock:
+        data = load_json("auto_posts", {})
+        patch = posts if isinstance(posts, dict) else {}
+        data[guild_id] = _merge_auto_post_nested_guild(data.get(guild_id), patch)
+        try:
+            save_json("auto_posts", data)
+        except Exception as exc:
+            raise HTTPException(status_code=500, detail=f"Failed to save auto_posts: {exc}") from exc
+        return {"status": "success"}
 
 @app.post("/api/guilds/{guild_id}/auto_posts/{old_name:path}/rename")
 @app.post("/api/bot/guilds/{guild_id}/auto_posts/{old_name:path}/rename")
 async def rename_auto_post(guild_id: str, old_name: str, body: Dict[str, str] = Body(...)):
-    new_name = body.get("new_name", "").strip()
-    if not new_name:
-        raise HTTPException(status_code=400, detail="new_name is required")
-    data = load_json("auto_posts", {})
-    if guild_id not in data:
-        raise HTTPException(status_code=404, detail="Guild not found")
-    guild_posts = data[guild_id]
-    if old_name not in guild_posts:
-        raise HTTPException(status_code=404, detail="Post not found")
-    if new_name in guild_posts and new_name != old_name:
-        raise HTTPException(status_code=409, detail="A post with this name already exists")
-    if new_name != old_name:
-        row = guild_posts[old_name]
-        if isinstance(row, dict):
-            row["name"] = new_name
-        guild_posts[new_name] = row
-        del guild_posts[old_name]
-    save_json("auto_posts", data)
-    return {"status": "success", "old_name": old_name, "new_name": new_name}
+    async with auto_posts_lock:
+        new_name = body.get("new_name", "").strip()
+        if not new_name:
+            raise HTTPException(status_code=400, detail="new_name is required")
+        data = load_json("auto_posts", {})
+        if guild_id not in data:
+            raise HTTPException(status_code=404, detail="Guild not found")
+        guild_posts = data[guild_id]
+        if old_name not in guild_posts:
+            raise HTTPException(status_code=404, detail="Post not found")
+        if new_name in guild_posts and new_name != old_name:
+            raise HTTPException(status_code=409, detail="A post with this name already exists")
+        if new_name != old_name:
+            row = guild_posts[old_name]
+            if isinstance(row, dict):
+                row["name"] = new_name
+            guild_posts[new_name] = row
+            del guild_posts[old_name]
+        save_json("auto_posts", data)
+        return {"status": "success", "old_name": old_name, "new_name": new_name}
 
 @app.delete("/api/guilds/{guild_id}/auto_posts/{post_name:path}")
 @app.delete("/api/bot/guilds/{guild_id}/auto_posts/{post_name:path}")
 async def delete_auto_post(guild_id: str, post_name: str):
-    data = load_json("auto_posts", {})
-    if guild_id not in data or post_name not in data[guild_id]:
-        raise HTTPException(status_code=404, detail="Post not found")
-    del data[guild_id][post_name]
-    save_json("auto_posts", data)
-    return {"status": "success", "deleted_post": post_name}
+    async with auto_posts_lock:
+        data = load_json("auto_posts", {})
+        if guild_id not in data or post_name not in data[guild_id]:
+            raise HTTPException(status_code=404, detail="Post not found")
+        del data[guild_id][post_name]
+        save_json("auto_posts", data)
+        return {"status": "success", "deleted_post": post_name}
 
 @app.post("/api/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
 @app.post("/api/bot/guilds/{guild_id}/auto_posts/{post_name:path}/post_now")
 async def trigger_post_now(guild_id: str, post_name: str, body: Optional[Dict[str, Any]] = Body(default=None)):
-    data = load_json("auto_posts", {})
-    guild_posts = data.get(guild_id, {})
-    if not isinstance(guild_posts, dict):
-        guild_posts = {}
-        data[guild_id] = guild_posts
+    async with auto_posts_lock:
+        data = load_json("auto_posts", {})
+        guild_posts = data.get(guild_id, {})
+        if not isinstance(guild_posts, dict):
+            guild_posts = {}
+            data[guild_id] = guild_posts
 
-    # If payload body is supplied from client, update config first so unsaved UI changes apply
-    if isinstance(body, dict) and body:
-        existing = guild_posts.get(post_name, {})
-        post_cfg = {**existing, **body}
-        if not body.get("last_message_id") and existing.get("last_message_id"):
-            post_cfg["last_message_id"] = existing["last_message_id"]
-        if not body.get("last_posted_at") and existing.get("last_posted_at"):
-            post_cfg["last_posted_at"] = existing["last_posted_at"]
-        guild_posts[post_name] = post_cfg
-        save_json("auto_posts", data)
-    elif post_name in guild_posts:
-        post_cfg = guild_posts[post_name]
-    else:
-        raise HTTPException(status_code=404, detail="Post configuration not found")
-    
-    from modules.ipc import process_dashboard_trigger
-    result, status_code = await process_dashboard_trigger("auto_post_now", guild_id, post_cfg)
-    
-    if status_code == 200 and result.get("status") == "success":
-        new_msg_id = result.get("message_id")
-        last_posted = result.get("last_posted_at")
-        if new_msg_id:
-            post_cfg["last_message_id"] = new_msg_id
-        if last_posted:
-            post_cfg["last_posted_at"] = last_posted
-        save_json("auto_posts", data)
-        return {"status": "success", "message_id": new_msg_id, "last_posted_at": last_posted}
-    else:
-        raise HTTPException(status_code=status_code, detail=result.get("message", "Failed to post message"))
+        # If payload body is supplied from client, update config first so unsaved UI changes apply
+        if isinstance(body, dict) and body:
+            existing = guild_posts.get(post_name, {})
+            post_cfg = _merge_auto_post_nested_guild({post_name: existing}, {post_name: {**existing, **body}})[post_name]
+            guild_posts[post_name] = post_cfg
+            save_json("auto_posts", data)
+        elif post_name in guild_posts:
+            post_cfg = guild_posts[post_name]
+        else:
+            raise HTTPException(status_code=404, detail="Post configuration not found")
+
+        from modules.ipc import process_dashboard_trigger
+        result, status_code = await process_dashboard_trigger("auto_post_now", guild_id, post_cfg)
+
+        if status_code == 200 and result.get("status") == "success":
+            new_msg_id = result.get("message_id")
+            last_posted = result.get("last_posted_at")
+            if new_msg_id:
+                post_cfg["last_message_id"] = new_msg_id
+            if last_posted:
+                post_cfg["last_posted_at"] = last_posted
+            save_json("auto_posts", data)
+            return {"status": "success", "message_id": new_msg_id, "last_posted_at": last_posted}
+        else:
+            raise HTTPException(status_code=status_code, detail=result.get("message", "Failed to post message"))
 
 # Poll Drafts
 @app.get("/api/guilds/{guild_id}/polls")
@@ -2776,9 +2766,6 @@ async def update_donations(guild_id: str, config: DonationSettingsConfig):
     donations.save_settings(guild_id, settings)
     return {"status": "success"}
 
-# Roblox Monitors
-@app.get("/api/guilds/{guild_id}/roblox")
-@app.get("/api/bot/guilds/{guild_id}/roblox")
 class TradingSettingsConfig(BaseModel):
     enabled: bool = True
     channel_ids: List[str] = []
@@ -2803,6 +2790,9 @@ async def update_trading(guild_id: str, config: TradingSettingsConfig):
     trading.save_settings(guild_id, settings)
     return {"status": "success"}
 
+# Roblox Monitors
+@app.get("/api/guilds/{guild_id}/roblox")
+@app.get("/api/bot/guilds/{guild_id}/roblox")
 async def get_roblox(guild_id: str):
     data = load_json("roblox_monitors", {})
     # Stored data may use an int guild_id; match by string comparison.
@@ -4655,6 +4645,8 @@ async def update_ping_protection(guild_id: str, request: Request, body: Dict[str
 @app.post("/api/bot/trigger/{action}")
 async def trigger_action(action: str, req: TriggerRequest, request: Request):
     await require_guild_dashboard_access(request, req.guild_id)
+    if action in {"auto_post_now", "auto_post_send"}:
+        raise HTTPException(status_code=400, detail="Use the named auto-post post_now endpoint")
     
     from modules.ipc import process_dashboard_trigger
     result, status_code = await process_dashboard_trigger(action, req.guild_id, req.payload)
@@ -4671,10 +4663,9 @@ async def seisen_guild_path_auth(request: Request, call_next):
     m = _DASHBOARD_GUILD_PATH_RE.match(path)
     if not m:
         return await call_next(request)
-    # Logged-in session only. "Manage server" is enforced when listing servers (/api/bot/guilds)
-    # and for trigger actions — not on every guild config GET/PUT.
+    # Enforce server permissions on every guild route, including direct API calls.
     try:
-        await require_authenticated_discord_user(request)
+        await require_guild_dashboard_access(request, m.group(1))
     except HTTPException as exc:
         return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
     return await call_next(request)

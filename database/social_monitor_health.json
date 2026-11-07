@@ -1,9 +1,9 @@
 {
-  "loop_started_at": "2026-07-26T13:31:23.395884+00:00",
+  "loop_started_at": "2026-11-02T17:46:37.167884+00:00",
   "last_error": null,
-  "last_poll_started": "2026-07-27T22:03:23.402097+00:00",
-  "last_poll_finished": "2026-07-27T22:03:23.918794+00:00",
-  "last_poll_seconds": 0.52,
+  "last_poll_started": "2026-11-02T17:46:37.182584+00:00",
+  "last_poll_finished": "2026-11-02T17:46:37.747871+00:00",
+  "last_poll_seconds": 0.57,
   "last_notifications": 0,
   "monitor_count": 1
 }

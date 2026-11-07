@@ -17,9 +17,16 @@
     "1530317865423605962": {
       "name": "Macro",
       "title": "",
-      "content": "Use /macro to upload your macro JSON and generate a shareable link. Your message will be automatically deleted after a few seconds. Copy the generated link and paste it into the script.",
+      "content": "Use /import to upload your macro JSON and generate a shareable link. Your message will be automatically deleted after a few seconds. Copy the generated link and paste it into the script.",
       "color": 5793266,
-      "last_message_id": 1531406986120532062
+      "last_message_id": 1554476036261945416
+    },
+    "1529181927473680464": {
+      "name": "Trap",
+      "title": "",
+      "content": "## 🛡️ Anti-Spam Honeypot\n\nThis channel is an automated spam detection trap and is not intended for normal use.\n\nAny account that sends a message in this channel will be automatically flagged as suspicious and permanently banned without warning.\n\n> **Members:** Please ignore or mute this channel. No action is required.\n> **Automated Accounts:** Sending any message in this channel will result in an immediate and irreversible ban.\n\n**🚫 Posting in this channel is strictly prohibited. 🚫**\n",
+      "color": 5793266,
+      "last_message_id": 1566620577739968624
     }
   }
 }

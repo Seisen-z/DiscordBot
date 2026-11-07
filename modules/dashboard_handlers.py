@@ -6,6 +6,7 @@ Handlers for IPC triggers.
 from __future__ import annotations
 
 import base64
+import re
 import os
 from datetime import datetime, timezone
 
@@ -17,26 +18,35 @@ from pathlib import Path
 import urllib.parse
 from uuid import uuid4
 
-def resolve_local_asset(url: str, files_list: list) -> str:
+def resolve_local_asset(url: str, files_list: list, guild_id: int | str) -> str | None:
     if not url:
         return url
     url = url.strip()
+    parsed = urllib.parse.urlparse(url)
+    path = urllib.parse.unquote(parsed.path)
+    if not (path.startswith("/api/bot/assets/") or path.startswith("/api/assets/")):
+        return url
+    parts = path.split("/")
+    prefix = ["", "api", "bot", "assets"] if path.startswith("/api/bot/assets/") else ["", "api", "assets"]
+    if len(parts) != len(prefix) + 2:
+        return None
+    asset_guild, filename = parts[-2:]
+    if not asset_guild.isascii() or not asset_guild.isdigit() or asset_guild != str(guild_id):
+        return None
+    if not re.fullmatch(r"[A-Za-z0-9_-]+\.[A-Za-z0-9]{1,8}", filename):
+        return None
+    asset_root = (Path(__file__).resolve().parent.parent / "database" / "assets").resolve()
+    guild_root = asset_root / asset_guild
+    local_path = guild_root / filename
     try:
-        parsed = urllib.parse.urlparse(url)
-        path = parsed.path
-        if path.startswith("/api/bot/assets/") or path.startswith("/api/assets/"):
-            parts = [p for p in path.split("/") if p]
-            if len(parts) >= 3:
-                filename = parts[-1]
-                g_id = parts[-2]
-                local_path = Path(__file__).resolve().parent.parent / "database" / "assets" / g_id / filename
-                if local_path.is_file():
-                    safe_name = f"att_{uuid4().hex[:6]}_{filename}"
-                    files_list.append(discord.File(str(local_path), filename=safe_name))
-                    return f"attachment://{safe_name}"
-    except Exception:
-        pass
-    return url
+        resolved = local_path.resolve(strict=True)
+        if not resolved.is_relative_to(guild_root) or not resolved.is_file():
+            return None
+        safe_name = f"att_{uuid4().hex[:6]}_{filename}"
+        files_list.append(discord.File(str(resolved), filename=safe_name))
+        return f"attachment://{safe_name}"
+    except (OSError, RuntimeError, ValueError):
+        return None
 
 from modules.utils import load_json, save_json, _as_int
 from modules.tickets import load_ticket_config, save_ticket_config, CreateTicketView
@@ -268,9 +278,9 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                     print(f"[Announcement] Thumbnail resolve failed: {_te}")
 
             files = []
-            thumb = resolve_local_asset(data.get("thumbnail_url"), files)
-            image = resolve_local_asset(data.get("image_url"), files)
-            images = [resolve_local_asset(img, files) for img in data.get("images", [])]
+            thumb = resolve_local_asset(data.get("thumbnail_url"), files, guild.id)
+            image = resolve_local_asset(data.get("image_url"), files, guild.id)
+            images = [resolve_local_asset(img, files, guild.id) for img in data.get("images", [])]
             footer = data.get("footer")
             role_id = data.get("ping_role_id")
 

@@ -1,1 +1,4120 @@
-{}
+{
+  "1333251917098520628": [
+    {
+      "id": "494e07af3e8c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1566825084360982539",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-11-02T14:43:22.615866+00:00"
+    },
+    {
+      "id": "b6aadada30f4",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1566825082288873563",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-11-02T14:43:22.127882+00:00"
+    },
+    {
+      "id": "a06a988b2454",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1566825079650910259",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-11-02T14:43:21.524373+00:00"
+    },
+    {
+      "id": "2c5af1c4a8d6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1566825076886868143",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-02T14:43:20.914476+00:00"
+    },
+    {
+      "id": "870adcd51526",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1566825074319826946",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-02T14:43:20.339277+00:00"
+    },
+    {
+      "id": "746a502dd7b2",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 145
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 14
+        }
+      },
+      "timestamp": "2026-11-02T10:31:13.919373+00:00"
+    },
+    {
+      "id": "e94a380d8e76",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Astral Simulator' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1566759852842160209",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-11-02T10:24:11.050040+00:00"
+    },
+    {
+      "id": "5c927a1bea9f",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1566749485135044768",
+        "ping_role_id": "1560903034534502410",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-11-02T09:42:59.279666+00:00"
+    },
+    {
+      "id": "c306431cdc36",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1566746723504627833",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-11-02T09:32:01.009337+00:00"
+    },
+    {
+      "id": "f8ff174cf819",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1566673963025829931",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-11-02T04:42:53.462433+00:00"
+    },
+    {
+      "id": "d2bdab0fc7fc",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1566673960106594315",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-11-02T04:42:52.682330+00:00"
+    },
+    {
+      "id": "d95716eefac4",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1566673957548064871",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-11-02T04:42:52.123670+00:00"
+    },
+    {
+      "id": "04b680cc5213",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1566673955102789733",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-02T04:42:51.479086+00:00"
+    },
+    {
+      "id": "594b23d3b5de",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1566673952745717840",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-02T04:42:50.922755+00:00"
+    },
+    {
+      "id": "54b5a6865baf",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 146
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 14
+        }
+      },
+      "timestamp": "2026-11-01T19:45:29.014571+00:00"
+    },
+    {
+      "id": "76bba9789054",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1566522837055971497",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-11-01T18:42:23.135529+00:00"
+    },
+    {
+      "id": "f68ceb7b3def",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1566522832274591918",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-11-01T18:42:21.901155+00:00"
+    },
+    {
+      "id": "c227e1cf4a52",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1566522829619470419",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-11-01T18:42:21.340463+00:00"
+    },
+    {
+      "id": "0bfe81af6965",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1566522827375644783",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-01T18:42:20.774091+00:00"
+    },
+    {
+      "id": "a3a27bca7661",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1566522825051869336",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-01T18:42:20.153749+00:00"
+    },
+    {
+      "id": "b8987558dfda",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1566416720460124183",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-11-01T11:40:44.021716+00:00"
+    },
+    {
+      "id": "5cd9bc072fe8",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1566371712692396105",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-11-01T08:41:53.075728+00:00"
+    },
+    {
+      "id": "d563ef089e4a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1566371710243180676",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-11-01T08:41:52.485385+00:00"
+    },
+    {
+      "id": "8bdf5a8e9004",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1566371708154413237",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-11-01T08:41:51.963373+00:00"
+    },
+    {
+      "id": "2e0f018d3596",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1566371704543121499",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-01T08:41:51.249669+00:00"
+    },
+    {
+      "id": "b430835bc33c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1566371700340301939",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-11-01T08:41:50.200556+00:00"
+    },
+    {
+      "id": "9776a95cf9ab",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1566220586970251287",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-31T22:41:22.865826+00:00"
+    },
+    {
+      "id": "2863c6774cdc",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1566220584432435366",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-31T22:41:22.294218+00:00"
+    },
+    {
+      "id": "aeb0842efda6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1566220582100541504",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-31T22:41:21.609154+00:00"
+    },
+    {
+      "id": "b22e0dffc3d1",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1566220579441479692",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-31T22:41:20.958512+00:00"
+    },
+    {
+      "id": "91b23436a60c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1566220576916377671",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-31T22:41:20.383383+00:00"
+    },
+    {
+      "id": "c84df7a7cbda",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Tap Simulator Reborn' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1566175401779134464",
+        "ping_role_id": "1563487375601041509",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-31T19:41:50.567357+00:00"
+    },
+    {
+      "id": "0c1ae332c759",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1566069461251923969",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-31T12:40:52.486817+00:00"
+    },
+    {
+      "id": "dd6a8aea7878",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1566069459007967233",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-31T12:40:51.929190+00:00"
+    },
+    {
+      "id": "c2be4c37ff4b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1566069456755757117",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-31T12:40:51.411990+00:00"
+    },
+    {
+      "id": "b52e9466602c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1566069453999964343",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-31T12:40:50.822565+00:00"
+    },
+    {
+      "id": "e67cb085f307",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1566069451663737004",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-31T12:40:50.250576+00:00"
+    },
+    {
+      "id": "31d08602d7c9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1565918338461204581",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-31T02:40:22.875638+00:00"
+    },
+    {
+      "id": "17f27644a96b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1565918335366074379",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-31T02:40:22.196126+00:00"
+    },
+    {
+      "id": "cc393375800f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1565918332589310055",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-31T02:40:21.471627+00:00"
+    },
+    {
+      "id": "8a9b2a87676f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1565918330060021973",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-31T02:40:20.892843+00:00"
+    },
+    {
+      "id": "079f0c18cdc8",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1565918327728115905",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-31T02:40:20.316934+00:00"
+    },
+    {
+      "id": "9426d1a46e82",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/The Forge' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1565834066677211307",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-30T21:05:31.904493+00:00"
+    },
+    {
+      "id": "ab39a8203a39",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 146
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 15
+        }
+      },
+      "timestamp": "2026-10-30T20:36:24.815794+00:00"
+    },
+    {
+      "id": "be57c1fae537",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1565767215427362879",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-30T16:39:53.327435+00:00"
+    },
+    {
+      "id": "561e92b495a5",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1565767212009128137",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-30T16:39:52.436950+00:00"
+    },
+    {
+      "id": "2d23b305c9a6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1565767209144418415",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-30T16:39:51.762505+00:00"
+    },
+    {
+      "id": "84569b108879",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1565767205533130763",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-30T16:39:50.883637+00:00"
+    },
+    {
+      "id": "640f10a2a435",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1565767202953494731",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-30T16:39:50.279422+00:00"
+    },
+    {
+      "id": "11464d47dae0",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1565617141258911747",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-30T06:39:43.197505+00:00"
+    },
+    {
+      "id": "9ff3e3c41798",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1565617138901717077",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-30T06:39:42.651198+00:00"
+    },
+    {
+      "id": "3f0e4be92124",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1565617136842580180",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-30T06:39:42.103242+00:00"
+    },
+    {
+      "id": "9f20d8583eb3",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1565617134434918453",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-30T06:39:41.534405+00:00"
+    },
+    {
+      "id": "901116c9c807",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1565617131641507932",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-30T06:39:40.887010+00:00"
+    },
+    {
+      "id": "4b55ec4bceeb",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1565466019684950049",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-29T20:39:13.884425+00:00"
+    },
+    {
+      "id": "78eee63fdf66",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1565466016849330350",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-29T20:39:13.240505+00:00"
+    },
+    {
+      "id": "706185d4800c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1565466013578043474",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-29T20:39:12.399024+00:00"
+    },
+    {
+      "id": "9df10686059c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1565466011036164279",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-29T20:39:11.826993+00:00"
+    },
+    {
+      "id": "05089011c603",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1565466008901255280",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-29T20:39:11.280438+00:00"
+    },
+    {
+      "id": "17c6e89c7b23",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1565314892511055904",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-29T10:38:43.257804+00:00"
+    },
+    {
+      "id": "34106c05f3be",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1565314889977692252",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-29T10:38:42.656703+00:00"
+    },
+    {
+      "id": "cc7ed7985d66",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1565314887666896947",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-29T10:38:42.060600+00:00"
+    },
+    {
+      "id": "e8ea5f159d6f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1565314885540257832",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-29T10:38:41.561925+00:00"
+    },
+    {
+      "id": "916467f3d9e8",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1565314883183054989",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-29T10:38:40.996716+00:00"
+    },
+    {
+      "id": "f4ae77a5dce6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1565163771788267591",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-29T00:38:14.126859+00:00"
+    },
+    {
+      "id": "916702c1431f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1565163768881619020",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-29T00:38:13.548605+00:00"
+    },
+    {
+      "id": "43e351dd7bdf",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1565163766096728112",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-29T00:38:12.883195+00:00"
+    },
+    {
+      "id": "deaaca665225",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1565163762539831439",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-29T00:38:11.972304+00:00"
+    },
+    {
+      "id": "42c2484b2318",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1565163758685388866",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-29T00:38:11.114993+00:00"
+    },
+    {
+      "id": "4211a086b5f1",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Tap Simulator Reborn' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1565107819248754709",
+        "ping_role_id": "1563487375601041509",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-28T20:55:54.792241+00:00"
+    },
+    {
+      "id": "7f3b80ad3b09",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Tap Simulator Reborn' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1565020653734592563",
+        "ping_role_id": "1563487375601041509",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-28T15:09:33.419263+00:00"
+    },
+    {
+      "id": "ece95f8d5cd0",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1565012644929208407",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-28T14:37:43.612883+00:00"
+    },
+    {
+      "id": "aea0b2815c72",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1565012641917698049",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-28T14:37:42.839742+00:00"
+    },
+    {
+      "id": "a53266ed2686",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1565012639397052648",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-28T14:37:42.304724+00:00"
+    },
+    {
+      "id": "dc4cce7a6197",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1565012636695928964",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-28T14:37:41.601975+00:00"
+    },
+    {
+      "id": "03232b882064",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1565012634015760577",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-28T14:37:40.999367+00:00"
+    },
+    {
+      "id": "1b628cad5e87",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Tap Simulator Reborn' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564992807309942877",
+        "ping_role_id": "1563487375601041509",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-28T13:18:54.613609+00:00"
+    },
+    {
+      "id": "5d26f8e035f5",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1564861522184904747",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-28T04:37:13.972228+00:00"
+    },
+    {
+      "id": "135fdb453475",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1564861519886557287",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-28T04:37:13.452054+00:00"
+    },
+    {
+      "id": "d7305a8ce337",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1564861517097209909",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-28T04:37:12.793251+00:00"
+    },
+    {
+      "id": "1355feb15a5c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1564861514366722059",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-28T04:37:12.194953+00:00"
+    },
+    {
+      "id": "9bf79ea9d3e8",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1564861510977847437",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-28T04:37:11.275946+00:00"
+    },
+    {
+      "id": "7f86b7ac0c21",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1564710409519366245",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-27T18:36:46.772460+00:00"
+    },
+    {
+      "id": "692613a37e50",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1564710406499471364",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-27T18:36:46.115119+00:00"
+    },
+    {
+      "id": "c3d25911adf9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1564710391483863051",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-27T18:36:42.475528+00:00"
+    },
+    {
+      "id": "d444508e1537",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1564710388002590721",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-27T18:36:41.717558+00:00"
+    },
+    {
+      "id": "bc87d58c8928",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1564710385351790693",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-27T18:36:41.022674+00:00"
+    },
+    {
+      "id": "ca160678f3d8",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Astral Simulator' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564671283273269349",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-27T16:01:19.056066+00:00"
+    },
+    {
+      "id": "4d4df5f18728",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/The Forge' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564655577135579217",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-27T14:58:54.554694+00:00"
+    },
+    {
+      "id": "646a0e6f98bc",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1564559271784489055",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-27T08:36:13.684173+00:00"
+    },
+    {
+      "id": "a1366a58b020",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1564559268609523835",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-27T08:36:12.904319+00:00"
+    },
+    {
+      "id": "c949d6db60eb",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1564559266004607090",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-27T08:36:12.239764+00:00"
+    },
+    {
+      "id": "29f7fdc7cac4",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1564559263794466918",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-27T08:36:11.693870+00:00"
+    },
+    {
+      "id": "2bff586a8eb2",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1564559260585697423",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-27T08:36:11.022579+00:00"
+    },
+    {
+      "id": "e67cade47d79",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1564408147680960706",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-26T22:35:43.701096+00:00"
+    },
+    {
+      "id": "0ea44ef62337",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1564408145114042452",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-26T22:35:43.084526+00:00"
+    },
+    {
+      "id": "8a7a5f9908db",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1564408142727614527",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-26T22:35:42.491195+00:00"
+    },
+    {
+      "id": "ee918788b1af",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1564408140232130601",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-26T22:35:41.920140+00:00"
+    },
+    {
+      "id": "7716217b41c7",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1564408136436285562",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-26T22:35:41.122918+00:00"
+    },
+    {
+      "id": "d796c83f397e",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Tap Simulator Reborn' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564368205022101689",
+        "ping_role_id": "1563487375601041509",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-26T19:57:01.491714+00:00"
+    },
+    {
+      "id": "7ca36e6e5cf2",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Tap Simulator Reborn' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564368116631474248",
+        "ping_role_id": "1563487375601041509",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-26T19:56:40.486472+00:00"
+    },
+    {
+      "id": "961db60b0870",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/The Forge' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564365477759811625",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-26T19:46:11.090187+00:00"
+    },
+    {
+      "id": "5d57069d2185",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/The Forge' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564270839686500403",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-26T13:30:08.130543+00:00"
+    },
+    {
+      "id": "b069dbf534f0",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1564257043031003258",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-26T12:35:18.419851+00:00"
+    },
+    {
+      "id": "3bfacd80a7f7",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1564257038173995080",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-26T12:35:17.310853+00:00"
+    },
+    {
+      "id": "d0b9793c983a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1564257035581657099",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-26T12:35:16.626692+00:00"
+    },
+    {
+      "id": "773821ee0ea2",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1564257030397755463",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-26T12:35:15.415005+00:00"
+    },
+    {
+      "id": "c0aed51e294d",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1564257024651567186",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-26T12:35:14.157038+00:00"
+    },
+    {
+      "id": "63a93573280d",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Astral Simulator' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1564201972565938237",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-26T08:56:29.494723+00:00"
+    },
+    {
+      "id": "dfa8cc20b6a3",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 146
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 16
+        }
+      },
+      "timestamp": "2026-10-26T05:08:54.952284+00:00"
+    },
+    {
+      "id": "c313ebd6f84c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1564105897150517299",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-26T02:34:43.369446+00:00"
+    },
+    {
+      "id": "ed510a640c5d",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1564105894617161809",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-26T02:34:42.695141+00:00"
+    },
+    {
+      "id": "1e3b1e71c016",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1564105892331266099",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-26T02:34:42.206786+00:00"
+    },
+    {
+      "id": "d8ab9aa0f9dd",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1564105889978253423",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-26T02:34:41.652701+00:00"
+    },
+    {
+      "id": "19843b9025e8",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1564105887369658392",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-26T02:34:40.978551+00:00"
+    },
+    {
+      "id": "92cb2a2df5bb",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1563954774280503357",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-25T16:34:13.707821+00:00"
+    },
+    {
+      "id": "4b9c075329c3",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1563954771986092063",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-25T16:34:13.136949+00:00"
+    },
+    {
+      "id": "c52fe197bc88",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1563954768458809447",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-25T16:34:12.397849+00:00"
+    },
+    {
+      "id": "345d06f714a9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1563954766160068711",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-25T16:34:11.775062+00:00"
+    },
+    {
+      "id": "d3a11e60650b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1563954762758488126",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-25T16:34:11.046492+00:00"
+    },
+    {
+      "id": "4ddb8680c5aa",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1563891226690715791",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-25T12:21:46.243334+00:00"
+    },
+    {
+      "id": "b463c0c93a3d",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1563840132925231115",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-25T08:58:42.267312+00:00"
+    },
+    {
+      "id": "aac739f28014",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1563803647597477901",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-25T06:33:43.250696+00:00"
+    },
+    {
+      "id": "e41730bbec1d",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1563803644166672457",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-25T06:33:42.458001+00:00"
+    },
+    {
+      "id": "819e0d785fee",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1563803642232967219",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-25T06:33:41.883604+00:00"
+    },
+    {
+      "id": "171a4cf91596",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1563803639884283974",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-25T06:33:41.314165+00:00"
+    },
+    {
+      "id": "5f831176d658",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1563803637401133111",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-25T06:33:40.837649+00:00"
+    },
+    {
+      "id": "834b85d2b255",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1563652524530077857",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-24T20:33:13.499558+00:00"
+    },
+    {
+      "id": "e2317048d54b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1563652521837465753",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-24T20:33:12.893632+00:00"
+    },
+    {
+      "id": "4932359de364",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1563652519044055113",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-24T20:33:12.214850+00:00"
+    },
+    {
+      "id": "22ca0785b75a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1563652516435075144",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-24T20:33:11.570596+00:00"
+    },
+    {
+      "id": "2fd29fc8cf67",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1563652513520033805",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-24T20:33:10.955943+00:00"
+    },
+    {
+      "id": "219d29c101b6",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Steal an egg' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1563621205230096426",
+        "ping_role_id": "1549005733478273044",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-24T18:28:47.246642+00:00"
+    },
+    {
+      "id": "6bd9b95bd695",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1563501399310999603",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-24T10:32:43.333161+00:00"
+    },
+    {
+      "id": "e01ac33fea85",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1563501396962054247",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-24T10:32:42.798330+00:00"
+    },
+    {
+      "id": "f2f292afa6bb",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1563501394248466453",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-24T10:32:42.127955+00:00"
+    },
+    {
+      "id": "242edf88daa8",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1563501392038068315",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-24T10:32:41.613693+00:00"
+    },
+    {
+      "id": "aa6bb1bc0801",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1563501388846207088",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-24T10:32:40.836181+00:00"
+    },
+    {
+      "id": "f0b3e44e2957",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1563350275463454852",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-24T00:32:13.495447+00:00"
+    },
+    {
+      "id": "8ec978e9d367",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1563350272812523711",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-24T00:32:12.892087+00:00"
+    },
+    {
+      "id": "24c1e406583c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1563350270392537229",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-24T00:32:12.302676+00:00"
+    },
+    {
+      "id": "876cbd1591de",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1563350267855118387",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-24T00:32:11.713460+00:00"
+    },
+    {
+      "id": "0eaab1807c23",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1563350264939806723",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-24T00:32:11.066564+00:00"
+    },
+    {
+      "id": "810f133e0950",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Astral Simulator' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1563286740960280587",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-23T20:19:46.523220+00:00"
+    },
+    {
+      "id": "bca7c779896c",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'Announce/Announce Draft 1' to #📢・announcements",
+      "metadata": {
+        "channel_id": "1333458476709580851",
+        "channel_name": "📢・announcements",
+        "message_id": "1563249864958021804",
+        "ping_role_id": "1367737195997171763",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-23T17:53:14.831347+00:00"
+    },
+    {
+      "id": "6980c536119f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1563199150734970962",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-23T14:31:43.484375+00:00"
+    },
+    {
+      "id": "8c8f1f3bb99f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1563199148218519573",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-23T14:31:42.850912+00:00"
+    },
+    {
+      "id": "3058ca53abf9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1563199145639149579",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-23T14:31:42.249888+00:00"
+    },
+    {
+      "id": "c0df8fdcaefe",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1563199142782836787",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-23T14:31:41.572558+00:00"
+    },
+    {
+      "id": "3e1f11b912b2",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1563199140337295371",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-23T14:31:40.968358+00:00"
+    },
+    {
+      "id": "4bd74d1d2641",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1563191654775783545",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-23T14:01:56.790021+00:00"
+    },
+    {
+      "id": "17cb7512b71e",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1563180903931580457",
+        "ping_role_id": "1560903034534502410",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-23T13:19:13.879798+00:00"
+    },
+    {
+      "id": "263421f00ab2",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1563168410999857226",
+        "ping_role_id": "1560903034534502410",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-23T12:29:35.428745+00:00"
+    },
+    {
+      "id": "7437e1b74e48",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1563048028254773270",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-23T04:31:13.952061+00:00"
+    },
+    {
+      "id": "20d3041bd290",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1563048025973325916",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-23T04:31:13.364330+00:00"
+    },
+    {
+      "id": "091f3818ac02",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1563048021904728149",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-23T04:31:12.478239+00:00"
+    },
+    {
+      "id": "83cf04711475",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1563048019065184327",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-23T04:31:11.725660+00:00"
+    },
+    {
+      "id": "67589ec956b1",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1563048015730839623",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-23T04:31:10.927267+00:00"
+    },
+    {
+      "id": "b228d9d8bbce",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1562896902260002817",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-22T18:30:43.558948+00:00"
+    },
+    {
+      "id": "5cf6bef0298b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1562896899760066582",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-22T18:30:42.977585+00:00"
+    },
+    {
+      "id": "783de1f8ad13",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1562896897264320613",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-22T18:30:42.366594+00:00"
+    },
+    {
+      "id": "b0b06067adcc",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1562896894689017979",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-22T18:30:41.764432+00:00"
+    },
+    {
+      "id": "de48385ccc57",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1562896891979767813",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-22T18:30:41.207029+00:00"
+    },
+    {
+      "id": "f736ab2b020c",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1562825760924762123",
+        "ping_role_id": "1560903034534502410",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-22T13:48:03.081146+00:00"
+    },
+    {
+      "id": "83b56fb66371",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1562803129349832754",
+        "ping_role_id": "1560903034534502410",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-22T12:18:07.425712+00:00"
+    },
+    {
+      "id": "06ceccd03b58",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1562745777988702230",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-22T08:30:13.622456+00:00"
+    },
+    {
+      "id": "7b156e59a281",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1562745775119667271",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-22T08:30:12.916213+00:00"
+    },
+    {
+      "id": "c69198606ed3",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1562745772502556673",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-22T08:30:12.392692+00:00"
+    },
+    {
+      "id": "b2ceea4adb95",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1562745769176334337",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-22T08:30:11.524657+00:00"
+    },
+    {
+      "id": "3d4bedd9a694",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1562745766962012321",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-22T08:30:11.010130+00:00"
+    },
+    {
+      "id": "8dc9f6fbbe82",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1562594652329349272",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-21T22:29:43.387876+00:00"
+    },
+    {
+      "id": "de3fc3b763f8",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1562594649422434456",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-21T22:29:42.716193+00:00"
+    },
+    {
+      "id": "c10997dbc678",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1562594647388327947",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-21T22:29:42.162218+00:00"
+    },
+    {
+      "id": "a621629cef1f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1562594644532142081",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-21T22:29:41.503666+00:00"
+    },
+    {
+      "id": "e0dcad285fef",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1562594642094981141",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-21T22:29:40.887165+00:00"
+    },
+    {
+      "id": "da8acc28df88",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1562443528246919190",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-21T12:29:13.445627+00:00"
+    },
+    {
+      "id": "13474ca330c9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1562443525981864031",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-21T12:29:12.912957+00:00"
+    },
+    {
+      "id": "610992f225f1",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1562443523326742591",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-21T12:29:12.272714+00:00"
+    },
+    {
+      "id": "ae8b3465c504",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1562443520864948225",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-21T12:29:11.712470+00:00"
+    },
+    {
+      "id": "935c9e00c3b2",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1562443517765091403",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-21T12:29:11.011913+00:00"
+    },
+    {
+      "id": "ce876d39a626",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Run a Restaurant' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1562318594686058497",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-21T04:12:48.109834+00:00"
+    },
+    {
+      "id": "15d59b09adbc",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1562292404072222821",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-21T02:28:43.582538+00:00"
+    },
+    {
+      "id": "6afaa3f4c4b5",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1562292401135947837",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-21T02:28:42.820792+00:00"
+    },
+    {
+      "id": "a6eb1efb1607",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1562292398204260466",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-21T02:28:42.177469+00:00"
+    },
+    {
+      "id": "4d181fc1dd64",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1562292396065169490",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-21T02:28:41.586294+00:00"
+    },
+    {
+      "id": "7bf44bba28ac",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1562292393330479186",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-21T02:28:41.014115+00:00"
+    },
+    {
+      "id": "efb1de7a0b60",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1562286400139956326",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-21T02:04:52.625897+00:00"
+    },
+    {
+      "id": "d4216765cc20",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1562141283856941099",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-20T16:28:14.582628+00:00"
+    },
+    {
+      "id": "8325b0ca7fd6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1562141278559404137",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-20T16:28:13.608532+00:00"
+    },
+    {
+      "id": "e29530fcd924",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1562141275359023165",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-20T16:28:12.497645+00:00"
+    },
+    {
+      "id": "ca3e26d00d1e",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1562141272595239043",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-20T16:28:11.844407+00:00"
+    },
+    {
+      "id": "957293766383",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1562141269008842815",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-20T16:28:11.077850+00:00"
+    },
+    {
+      "id": "17a52249a91c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1561990156901290047",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-20T06:27:44.022753+00:00"
+    },
+    {
+      "id": "6756a6e6bc33",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1561990154493628558",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-20T06:27:43.382147+00:00"
+    },
+    {
+      "id": "105ad2957b10",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1561990150932799540",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-20T06:27:42.541665+00:00"
+    },
+    {
+      "id": "534de1abb6d5",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1561990147447201853",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-20T06:27:41.747915+00:00"
+    },
+    {
+      "id": "dc3dd4605542",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1561990144494411869",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-20T06:27:41.014752+00:00"
+    },
+    {
+      "id": "bfbf8f7047dd",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 146
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 17
+        }
+      },
+      "timestamp": "2026-10-19T22:26:02.409290+00:00"
+    },
+    {
+      "id": "6300af2a5fd3",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1561839035440177344",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-19T20:27:14.662863+00:00"
+    },
+    {
+      "id": "076af386c34d",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1561839032634310787",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-19T20:27:13.971428+00:00"
+    },
+    {
+      "id": "16e099f68283",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1561839029853360300",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-19T20:27:13.399675+00:00"
+    },
+    {
+      "id": "d6df8956b590",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1561839024736305153",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-19T20:27:12.125885+00:00"
+    },
+    {
+      "id": "a47e8a068951",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1561839021057908897",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-19T20:27:11.353003+00:00"
+    },
+    {
+      "id": "330b04a9000e",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1561829028456042557",
+        "ping_role_id": "1560903034534502410",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-19T19:47:29.414822+00:00"
+    },
+    {
+      "id": "2b3b707d21ae",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1561688010993565822",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-19T10:27:09.048629+00:00"
+    },
+    {
+      "id": "d289724b71e1",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1561687912746057739",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-19T10:26:45.094196+00:00"
+    },
+    {
+      "id": "5013f7c95a6f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1561687909956984863",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-19T10:26:44.409806+00:00"
+    },
+    {
+      "id": "3af3c58436ab",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1561687906865909765",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-19T10:26:43.760383+00:00"
+    },
+    {
+      "id": "efda7ada7db1",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1561687904382750840",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-19T10:26:43.109742+00:00"
+    },
+    {
+      "id": "177789cd3781",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1561687900645625900",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-19T10:26:42.248781+00:00"
+    },
+    {
+      "id": "2326606d845c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1561536782535753740",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-19T00:26:13.753373+00:00"
+    },
+    {
+      "id": "9b10f0de5ba7",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1561536780237279252",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-19T00:26:13.167057+00:00"
+    },
+    {
+      "id": "7a29b75891b9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1561536777586741329",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-19T00:26:12.629822+00:00"
+    },
+    {
+      "id": "3d548f546990",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1561536774017253439",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-19T00:26:11.769133+00:00"
+    },
+    {
+      "id": "a2d6b9c5b3a1",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1561536771265921035",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-19T00:26:11.061007+00:00"
+    },
+    {
+      "id": "80dc27b5a9f5",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 146
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 18
+        }
+      },
+      "timestamp": "2026-10-18T22:42:27.521162+00:00"
+    },
+    {
+      "id": "55a19bc9c90b",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 146
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 19
+        }
+      },
+      "timestamp": "2026-10-18T20:15:18.869824+00:00"
+    },
+    {
+      "id": "3622f1a45807",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1561435728750051601",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-18T17:44:41.660393+00:00"
+    },
+    {
+      "id": "3d91a2ab5255",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1561385659699036211",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-18T14:25:44.139890+00:00"
+    },
+    {
+      "id": "7d8e78a0a2da",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1561385656348049489",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-18T14:25:43.335459+00:00"
+    },
+    {
+      "id": "d7c8bafc70c6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1561385653420171458",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-18T14:25:42.657042+00:00"
+    },
+    {
+      "id": "70b77008066c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1561385650823897120",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-18T14:25:41.997519+00:00"
+    },
+    {
+      "id": "1359aa706c4a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1561385647703593001",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-18T14:25:41.274253+00:00"
+    },
+    {
+      "id": "1f7ccc167b59",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Steal an egg' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1561358130833662132",
+        "ping_role_id": "1549005733478273044",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-18T12:36:21.496260+00:00"
+    },
+    {
+      "id": "654bf34869aa",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1561234530545963089",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-18T04:25:13.026649+00:00"
+    },
+    {
+      "id": "142a1caec4d9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1561234528306200751",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-18T04:25:12.494740+00:00"
+    },
+    {
+      "id": "3487de8d3b8e",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1561234526020046879",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-18T04:25:11.939371+00:00"
+    },
+    {
+      "id": "736d7e09f1f6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1561234523729961111",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-18T04:25:11.394271+00:00"
+    },
+    {
+      "id": "8204f3d1564a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1561234521595183215",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-18T04:25:10.876926+00:00"
+    },
+    {
+      "id": "aa8a85fedca3",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Steal an egg' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1561126486629421238",
+        "ping_role_id": "1549005733478273044",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-17T21:15:55.271067+00:00"
+    },
+    {
+      "id": "58738c0fa406",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1561113814056042578",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-17T20:25:33.126817+00:00"
+    },
+    {
+      "id": "1e36831274ea",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1561083408442990835",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-17T18:24:43.647769+00:00"
+    },
+    {
+      "id": "a825c6029c90",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1561083404899057725",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-17T18:24:42.739568+00:00"
+    },
+    {
+      "id": "ece1c52f9e10",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1561083402176962610",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-17T18:24:42.141755+00:00"
+    },
+    {
+      "id": "110bd065b522",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1561083399307919492",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-17T18:24:41.389572+00:00"
+    },
+    {
+      "id": "7af378dc7570",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1561083397294784533",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-17T18:24:40.915984+00:00"
+    },
+    {
+      "id": "26beb9b81711",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Steal an egg' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1561059635677368412",
+        "ping_role_id": "1549005733478273044",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-17T16:50:16.437350+00:00"
+    },
+    {
+      "id": "37d7add3f8eb",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1560932286516432897",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-17T08:24:14.193262+00:00"
+    },
+    {
+      "id": "c241d0704c8b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1560932283559710774",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-17T08:24:13.571764+00:00"
+    },
+    {
+      "id": "b15ae5749111",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1560932280153673789",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-17T08:24:12.688530+00:00"
+    },
+    {
+      "id": "a45efa9d2a7a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1560932277557534751",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-17T08:24:12.052138+00:00"
+    },
+    {
+      "id": "de686d09c2d3",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1560932275384754187",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-17T08:24:11.535099+00:00"
+    },
+    {
+      "id": "ef508b5eafb5",
+      "category": "Restock",
+      "action": "Updated Premium Stock",
+      "actor": "System (Website API)",
+      "details": "Posted new restock announcement embeds in #🛒・buy-premium",
+      "metadata": {
+        "monthly": {
+          "robux": 147,
+          "paypal": 147
+        },
+        "lifetime": {
+          "robux": 20,
+          "paypal": 19
+        }
+      },
+      "timestamp": "2026-10-17T08:18:57.835506+00:00"
+    },
+    {
+      "id": "4753502f5338",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1560930253163986965",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-17T08:16:09.918170+00:00"
+    },
+    {
+      "id": "42decf9982e4",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1560904581486084137",
+        "ping_role_id": "1560903034534502410",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-17T06:34:09.398595+00:00"
+    },
+    {
+      "id": "86c59e48b5ed",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1560781157761814540",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-16T22:23:43.262569+00:00"
+    },
+    {
+      "id": "473aa7b87e60",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1560781155500957708",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-16T22:23:42.675390+00:00"
+    },
+    {
+      "id": "f6d777351127",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1560781153248608299",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-16T22:23:42.136238+00:00"
+    },
+    {
+      "id": "b3627004e51f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1560781151336140831",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-16T22:23:41.644147+00:00"
+    },
+    {
+      "id": "6fb779694646",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1560781148521766993",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-16T22:23:41.017159+00:00"
+    },
+    {
+      "id": "3f3fb3e0c84b",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1560669501467525211",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-16T15:00:03.680504+00:00"
+    },
+    {
+      "id": "4380e4f3c0ed",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1560630034341953650",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-16T12:23:13.493475+00:00"
+    },
+    {
+      "id": "ec832891e640",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1560630031976243342",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-16T12:23:12.878592+00:00"
+    },
+    {
+      "id": "973a1760d0f0",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1560630029782880357",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-16T12:23:12.346569+00:00"
+    },
+    {
+      "id": "8630863cfc3c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1560630027115307109",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-16T12:23:11.760293+00:00"
+    },
+    {
+      "id": "43b8db6dc40c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1560630023977832449",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-16T12:23:10.980267+00:00"
+    },
+    {
+      "id": "2c3540d65c1b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1560478914856484905",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-16T02:22:44.671452+00:00"
+    },
+    {
+      "id": "46f25e3030fa",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1560478910028849224",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-16T02:22:43.543727+00:00"
+    },
+    {
+      "id": "24cbfc05be2f",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1560478907331776553",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-16T02:22:42.850560+00:00"
+    },
+    {
+      "id": "2fab1545b6fa",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1560478904609808479",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-16T02:22:42.239515+00:00"
+    },
+    {
+      "id": "a4aa66b33e3e",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1560478901761998979",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-16T02:22:41.500595+00:00"
+    },
+    {
+      "id": "91b4165a2881",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Steal an egg' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1560337211000627301",
+        "ping_role_id": "1549005733478273044",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-15T16:59:41.717093+00:00"
+    },
+    {
+      "id": "5b6342d63ff5",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Steal an egg' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1560337030548824115",
+        "ping_role_id": "1549005733478273044",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-15T16:58:58.251305+00:00"
+    },
+    {
+      "id": "a9e2a8fd8eb6",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1560327787330404373",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-15T16:22:13.895845+00:00"
+    },
+    {
+      "id": "e9ea2e67fa33",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1560327784625209385",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-15T16:22:13.257819+00:00"
+    },
+    {
+      "id": "806cf5f80150",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1560327782150574101",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-15T16:22:12.688747+00:00"
+    },
+    {
+      "id": "6d377b74bc9a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1560327777578909698",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-15T16:22:11.607781+00:00"
+    },
+    {
+      "id": "b891b5b97388",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1560327774802288803",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-15T16:22:10.989543+00:00"
+    },
+    {
+      "id": "84540017f7ec",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1560176663772532780",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-15T06:21:44.239092+00:00"
+    },
+    {
+      "id": "2bcfd626a900",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1560176660915953726",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-15T06:21:43.533986+00:00"
+    },
+    {
+      "id": "9d5c8a1cca10",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1560176655669002363",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-15T06:21:42.970936+00:00"
+    },
+    {
+      "id": "b7ae5db1dd38",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1560176652984782973",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-15T06:21:41.663258+00:00"
+    },
+    {
+      "id": "9af46b1d6911",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1560176650207895626",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-15T06:21:40.959206+00:00"
+    },
+    {
+      "id": "e4b7a24512d9",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1559947245879566508",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-14T15:10:07.987707+00:00"
+    },
+    {
+      "id": "246c520e4840",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1559883448880078859",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-14T10:56:37.980818+00:00"
+    },
+    {
+      "id": "ac4451704697",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1559883071380131961",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-14T10:55:07.974822+00:00"
+    },
+    {
+      "id": "c716a0c341d7",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1559882820355358782",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-14T10:54:08.144890+00:00"
+    },
+    {
+      "id": "0c0f67c23c84",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1559882442456694927",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-14T10:52:38.125334+00:00"
+    },
+    {
+      "id": "ef0efb9f33d3",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Anime Dice' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1559798175848603668",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-14T05:17:48.370087+00:00"
+    },
+    {
+      "id": "17e49660bb0f",
+      "category": "Auto-Post",
+      "action": "Executed Auto-Post",
+      "actor": "Dashboard User",
+      "details": "Posted 'Supported Executor' to channel",
+      "metadata": {
+        "post_name": "Supported Executor",
+        "message_id": "1559796231549747364",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-14T05:10:04.389962+00:00"
+    },
+    {
+      "id": "195813d27a3a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1559786565356486657",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-14T04:31:39.712203+00:00"
+    },
+    {
+      "id": "1ba2086300e7",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1559732331890085983",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-14T00:56:09.803831+00:00"
+    },
+    {
+      "id": "1dccaed7900c",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1559731954046210169",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-14T00:54:39.747513+00:00"
+    },
+    {
+      "id": "fe1b686c6aab",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1559731703713501316",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-14T00:53:40.071092+00:00"
+    },
+    {
+      "id": "bd8f7a04d96a",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1559731326763139095",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-14T00:52:10.170502+00:00"
+    },
+    {
+      "id": "3e072fe5f8c9",
+      "category": "Auto-Post",
+      "action": "Executed Auto-Post",
+      "actor": "Dashboard User",
+      "details": "Posted 'Supported Executor' to channel",
+      "metadata": {
+        "post_name": "Supported Executor",
+        "message_id": "1559635532462690368",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-13T18:31:31.623082+00:00"
+    },
+    {
+      "id": "cff158ffcc12",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Steal an egg' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1559631659031072851",
+        "ping_role_id": "1549005733478273044",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-13T18:16:08.591729+00:00"
+    },
+    {
+      "id": "c576bf4aaf41",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1559618705749442575",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-13T17:24:39.888446+00:00"
+    },
+    {
+      "id": "64278cc2e41d",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1559581206801158257",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-13T14:55:39.689080+00:00"
+    },
+    {
+      "id": "c7ef1ba301cc",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1559580829695348747",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-13T14:54:09.725404+00:00"
+    },
+    {
+      "id": "8c7cea1945d2",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1559580578230173848",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-13T14:53:09.784999+00:00"
+    },
+    {
+      "id": "e673f42839ef",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1559580200528908322",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-13T14:51:39.737236+00:00"
+    },
+    {
+      "id": "0c1a9b69fc9f",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1559570012493053964",
+        "ping_role_id": "1558831873298399282",
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-13T14:11:11.375892+00:00"
+    },
+    {
+      "id": "577a93552fa5",
+      "category": "Announcements",
+      "action": "Published Announcement",
+      "actor": "Dashboard User",
+      "details": "Published 'General/Pet Simulator 99' to #📢・updates",
+      "metadata": {
+        "channel_id": "1367733424227483658",
+        "channel_name": "📢・updates",
+        "message_id": "1559569904628146329",
+        "ping_role_id": null,
+        "auto_reactions": [
+          "⭐"
+        ]
+      },
+      "timestamp": "2026-10-13T14:10:45.920378+00:00"
+    },
+    {
+      "id": "8ddc2ca03c64",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1559467582300626974",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-13T07:24:10.318906+00:00"
+    },
+    {
+      "id": "4418bdd469eb",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Infinity Cheats' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Infinity Cheats",
+        "message_id": "1559430083025047694",
+        "channel_id": "1556702165744095262"
+      },
+      "timestamp": "2026-10-13T04:55:09.824205+00:00"
+    },
+    {
+      "id": "e8b804e41a8b",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Account Manager' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Account Manager",
+        "message_id": "1559429704887574573",
+        "channel_id": "1530927634454937741"
+      },
+      "timestamp": "2026-10-13T04:53:39.785996+00:00"
+    },
+    {
+      "id": "e04aa8a625a3",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Vsphone 2' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Vsphone 2",
+        "message_id": "1559429453380198454",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-13T04:52:39.765723+00:00"
+    },
+    {
+      "id": "f77a5552ea86",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/VsPhone' to channel",
+      "metadata": {
+        "post_key": "VsPhone/VsPhone",
+        "message_id": "1559429076383432841",
+        "channel_id": "1529672806797672742"
+      },
+      "timestamp": "2026-10-13T04:51:10.020960+00:00"
+    },
+    {
+      "id": "c7089e0b09b4",
+      "category": "Auto-Post",
+      "action": "Scheduled Auto-Post Reposted",
+      "actor": "Bot Task Loop",
+      "details": "Auto-reposted 'VsPhone/Supported Executor' to channel",
+      "metadata": {
+        "post_key": "VsPhone/Supported Executor",
+        "message_id": "1559316456188153907",
+        "channel_id": "1556707401925918730"
+      },
+      "timestamp": "2026-10-12T21:23:39.744032+00:00"
+    }
+  ]
+}

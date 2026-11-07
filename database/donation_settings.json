@@ -1,0 +1,22 @@
+{
+  "1333251917098520628": {
+    "enabled": true,
+    "channel_id": "1566837032008032366",
+    "message_id": "1566840924233924724",
+    "announce_channel_id": "1566837032008032366",
+    "title": "💖 Support Seisen Hub",
+    "description": "Enjoying Seisen Hub and the features we provide? Consider supporting us with a donation! ❤️\n\nYour generosity helps us continue developing new features, improving existing scripts, fixing bugs, and keeping Seisen Hub updated for everyone.\n\n💝 Every donation matters! Whether big or small, any amount is greatly appreciated. Donations are completely optional, but your support means a lot to our development team.\n\n💳 Want to support us?\nClick the button below to donate securely through PayPal.\n\nThank you for being part of the Seisen Hub community and supporting our work! 💖",
+    "button_label": "Donate",
+    "embed_color": "#F5B301",
+    "embed_thumbnail": "",
+    "embed_image": "",
+    "embed_footer": "Payments are processed securely by PayPal",
+    "min_amount": 1.0,
+    "max_amount": 0.0,
+    "donor_role_id": "1566836804341072104",
+    "role_min_total": 0.0,
+    "announce": true,
+    "dm_thanks": true,
+    "bump_panel": false
+  }
+}
