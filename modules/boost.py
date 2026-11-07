@@ -403,8 +403,30 @@ async def handle_member_update(before: discord.Member, after: discord.Member):
 
 async def handle_member_remove(member: discord.Member):
     """Leaving the server also drops the boost, so it counts as unboosting."""
-    if member.premium_since is not None:
-        await apply_unboost_penalty(member.guild, member)
+    if member.premium_since is None:
+        return
+    if await _was_removed_by_moderator(member):
+        return
+    await apply_unboost_penalty(member.guild, member)
+
+
+async def _was_removed_by_moderator(member: discord.Member) -> bool:
+    """A kick or ban is not the member unboosting, so it must not trigger the penalty.
+
+    If the audit log can't be read we can't tell, so skip the penalty rather than
+    risk banning someone a moderator removed.
+    """
+    guild = member.guild
+    now = discord.utils.utcnow()
+    try:
+        for action in (discord.AuditLogAction.kick, discord.AuditLogAction.ban):
+            async for entry in guild.audit_logs(limit=10, action=action):
+                if entry.target is not None and entry.target.id == member.id and (now - entry.created_at).total_seconds() < 60:
+                    return True
+    except Exception as e:
+        print(f"[Boost] Cannot read audit log in {guild.name} ({e}); skipping unboost penalty for {member.id}.")
+        return True
+    return False
 
 
 # ── Slash commands ────────────────────────────────────────────────────────────
@@ -540,10 +562,14 @@ async def boost_penalty(interaction: discord.Interaction, mode: app_commands.Cho
 
 @boost_group.command(name="grant", description="Manually give a booster their key (if they never received one)")
 @app_commands.describe(member="The booster to give a key to")
-@app_commands.checks.has_permissions(manage_guild=True)
+@app_commands.checks.has_permissions(administrator=True)
 async def boost_grant(interaction: discord.Interaction, member: discord.Member):
     if member.premium_since is None:
         await interaction.response.send_message("❌ That member isn't currently boosting.", ephemeral=True)
+        return
+    claimed = load_boost_config().get(str(interaction.guild_id), {}).get("key_claims", {})
+    if str(member.id) in claimed:
+        await interaction.response.send_message("❌ That member has already been given a key.", ephemeral=True)
         return
     await interaction.response.defer(ephemeral=True)
     key = await deliver_boost_reward(interaction.guild, member, is_test=False)

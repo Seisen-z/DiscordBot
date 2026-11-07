@@ -148,9 +148,10 @@ async def start_ipc_server():
         ipc_app.router.add_post('/trigger/{action}', handle_dashboard_trigger)
         runner = web.AppRunner(ipc_app)
         await runner.setup()
-        site = web.TCPSite(runner, '127.0.0.1', ipc_port)
+        ipc_host = os.getenv('IPC_HOST', '127.0.0.1').strip() or '127.0.0.1'
+        site = web.TCPSite(runner, ipc_host, ipc_port)
         await site.start()
-        print(f"[IPC] Bot Internal Server started on http://127.0.0.1:{ipc_port}")
+        print(f"[IPC] Bot Internal Server started on http://{ipc_host}:{ipc_port}")
     except OSError as e:
         print(f"[IPC] Failed to bind {ipc_port}: {e}. Bot will continue running.")
 
