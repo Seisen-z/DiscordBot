@@ -307,11 +307,25 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             role_id = data.get("ping_role_id")
 
             embeds = []
+            # "only": the banner is the whole post. "header": the banner is attached as a strip above the normal embed
+            # (Discord shows attached pictures above embeds)
+            banner_mode = "header" if data.get("banner_mode") == "header" else "only"
             if banner_file is not None:
-                # Role ping, link buttons and reactions still apply; the banner is attached as a plain image
                 files.append(banner_file)
-            else:
-                main_embed = discord.Embed(title=title, description=desc, color=discord.Color.from_str("#f47fff"))
+            if banner_file is None or banner_mode == "header":
+                embed_title, embed_desc, embed_footer = title, desc, footer
+                if banner_file is not None:
+                    # Text the header already shows through ${title} / ${description} / ${footer} is not repeated in the embed
+                    banner_text = " ".join(
+                        str(layer.get("text") or "")
+                        for layer in banner["layers"]
+                        if isinstance(layer, dict) and layer.get("type") == "text" and layer.get("enabled", True)
+                    )
+                    shown = set(re.findall(r"\$\{(title|description|footer)\}", banner_text))
+                    embed_title = "" if "title" in shown else title
+                    embed_desc = "" if "description" in shown else desc
+                    embed_footer = "" if "footer" in shown else footer
+                main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
                 if thumb:
                     main_embed.set_thumbnail(url=thumb)
 
@@ -319,10 +333,10 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 if first_image:
                     main_embed.set_image(url=first_image)
 
-                if footer:
-                    main_embed.set_footer(text=footer)
+                if embed_footer:
+                    main_embed.set_footer(text=embed_footer)
 
-                if title or desc or thumb or first_image or footer:
+                if embed_title or embed_desc or thumb or first_image or embed_footer:
                     embeds.append(main_embed)
             
             parts = []
