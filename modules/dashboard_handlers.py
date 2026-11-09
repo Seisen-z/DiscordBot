@@ -282,9 +282,9 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             thumb = resolve_local_asset(data.get("thumbnail_url"), files, guild.id)
             image = resolve_local_asset(data.get("image_url"), files, guild.id)
             images = [resolve_local_asset(img, files, guild.id) for img in data.get("images", [])]
-            # A designed banner (Dynamic Image) replaces the plain image
+            # A designed banner (Dynamic Image) is the whole post: only the picture, no embed card
             banner = data.get("dynamic_image")
-            shown_in_banner: set[str] = set()
+            banner_file = None
             if isinstance(banner, dict) and banner.get("layers"):
                 try:
                     banner_pixels = max(1, int(float(banner.get("width") or 800)) * int(float(banner.get("height") or 300)))
@@ -302,36 +302,28 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                         break
                     banner_scale -= 1
                 if rendered_banner:
-                    files.append(discord.File(io.BytesIO(rendered_banner), filename="announcement-banner.png"))
-                    image = "attachment://announcement-banner.png"
-                    # Text the banner already shows through ${title} / ${description} / ${footer} is not repeated in the embed
-                    banner_text = " ".join(
-                        str(layer.get("text") or "")
-                        for layer in banner["layers"]
-                        if isinstance(layer, dict) and layer.get("type") == "text" and layer.get("enabled", True)
-                    )
-                    shown_in_banner = set(re.findall(r"\$\{(title|description|footer)\}", banner_text))
+                    banner_file = discord.File(io.BytesIO(rendered_banner), filename="announcement-banner.png")
             footer = data.get("footer")
-            # What the embed itself shows; the audit log and the website post keep the real text
-            embed_title = "" if "title" in shown_in_banner else title
-            embed_desc = "" if "description" in shown_in_banner else desc
-            embed_footer = "" if "footer" in shown_in_banner else footer
             role_id = data.get("ping_role_id")
 
             embeds = []
-            main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
-            if thumb:
-                main_embed.set_thumbnail(url=thumb)
+            if banner_file is not None:
+                # Role ping, link buttons and reactions still apply; the banner is attached as a plain image
+                files.append(banner_file)
+            else:
+                main_embed = discord.Embed(title=title, description=desc, color=discord.Color.from_str("#f47fff"))
+                if thumb:
+                    main_embed.set_thumbnail(url=thumb)
 
-            first_image = image
-            if first_image:
-                main_embed.set_image(url=first_image)
+                first_image = image
+                if first_image:
+                    main_embed.set_image(url=first_image)
 
-            if embed_footer:
-                main_embed.set_footer(text=embed_footer)
+                if footer:
+                    main_embed.set_footer(text=footer)
 
-            if embed_title or embed_desc or thumb or first_image or embed_footer:
-                embeds.append(main_embed)
+                if title or desc or thumb or first_image or footer:
+                    embeds.append(main_embed)
             
             parts = []
             if role_id:
