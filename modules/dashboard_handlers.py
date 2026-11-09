@@ -230,6 +230,56 @@ async def _execute_restock_post(guild: discord.Guild):
         )
 
 
+def _link_buttons(buttons_data) -> list:
+    """Fresh link-button items from the dashboard's button list (max 5, https only)."""
+    items = []
+    if isinstance(buttons_data, list):
+        for btn in buttons_data[:5]:
+            if not isinstance(btn, dict):
+                continue
+            btn_url = str(btn.get("url") or "").strip()
+            if not (btn_url.startswith("http://") or btn_url.startswith("https://")):
+                continue
+            btn_label = str(btn.get("label") or "Button").strip()[:80] or "Button"
+            items.append(discord.ui.Button(style=discord.ButtonStyle.link, label=btn_label, url=btn_url))
+    return items
+
+
+def build_header_card(*, top_text: str, title: str, description: str, footer: str, thumbnail, header: str,
+                      gallery: list, buttons: list, accent: str = "#f47fff"):
+    """An embed-style card with a picture at its top (Discord's card layout, "Components V2").
+
+    Layout: ping text, then one card holding the header picture, title + description (game icon on the right),
+    any extra pictures, a small footer line and the link buttons. Discord allows ~4000 characters of text in total."""
+    budget = 3900
+    top_text = (top_text or "")[:800]
+    title = (title or "")[:256]
+    footer = (footer or "")[:300]
+    description = (description or "")[: max(400, budget - len(top_text) - len(title) - len(footer))]
+
+    view = discord.ui.LayoutView(timeout=None)
+    if top_text.strip():
+        view.add_item(discord.ui.TextDisplay(top_text))
+
+    card = discord.ui.Container(accent_colour=discord.Colour.from_str(accent))
+    if header:
+        card.add_item(discord.ui.MediaGallery(discord.MediaGalleryItem(header)))
+    main_text = "\n".join(part for part in ((f"### {title}" if title else ""), description) if part)
+    if main_text.strip():
+        if thumbnail:
+            card.add_item(discord.ui.Section(main_text, accessory=discord.ui.Thumbnail(thumbnail)))
+        else:
+            card.add_item(discord.ui.TextDisplay(main_text))
+    if gallery:
+        card.add_item(discord.ui.MediaGallery(*[discord.MediaGalleryItem(url) for url in gallery[:10]]))
+    if footer.strip():
+        card.add_item(discord.ui.TextDisplay(f"-# {footer}"))
+    if buttons:
+        card.add_item(discord.ui.ActionRow(*buttons[:5]))
+    view.add_item(card)
+    return view
+
+
 async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict):
     print(f"[IPC/Dashboard] Received trigger: {action} for guild {guild.name} ({guild.id})")
 
@@ -310,6 +360,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             # "only": the banner is the whole post. "header": the banner is attached as a strip above the normal embed
             # (Discord shows attached pictures above embeds)
             banner_mode = "header" if data.get("banner_mode") == "header" else "only"
+            use_card = banner_file is not None and banner_mode == "header"
             if banner_file is not None:
                 files.append(banner_file)
             if banner_file is None or banner_mode == "header":
@@ -325,19 +376,20 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                     embed_title = "" if "title" in shown else title
                     embed_desc = "" if "description" in shown else desc
                     embed_footer = "" if "footer" in shown else footer
-                main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
-                if thumb:
-                    main_embed.set_thumbnail(url=thumb)
+                if not use_card:
+                    main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
+                    if thumb:
+                        main_embed.set_thumbnail(url=thumb)
 
-                first_image = image
-                if first_image:
-                    main_embed.set_image(url=first_image)
+                    first_image = image
+                    if first_image:
+                        main_embed.set_image(url=first_image)
 
-                if embed_footer:
-                    main_embed.set_footer(text=embed_footer)
+                    if embed_footer:
+                        main_embed.set_footer(text=embed_footer)
 
-                if embed_title or embed_desc or thumb or first_image or embed_footer:
-                    embeds.append(main_embed)
+                    if embed_title or embed_desc or thumb or first_image or embed_footer:
+                        embeds.append(main_embed)
             
             parts = []
             if role_id:
@@ -360,20 +412,50 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
 
             view = None
             buttons_data = data.get("buttons") or []
-            if isinstance(buttons_data, list) and buttons_data:
+            link_buttons = _link_buttons(buttons_data)
+            if link_buttons:
                 view = discord.ui.View(timeout=None)
-                for btn in buttons_data[:5]:
-                    if not isinstance(btn, dict):
-                        continue
-                    btn_url = str(btn.get("url") or "").strip()
-                    if not (btn_url.startswith("http://") or btn_url.startswith("https://")):
-                        continue
-                    btn_label = str(btn.get("label") or "Button").strip()[:80] or "Button"
-                    view.add_item(discord.ui.Button(style=discord.ButtonStyle.link, label=btn_label, url=btn_url))
-                if not view.children:
-                    view = None
+                for item in link_buttons:
+                    view.add_item(item)
 
-            sent_msg = await channel.send(content=final_content, embeds=embeds, files=files, view=view)
+            sent_msg = None
+            if use_card:
+                try:
+                    card_view = build_header_card(
+                        top_text=final_content,
+                        title=embed_title,
+                        description=embed_desc,
+                        footer=embed_footer,
+                        thumbnail=thumb,
+                        header="attachment://announcement-banner.png",
+                        gallery=[url for url in ([image] + [i for i in images if i and i.startswith("attachment://")]) if url],
+                        buttons=_link_buttons(buttons_data),
+                    )
+                    sent_msg = await channel.send(view=card_view, files=files)
+                except Exception as card_err:
+                    # Never lose the announcement: post the picture with a normal embed under it instead
+                    print(f"[Announcement] Card layout failed, posting a normal embed under the picture instead: {card_err}")
+                    fallback_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
+                    if thumb and str(thumb).startswith("http"):
+                        fallback_embed.set_thumbnail(url=thumb)
+                    if image and str(image).startswith("http"):
+                        fallback_embed.set_image(url=image)
+                    if embed_footer:
+                        fallback_embed.set_footer(text=embed_footer)
+                    fallback_view = None
+                    fallback_buttons = _link_buttons(buttons_data)
+                    if fallback_buttons:
+                        fallback_view = discord.ui.View(timeout=None)
+                        for item in fallback_buttons:
+                            fallback_view.add_item(item)
+                    sent_msg = await channel.send(
+                        content=final_content,
+                        embeds=[fallback_embed] if (embed_title or embed_desc or embed_footer) else [],
+                        files=[discord.File(io.BytesIO(rendered_banner), filename="announcement-banner.png")],
+                        view=fallback_view,
+                    )
+            else:
+                sent_msg = await channel.send(content=final_content, embeds=embeds, files=files, view=view)
 
             # Auto-Reactions for Announcement
             raw_reactions = data.get("auto_reactions") or []
