@@ -1018,6 +1018,13 @@ async def render_welcome_dynamic_image_bytes(
             else:
                 canvas = canvas.resize((width * output_scale, height * output_scale))
 
+        # Posted announcement banners cut away their empty transparent margin, so the card fills the picture
+        # (Discord shrinks every image to fit a fixed box; empty margin only makes the card smaller)
+        if dynamic_cfg.get("trim") is True:
+            content_box = canvas.getchannel("A").point(lambda v: 255 if v > 6 else 0).getbbox()
+            if content_box:
+                canvas = canvas.crop(content_box)
+
         output = io.BytesIO()
         canvas.save(output, format="PNG")
         return output.getvalue()

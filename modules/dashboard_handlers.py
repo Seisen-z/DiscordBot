@@ -296,7 +296,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 rendered_banner = None
                 while banner_scale >= 1:
                     rendered_banner = await render_welcome_dynamic_image_bytes(
-                        {**banner, "output_scale": banner_scale, "tokens": banner_tokens}, guild, None
+                        {**banner, "output_scale": banner_scale, "tokens": banner_tokens, "trim": True}, guild, None
                     )
                     if not rendered_banner or len(rendered_banner) <= 7_500_000 or banner_scale == 1:
                         break
