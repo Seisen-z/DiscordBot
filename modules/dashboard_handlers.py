@@ -284,27 +284,53 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             images = [resolve_local_asset(img, files, guild.id) for img in data.get("images", [])]
             # A designed banner (Dynamic Image) replaces the plain image
             banner = data.get("dynamic_image")
+            shown_in_banner: set[str] = set()
             if isinstance(banner, dict) and banner.get("layers"):
-                rendered_banner = await render_welcome_dynamic_image_bytes(banner, guild, None)
+                try:
+                    banner_pixels = max(1, int(float(banner.get("width") or 800)) * int(float(banner.get("height") or 300)))
+                except (TypeError, ValueError):
+                    banner_pixels = 800 * 300
+                # Posted large (up to 4x its design size) so it stays sharp, within Discord's file size limit
+                banner_scale = max(1, min(4, int((16_000_000 / banner_pixels) ** 0.5)))
+                banner_tokens = {"title": title, "description": desc, "footer": data.get("footer") or ""}
+                rendered_banner = None
+                while banner_scale >= 1:
+                    rendered_banner = await render_welcome_dynamic_image_bytes(
+                        {**banner, "output_scale": banner_scale, "tokens": banner_tokens}, guild, None
+                    )
+                    if not rendered_banner or len(rendered_banner) <= 7_500_000 or banner_scale == 1:
+                        break
+                    banner_scale -= 1
                 if rendered_banner:
                     files.append(discord.File(io.BytesIO(rendered_banner), filename="announcement-banner.png"))
                     image = "attachment://announcement-banner.png"
+                    # Text the banner already shows through ${title} / ${description} / ${footer} is not repeated in the embed
+                    banner_text = " ".join(
+                        str(layer.get("text") or "")
+                        for layer in banner["layers"]
+                        if isinstance(layer, dict) and layer.get("type") == "text" and layer.get("enabled", True)
+                    )
+                    shown_in_banner = set(re.findall(r"\$\{(title|description|footer)\}", banner_text))
             footer = data.get("footer")
+            # What the embed itself shows; the audit log and the website post keep the real text
+            embed_title = "" if "title" in shown_in_banner else title
+            embed_desc = "" if "description" in shown_in_banner else desc
+            embed_footer = "" if "footer" in shown_in_banner else footer
             role_id = data.get("ping_role_id")
 
             embeds = []
-            main_embed = discord.Embed(title=title, description=desc, color=discord.Color.from_str("#f47fff"))
+            main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
             if thumb:
                 main_embed.set_thumbnail(url=thumb)
-            
+
             first_image = image
             if first_image:
                 main_embed.set_image(url=first_image)
-            
-            if footer:
-                main_embed.set_footer(text=footer)
-                
-            if title or desc or thumb or first_image or footer:
+
+            if embed_footer:
+                main_embed.set_footer(text=embed_footer)
+
+            if embed_title or embed_desc or thumb or first_image or embed_footer:
                 embeds.append(main_embed)
             
             parts = []

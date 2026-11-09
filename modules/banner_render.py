@@ -14,9 +14,11 @@ render: `_fills_of`, `_strokes_of` and `_effects_of` translate those fields.
 from __future__ import annotations
 
 import io
+import json
 import math
 import os
 import re
+import time
 
 try:
     from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps, ImageStat
@@ -43,6 +45,30 @@ def _lanczos():
     if _RESAMPLE is None:
         _RESAMPLE = Image.Resampling.LANCZOS if hasattr(Image, "Resampling") else Image.LANCZOS
     return _RESAMPLE
+
+
+_ASSET_ROOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "database", "assets")
+_ASSET_PATH = re.compile(r"/api(?:/bot)?/assets/(\d+)/([A-Za-z0-9_-]+\.[A-Za-z0-9]{1,8})")
+
+
+def read_local_asset(url: str, guild_id) -> bytes | None:
+    """Bytes of an image uploaded in the dashboard (/api/bot/assets/<server>/<file>), read from disk.
+
+    Same rules as the announcement image upload: only this server's own folder, plain file names only."""
+    from urllib.parse import unquote, urlparse
+
+    match = _ASSET_PATH.fullmatch(unquote(urlparse(str(url or "").strip()).path))
+    if not match or match.group(1) != str(guild_id):
+        return None
+    root = os.path.realpath(os.path.join(_ASSET_ROOT, match.group(1)))
+    target = os.path.realpath(os.path.join(root, match.group(2)))
+    if os.path.commonpath([root, target]) != root or not os.path.isfile(target):
+        return None
+    try:
+        with open(target, "rb") as handle:
+            return handle.read()
+    except OSError:
+        return None
 
 
 def is_banner_layer(layer: dict) -> bool:
@@ -297,6 +323,39 @@ def _fit_image(source, width: int, height: int, mode: str):
     return ImageOps.fit(source, (width, height), method=_lanczos(), centering=(0.5, 0.5))
 
 
+_game_image_cache: dict[tuple[str, str], tuple[float, str]] = {}
+_GAME_IMAGE_TTL = 600  # seconds; a game's cover rarely changes, so one lookup serves many renders
+
+
+async def _roblox_image_url(game_id: str, kind: str, fetch_bytes) -> str:
+    """URL of a Roblox game's cover photo (wide 16:9) or icon (square), by universe ID. '' if unavailable."""
+    key = (game_id, kind)
+    cached = _game_image_cache.get(key)
+    if cached and time.time() - cached[0] < _GAME_IMAGE_TTL:
+        return cached[1]
+
+    if kind == "roblox_icon":
+        api = (f"https://thumbnails.roblox.com/v1/games/icons?universeIds={game_id}"
+               "&returnPolicy=PlaceHolder&size=512x512&format=Png&isCircular=false")
+    else:
+        api = (f"https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds={game_id}"
+               "&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false")
+    url = ""
+    try:
+        raw = await fetch_bytes(api)
+        entry = (json.loads(raw).get("data") or [{}])[0] if raw else {}
+        if kind == "roblox_icon":
+            url = str(entry.get("imageUrl") or "")
+        else:
+            ready = [t for t in (entry.get("thumbnails") or []) if t.get("state") == "Completed"]
+            url = str(ready[0].get("imageUrl") or "") if ready else ""
+    except Exception:
+        url = ""
+    if url:  # a failed or pending lookup is not remembered, so the next render tries again
+        _game_image_cache[key] = (time.time(), url)
+    return url
+
+
 async def _fill_image(fill: dict, width: int, height: int, render_text, fetch_bytes):
     kind = str(fill.get("type") or "solid").lower()
     if kind == "gradient":
@@ -304,7 +363,12 @@ async def _fill_image(fill: dict, width: int, height: int, render_text, fetch_by
         end = _rgb(fill.get("color2") or fill.get("gradient_color"), (88, 101, 242))
         return _gradient_image(width, height, start, end, _num(fill.get("angle"), 90, -360, 360))
     if kind == "image":
-        url = render_text(str(fill.get("url") or fill.get("image_url") or ""))
+        source = str(fill.get("source") or "url")
+        game_id = re.sub(r"\D", "", str(fill.get("game_id") or ""))
+        if source in {"roblox_cover", "roblox_icon"}:
+            url = await _roblox_image_url(game_id, source, fetch_bytes) if game_id else ""
+        else:
+            url = render_text(str(fill.get("url") or fill.get("image_url") or ""))
         raw = await fetch_bytes(url) if url else None
         if not raw:
             return None

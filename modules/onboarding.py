@@ -20,7 +20,7 @@ except ImportError:
     ImageDraw = None
     ImageOps = None
 from modules.utils import _as_int, load_json, save_json
-from modules.banner_render import is_banner_layer, render_banner_layer
+from modules.banner_render import is_banner_layer, read_local_asset, render_banner_layer
 
 _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
 _DYNAMIC_IMAGE_RUNTIME_WARNING_EMITTED = False
@@ -481,6 +481,12 @@ def _color_to_rgba(color_value: str, opacity: int, default: tuple[int, int, int]
     return (rgb[0], rgb[1], rgb[2], alpha)
 
 
+def _apply_announcement_tokens(text: str, tokens: dict) -> str:
+    for name in ("title", "description", "footer"):
+        text = text.replace("${" + name + "}", str(tokens.get(name) or ""))
+    return text
+
+
 def _safe_int(value, fallback: int, minimum: int, maximum: int) -> int:
     try:
         parsed = int(float(value))
@@ -766,6 +772,8 @@ async def render_welcome_dynamic_image_bytes(
     layers = dynamic_cfg.get("layers", [])
     if not isinstance(layers, list):
         layers = []
+    # Announcement text a banner can show (${title}, ${description}, ${footer}); welcome images never set it
+    banner_tokens = dynamic_cfg.get("tokens") if isinstance(dynamic_cfg.get("tokens"), dict) else {}
 
     def _normalized_z_position(layer_obj: dict) -> str:
         raw_value = str(layer_obj.get("z_position") or "").strip().lower()
@@ -790,13 +798,18 @@ async def render_welcome_dynamic_image_bytes(
 
         if is_banner_layer(layer):
             # Free-form layers from the announcement designer have their own renderer
+            async def _banner_bytes(url: str):
+                # Images uploaded in the dashboard live on disk; everything else is downloaded
+                local = read_local_asset(url, getattr(guild, "id", None))
+                return local if local is not None else await _fetch_image_bytes(url)
+
             try:
                 await render_banner_layer(
                     canvas,
                     layer,
                     quality_scale,
-                    render_text=lambda text: render_onboarding_text(text, guild, member),
-                    fetch_bytes=_fetch_image_bytes,
+                    render_text=lambda text: render_onboarding_text(_apply_announcement_tokens(text, banner_tokens), guild, member),
+                    fetch_bytes=_banner_bytes,
                     fallback_font=_load_dynamic_font,
                 )
             except Exception as banner_err:
