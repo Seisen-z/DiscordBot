@@ -8,7 +8,7 @@ from pathlib import Path
 import aiohttp
 from PIL import Image, ImageDraw, ImageFont
 
-_STRIP_RATIO = 2.6
+_STRIP_RATIO = 8
 _FONT = Path(__file__).resolve().parent.parent / "assets" / "fonts" / "Poppins-Bold.ttf"
 
 
@@ -16,15 +16,15 @@ def _draw_title(cover: bytes, title: str) -> bytes:
     image = Image.open(io.BytesIO(cover)).convert("RGB")
     # Upscaled so the text edges stay sharp when Discord shows the picture large
     image = image.resize((image.width * 2, image.height * 2), Image.LANCZOS)
-    # Short wide strip (2.6 : 1) instead of the full 16 : 9 picture, cut a little above the middle where the artwork is
+    # Short wide strip (8 : 1) instead of the full 16 : 9 picture, cut a little above the middle where the artwork is
     strip = int(image.width / _STRIP_RATIO)
-    top = int((image.height - strip) * 0.3)
+    top = int((image.height - strip) * 0.45)
     image = image.crop((0, top, image.width, top + strip))
     width, height = image.size
     draw = ImageDraw.Draw(image)
 
     max_width = int(width * 0.9)
-    size = int(height * 0.24)
+    size = int(height * 0.5)
     while size > 16:
         font = ImageFont.truetype(str(_FONT), size)
         stroke = max(2, size // 8)
@@ -33,8 +33,18 @@ def _draw_title(cover: bytes, title: str) -> bytes:
             break
         size -= 4
     x = int(width * 0.04) - left
-    y = int(height * 0.8) - (bottom - top) // 2 - top
+    y = int(height * 0.5) - (bottom - top) // 2 - top
     draw.text((x, y), title, font=font, fill="white", stroke_width=stroke, stroke_fill="black")
+
+    # Rounded top-left and top-right corners (the bottom edge meets the card text)
+    radius = height // 5
+    mask = Image.new("L", image.size, 255)
+    corners = ImageDraw.Draw(mask)
+    corners.rectangle((0, 0, width, radius), fill=0)
+    corners.rounded_rectangle((0, 0, width - 1, radius * 2), radius=radius, fill=255)
+    corners.rectangle((0, radius, width, height), fill=255)
+    image = image.convert("RGBA")
+    image.putalpha(mask)
 
     out = io.BytesIO()
     image.save(out, "PNG")
