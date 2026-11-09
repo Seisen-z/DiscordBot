@@ -54,6 +54,7 @@ from modules.tickets import load_ticket_config, save_ticket_config, CreateTicket
 from modules.reaction_roles import load_reaction_roles, save_reaction_roles, build_reaction_role_embed
 from modules.select_menu_roles import build_select_menu_embed, SelectMenuRoleView, load_select_menu_roles, save_select_menu_roles
 # In fully refactored architecture, dashboard actions will invoke functions from modules.
+from modules.announcement_cover import render_cover_with_title
 from modules.onboarding import (
     update_onboarding_config,
     get_onboarding_config,
@@ -356,6 +357,20 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             embeds = []
             use_card = bool(cover_url)
             embed_title, embed_desc, embed_footer = title, desc, footer
+            card_header = cover_url
+            if use_card:
+                # The cover replaces the small game icon, and the title is written on the cover picture itself
+                thumb = None
+                if title:
+                    try:
+                        cover_png = await render_cover_with_title(cover_url, title)
+                    except Exception as cover_err:
+                        print(f"[Announcement] Could not write the title on the cover: {cover_err}")
+                        cover_png = None
+                    if cover_png:
+                        files.append(discord.File(io.BytesIO(cover_png), filename="announcement-cover.png"))
+                        card_header = "attachment://announcement-cover.png"
+                        embed_title = ""
             if not use_card:
                 main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
                 if thumb:
@@ -407,7 +422,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                         description=embed_desc,
                         footer=embed_footer,
                         thumbnail=thumb,
-                        header=cover_url,
+                        header=card_header,
                         gallery=[url for url in ([image] + [i for i in images if i and i.startswith("attachment://")]) if url],
                         buttons=_link_buttons(buttons_data),
                     )
@@ -415,7 +430,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 except Exception as card_err:
                     # Never lose the announcement: post a normal embed with the cover as its picture instead
                     print(f"[Announcement] Card layout failed, posting a normal embed instead: {card_err}")
-                    fallback_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
+                    fallback_embed = discord.Embed(title=title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
                     if thumb and str(thumb).startswith("http"):
                         fallback_embed.set_thumbnail(url=thumb)
                     fallback_embed.set_image(url=cover_url)
@@ -429,7 +444,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                             fallback_view.add_item(item)
                     sent_msg = await channel.send(
                         content=final_content,
-                        embeds=[fallback_embed] if (embed_title or embed_desc or embed_footer) else [],
+                        embeds=[fallback_embed] if (title or embed_desc or embed_footer) else [],
                         view=fallback_view,
                     )
             else:
