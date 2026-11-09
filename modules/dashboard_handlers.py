@@ -813,6 +813,18 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 "image_base64": base64.b64encode(rendered).decode("ascii"),
             }
 
+        elif action == "render_announcement_cover":
+            cover_url = await _roblox_cover_url(str(payload.get("game_id") or "").strip())
+            rendered = await render_cover_with_title(cover_url, str(payload.get("title") or "")) if cover_url else None
+            if not rendered:
+                return {"status": "error", "action": action, "http_status": 404, "message": "No cover photo for that game ID."}
+            return {
+                "status": "success",
+                "action": action,
+                "mime_type": "image/png",
+                "image_base64": base64.b64encode(rendered).decode("ascii"),
+            }
+
         elif action == "create_poll":
             question = str(payload.get("question", "")).strip()
             channel_id = _as_int(payload.get("channel_id"))
