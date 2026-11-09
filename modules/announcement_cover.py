@@ -8,15 +8,15 @@ from pathlib import Path
 import aiohttp
 from PIL import Image, ImageDraw, ImageFont
 
-_STRIP_RATIO = 8
-_FONT = Path(__file__).resolve().parent.parent / "assets" / "fonts" / "Poppins-Bold.ttf"
+_STRIP_RATIO = 6
+_FONT = Path(__file__).resolve().parent.parent / "assets" / "fonts" / "Poppins-BoldItalic.ttf"
 
 
 def _draw_title(cover: bytes, title: str) -> bytes:
     image = Image.open(io.BytesIO(cover)).convert("RGB")
     # Upscaled so the text edges stay sharp when Discord shows the picture large
     image = image.resize((image.width * 2, image.height * 2), Image.LANCZOS)
-    # Short wide strip (8 : 1) instead of the full 16 : 9 picture, cut a little above the middle where the artwork is
+    # Short wide strip (6 : 1) instead of the full 16 : 9 picture, cut a little above the middle where the artwork is
     strip = int(image.width / _STRIP_RATIO)
     top = int((image.height - strip) * 0.45)
     image = image.crop((0, top, image.width, top + strip))
@@ -27,17 +27,17 @@ def _draw_title(cover: bytes, title: str) -> bytes:
     size = int(height * 0.5)
     while size > 16:
         font = ImageFont.truetype(str(_FONT), size)
-        stroke = max(2, size // 8)
+        stroke = max(2, size // 16)
         left, top, right, bottom = draw.textbbox((0, 0), title, font=font, stroke_width=stroke)
         if right - left <= max_width:
             break
         size -= 4
     x = int(width * 0.04) - left
-    y = int(height * 0.5) - (bottom - top) // 2 - top
+    y = int(height * 0.6) - (bottom - top) // 2 - top
     draw.text((x, y), title, font=font, fill="white", stroke_width=stroke, stroke_fill="black")
 
     # Rounded top-left and top-right corners (the bottom edge meets the card text)
-    radius = height // 5
+    radius = height // 3
     mask = Image.new("L", image.size, 255)
     corners = ImageDraw.Draw(mask)
     corners.rectangle((0, 0, width, radius), fill=0)
