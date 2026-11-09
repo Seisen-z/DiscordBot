@@ -909,6 +909,7 @@ class AnnouncementDraft(BaseModel):
     website_tag: Optional[str] = "Announcement"
     thumbnail_game_id: Optional[str] = None
     thumbnail_game_name: Optional[str] = None
+    dynamic_image: Optional[Dict[str, Any]] = None
 
     @field_validator("channel_id", "ping_role_id", mode="before")
     @classmethod
@@ -1629,6 +1630,77 @@ def _normalize_giveaway_entry(raw: Dict[str, Any], *, guild_id: str, message_id:
 
 # --- Routes ---
 
+# PUBLIC FEEDBACK: the Seisen UI library posts here and the bot sends it to Discord,
+# so no webhook URL or token ever ships inside the library.
+_FEEDBACK_CHANNEL_ENVS = {
+    "Suggestion": "FEEDBACK_SUGGESTION_CHANNEL_ID",
+    "Bug Report": "FEEDBACK_BUG_CHANNEL_ID",
+    "Vouch": "FEEDBACK_VOUCH_CHANNEL_ID",
+}
+_feedback_hits: Dict[str, List[float]] = {}
+
+
+class FeedbackRequest(BaseModel):
+    category: str
+    message: str = Field(min_length=1, max_length=1000)
+    image_url: Optional[str] = Field(default=None, max_length=300)
+
+
+@app.post("/api/feedback")
+async def post_feedback(req: FeedbackRequest, request: Request):
+    env_name = _FEEDBACK_CHANNEL_ENVS.get(req.category)
+    if not env_name:
+        raise HTTPException(status_code=400, detail="Unknown category")
+    channel_id = os.getenv(env_name, "").strip()
+    if not channel_id.isdigit():
+        raise HTTPException(status_code=503, detail="Feedback channel is not configured")
+    text = req.message.strip()
+    image = (req.image_url or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Message is empty")
+    if req.category == "Bug Report" and not image.startswith("https://"):
+        raise HTTPException(status_code=400, detail="Bug reports need an https screenshot URL")
+
+    # Per-client cooldown (1/min, 5/hour) plus a global cap, in memory only.
+    ip = request.client.host if request.client else "unknown"
+    now = time.time()
+    hits = [t for t in _feedback_hits.get(ip, []) if now - t < 3600]
+    total = sum(1 for ts in _feedback_hits.values() for t in ts if now - t < 3600)
+    if (hits and now - hits[-1] < 60) or len(hits) >= 5 or total >= 100:
+        raise HTTPException(status_code=429, detail="Slow down, try again in a minute.")
+
+    from modules.ipc import _bot
+    if not _bot:
+        raise HTTPException(status_code=503, detail="Bot is not ready yet")
+    import discord
+
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    if req.category == "Vouch":
+        embed = discord.Embed(title="New vouch for Seisen Hub created!", description="⭐⭐⭐⭐⭐",
+                              color=3447003, timestamp=datetime.now(timezone.utc))
+        embed.add_field(name="Vouch:", value=text, inline=False)
+        embed.add_field(name="Vouched by:", value="Anonymous", inline=True)
+        embed.set_footer(text="Seisen Hub Script")
+    else:
+        embed = discord.Embed(title=req.category, description=text, color=16711684)
+        if image:
+            embed.set_image(url=image)
+        embed.set_footer(text="Submitted anonymously")
+
+    try:
+        channel = _bot.get_channel(int(channel_id)) or await _bot.fetch_channel(int(channel_id))
+        mentions = discord.AllowedMentions.none()
+        if isinstance(channel, discord.ForumChannel):
+            await channel.create_thread(name=f"[{req.category}] {stamp}", embed=embed, allowed_mentions=mentions)
+        else:
+            await channel.send(embed=embed, allowed_mentions=mentions)
+    except discord.HTTPException:
+        raise HTTPException(status_code=502, detail="Could not post to Discord")
+
+    _feedback_hits[ip] = hits + [now]
+    return {"ok": True}
+
+
 # RESTOCK INTERNAL API
 class InternalRestockRequest(BaseModel):
     methodStocks: Dict[str, Dict[str, int]]
@@ -2195,6 +2267,7 @@ async def update_announcements(guild_id: str, drafts: Dict[str, Any]):
             "website_tag": candidate.get("website_tag") or "Announcement",
             "thumbnail_game_id": candidate.get("thumbnail_game_id"),
             "thumbnail_game_name": candidate.get("thumbnail_game_name"),
+            "dynamic_image": candidate.get("dynamic_image") if isinstance(candidate.get("dynamic_image"), dict) else None,
         })
 
         normalized_drafts[draft_name] = validated.model_dump()

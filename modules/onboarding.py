@@ -20,6 +20,7 @@ except ImportError:
     ImageDraw = None
     ImageOps = None
 from modules.utils import _as_int, load_json, save_json
+from modules.banner_render import is_banner_layer, render_banner_layer
 
 _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
 _DYNAMIC_IMAGE_RUNTIME_WARNING_EMITTED = False
@@ -748,7 +749,9 @@ async def render_welcome_dynamic_image_bytes(
 
     width = _safe_int(dynamic_cfg.get("width"), 500, 128, 4000)
     height = _safe_int(dynamic_cfg.get("height"), 350, 128, 4000)
-    quality_scale = _safe_int(dynamic_cfg.get("render_quality_scale"), 2, 1, 4)
+    # output_scale (designer "Export" at 1x-4x) sets the final image size; welcome images never set it
+    output_scale = _safe_int(dynamic_cfg.get("output_scale"), 1, 1, 4)
+    quality_scale = max(_safe_int(dynamic_cfg.get("render_quality_scale"), 2, 1, 4), output_scale)
 
     render_width = width * quality_scale
     render_height = height * quality_scale
@@ -783,6 +786,21 @@ async def render_welcome_dynamic_image_bytes(
 
     for _, layer in sorted_layers:
         if not bool(layer.get("enabled", True)):
+            continue
+
+        if is_banner_layer(layer):
+            # Free-form layers from the announcement designer have their own renderer
+            try:
+                await render_banner_layer(
+                    canvas,
+                    layer,
+                    quality_scale,
+                    render_text=lambda text: render_onboarding_text(text, guild, member),
+                    fetch_bytes=_fetch_image_bytes,
+                    fallback_font=_load_dynamic_font,
+                )
+            except Exception as banner_err:
+                print(f"[Onboarding] Banner layer render failed ({layer.get('name') or layer.get('id')}): {banner_err}")
             continue
 
         try:
@@ -981,11 +999,11 @@ async def render_welcome_dynamic_image_bytes(
             continue
 
     try:
-        if quality_scale > 1:
+        if quality_scale != output_scale:
             if resample is not None:
-                canvas = canvas.resize((width, height), resample)
+                canvas = canvas.resize((width * output_scale, height * output_scale), resample)
             else:
-                canvas = canvas.resize((width, height))
+                canvas = canvas.resize((width * output_scale, height * output_scale))
 
         output = io.BytesIO()
         canvas.save(output, format="PNG")

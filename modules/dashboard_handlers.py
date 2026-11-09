@@ -6,6 +6,7 @@ Handlers for IPC triggers.
 from __future__ import annotations
 
 import base64
+import io
 import re
 import os
 from datetime import datetime, timezone
@@ -281,6 +282,13 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             thumb = resolve_local_asset(data.get("thumbnail_url"), files, guild.id)
             image = resolve_local_asset(data.get("image_url"), files, guild.id)
             images = [resolve_local_asset(img, files, guild.id) for img in data.get("images", [])]
+            # A designed banner (Dynamic Image) replaces the plain image
+            banner = data.get("dynamic_image")
+            if isinstance(banner, dict) and banner.get("layers"):
+                rendered_banner = await render_welcome_dynamic_image_bytes(banner, guild, None)
+                if rendered_banner:
+                    files.append(discord.File(io.BytesIO(rendered_banner), filename="announcement-banner.png"))
+                    image = "attachment://announcement-banner.png"
             footer = data.get("footer")
             role_id = data.get("ping_role_id")
 
@@ -698,6 +706,22 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 "image_base64": base64.b64encode(rendered).decode("ascii"),
             }
 
+        elif action == "render_announcement_dynamic_image":
+            banner = payload.get("dynamic_image")
+            rendered = await render_welcome_dynamic_image_bytes(banner, guild, None) if isinstance(banner, dict) else None
+            if not rendered:
+                return {
+                    "status": "error",
+                    "action": action,
+                    "http_status": 500,
+                    "message": "Dynamic image rendering returned no data.",
+                }
+            return {
+                "status": "success",
+                "action": action,
+                "mime_type": "image/png",
+                "image_base64": base64.b64encode(rendered).decode("ascii"),
+            }
 
         elif action == "create_poll":
             question = str(payload.get("question", "")).strip()
