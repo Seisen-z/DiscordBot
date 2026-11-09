@@ -20,7 +20,6 @@ except ImportError:
     ImageDraw = None
     ImageOps = None
 from modules.utils import _as_int, load_json, save_json
-from modules.banner_render import is_banner_layer, read_local_asset, render_banner_layer
 
 _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
 _DYNAMIC_IMAGE_RUNTIME_WARNING_EMITTED = False
@@ -481,12 +480,6 @@ def _color_to_rgba(color_value: str, opacity: int, default: tuple[int, int, int]
     return (rgb[0], rgb[1], rgb[2], alpha)
 
 
-def _apply_announcement_tokens(text: str, tokens: dict) -> str:
-    for name in ("title", "description", "footer"):
-        text = text.replace("${" + name + "}", str(tokens.get(name) or ""))
-    return text
-
-
 def _safe_int(value, fallback: int, minimum: int, maximum: int) -> int:
     try:
         parsed = int(float(value))
@@ -755,9 +748,7 @@ async def render_welcome_dynamic_image_bytes(
 
     width = _safe_int(dynamic_cfg.get("width"), 500, 128, 4000)
     height = _safe_int(dynamic_cfg.get("height"), 350, 128, 4000)
-    # output_scale (designer "Export" at 1x-4x) sets the final image size; welcome images never set it
-    output_scale = _safe_int(dynamic_cfg.get("output_scale"), 1, 1, 4)
-    quality_scale = max(_safe_int(dynamic_cfg.get("render_quality_scale"), 2, 1, 4), output_scale)
+    quality_scale = _safe_int(dynamic_cfg.get("render_quality_scale"), 2, 1, 4)
 
     render_width = width * quality_scale
     render_height = height * quality_scale
@@ -772,8 +763,6 @@ async def render_welcome_dynamic_image_bytes(
     layers = dynamic_cfg.get("layers", [])
     if not isinstance(layers, list):
         layers = []
-    # Announcement text a banner can show (${title}, ${description}, ${footer}); welcome images never set it
-    banner_tokens = dynamic_cfg.get("tokens") if isinstance(dynamic_cfg.get("tokens"), dict) else {}
 
     def _normalized_z_position(layer_obj: dict) -> str:
         raw_value = str(layer_obj.get("z_position") or "").strip().lower()
@@ -794,26 +783,6 @@ async def render_welcome_dynamic_image_bytes(
 
     for _, layer in sorted_layers:
         if not bool(layer.get("enabled", True)):
-            continue
-
-        if is_banner_layer(layer):
-            # Free-form layers from the announcement designer have their own renderer
-            async def _banner_bytes(url: str):
-                # Images uploaded in the dashboard live on disk; everything else is downloaded
-                local = read_local_asset(url, getattr(guild, "id", None))
-                return local if local is not None else await _fetch_image_bytes(url)
-
-            try:
-                await render_banner_layer(
-                    canvas,
-                    layer,
-                    quality_scale,
-                    render_text=lambda text: render_onboarding_text(_apply_announcement_tokens(text, banner_tokens), guild, member),
-                    fetch_bytes=_banner_bytes,
-                    fallback_font=_load_dynamic_font,
-                )
-            except Exception as banner_err:
-                print(f"[Onboarding] Banner layer render failed ({layer.get('name') or layer.get('id')}): {banner_err}")
             continue
 
         try:
@@ -1012,18 +981,11 @@ async def render_welcome_dynamic_image_bytes(
             continue
 
     try:
-        if quality_scale != output_scale:
+        if quality_scale > 1:
             if resample is not None:
-                canvas = canvas.resize((width * output_scale, height * output_scale), resample)
+                canvas = canvas.resize((width, height), resample)
             else:
-                canvas = canvas.resize((width * output_scale, height * output_scale))
-
-        # Posted announcement banners cut away their empty transparent margin, so the card fills the picture
-        # (Discord shrinks every image to fit a fixed box; empty margin only makes the card smaller)
-        if dynamic_cfg.get("trim") is True:
-            content_box = canvas.getchannel("A").point(lambda v: 255 if v > 6 else 0).getbbox()
-            if content_box:
-                canvas = canvas.crop(content_box)
+                canvas = canvas.resize((width, height))
 
         output = io.BytesIO()
         canvas.save(output, format="PNG")

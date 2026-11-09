@@ -909,8 +909,6 @@ class AnnouncementDraft(BaseModel):
     website_tag: Optional[str] = "Announcement"
     thumbnail_game_id: Optional[str] = None
     thumbnail_game_name: Optional[str] = None
-    dynamic_image: Optional[Dict[str, Any]] = None
-    banner_mode: Optional[str] = "only"
 
     @field_validator("channel_id", "ping_role_id", mode="before")
     @classmethod
@@ -2268,8 +2266,6 @@ async def update_announcements(guild_id: str, drafts: Dict[str, Any]):
             "website_tag": candidate.get("website_tag") or "Announcement",
             "thumbnail_game_id": candidate.get("thumbnail_game_id"),
             "thumbnail_game_name": candidate.get("thumbnail_game_name"),
-            "dynamic_image": candidate.get("dynamic_image") if isinstance(candidate.get("dynamic_image"), dict) else None,
-            "banner_mode": "header" if candidate.get("banner_mode") == "header" else "only",
         })
 
         normalized_drafts[draft_name] = validated.model_dump()

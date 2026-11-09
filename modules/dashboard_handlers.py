@@ -230,6 +230,17 @@ async def _execute_restock_post(guild: discord.Guild):
         )
 
 
+async def _roblox_cover_url(game_id: str) -> str:
+    """Wide (16:9) cover photo URL of a Roblox game, by universe ID. '' if unavailable."""
+    api = (f"https://thumbnails.roblox.com/v1/games/multiget/thumbnails?universeIds={game_id}"
+           "&countPerUniverse=1&defaults=true&size=768x432&format=Png&isCircular=false")
+    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=8)) as session:
+        async with session.get(api) as resp:
+            payload = await resp.json()
+    thumbs = ((payload.get("data") or [{}])[0].get("thumbnails") or [{}])
+    return thumbs[0].get("imageUrl") or "" if thumbs[0].get("state") == "Completed" else ""
+
+
 def _link_buttons(buttons_data) -> list:
     """Fresh link-button items from the dashboard's button list (max 5, https only)."""
     items = []
@@ -312,7 +323,14 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
 
             # Resolve Roblox game thumbnail if a game ID is stored
             thumbnail_game_id = str(data.get("thumbnail_game_id") or "").strip()
-            if thumbnail_game_id and not data.get("thumbnail_url"):
+            # A game ID gives the game's wide cover photo at the top of the card (not the small icon)
+            cover_url = ""
+            if thumbnail_game_id:
+                try:
+                    cover_url = await _roblox_cover_url(thumbnail_game_id)
+                except Exception as _ce:
+                    print(f"[Announcement] Cover resolve failed: {_ce}")
+            if thumbnail_game_id and not cover_url and not data.get("thumbnail_url"):
                 try:
                     import aiohttp as _aiohttp_thumb
                     async with _aiohttp_thumb.ClientSession() as _ts:
@@ -332,65 +350,27 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
             thumb = resolve_local_asset(data.get("thumbnail_url"), files, guild.id)
             image = resolve_local_asset(data.get("image_url"), files, guild.id)
             images = [resolve_local_asset(img, files, guild.id) for img in data.get("images", [])]
-            # A designed banner (Dynamic Image) is the whole post: only the picture, no embed card
-            banner = data.get("dynamic_image")
-            banner_file = None
-            if isinstance(banner, dict) and banner.get("layers"):
-                try:
-                    banner_pixels = max(1, int(float(banner.get("width") or 800)) * int(float(banner.get("height") or 300)))
-                except (TypeError, ValueError):
-                    banner_pixels = 800 * 300
-                # Posted large (up to 4x its design size) so it stays sharp, within Discord's file size limit
-                banner_scale = max(1, min(4, int((16_000_000 / banner_pixels) ** 0.5)))
-                banner_tokens = {"title": title, "description": desc, "footer": data.get("footer") or ""}
-                rendered_banner = None
-                while banner_scale >= 1:
-                    rendered_banner = await render_welcome_dynamic_image_bytes(
-                        {**banner, "output_scale": banner_scale, "tokens": banner_tokens, "trim": True}, guild, None
-                    )
-                    if not rendered_banner or len(rendered_banner) <= 7_500_000 or banner_scale == 1:
-                        break
-                    banner_scale -= 1
-                if rendered_banner:
-                    banner_file = discord.File(io.BytesIO(rendered_banner), filename="announcement-banner.png")
             footer = data.get("footer")
             role_id = data.get("ping_role_id")
 
             embeds = []
-            # "only": the banner is the whole post. "header": the banner is attached as a strip above the normal embed
-            # (Discord shows attached pictures above embeds)
-            banner_mode = "header" if data.get("banner_mode") == "header" else "only"
-            use_card = banner_file is not None and banner_mode == "header"
-            if banner_file is not None:
-                files.append(banner_file)
-            if banner_file is None or banner_mode == "header":
-                embed_title, embed_desc, embed_footer = title, desc, footer
-                if banner_file is not None:
-                    # Text the header already shows through ${title} / ${description} / ${footer} is not repeated in the embed
-                    banner_text = " ".join(
-                        str(layer.get("text") or "")
-                        for layer in banner["layers"]
-                        if isinstance(layer, dict) and layer.get("type") == "text" and layer.get("enabled", True)
-                    )
-                    shown = set(re.findall(r"\$\{(title|description|footer)\}", banner_text))
-                    embed_title = "" if "title" in shown else title
-                    embed_desc = "" if "description" in shown else desc
-                    embed_footer = "" if "footer" in shown else footer
-                if not use_card:
-                    main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
-                    if thumb:
-                        main_embed.set_thumbnail(url=thumb)
+            use_card = bool(cover_url)
+            embed_title, embed_desc, embed_footer = title, desc, footer
+            if not use_card:
+                main_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
+                if thumb:
+                    main_embed.set_thumbnail(url=thumb)
 
-                    first_image = image
-                    if first_image:
-                        main_embed.set_image(url=first_image)
+                first_image = image
+                if first_image:
+                    main_embed.set_image(url=first_image)
 
-                    if embed_footer:
-                        main_embed.set_footer(text=embed_footer)
+                if embed_footer:
+                    main_embed.set_footer(text=embed_footer)
 
-                    if embed_title or embed_desc or thumb or first_image or embed_footer:
-                        embeds.append(main_embed)
-            
+                if embed_title or embed_desc or thumb or first_image or embed_footer:
+                    embeds.append(main_embed)
+
             parts = []
             if role_id:
                 parts.append(f"<@&{role_id}>")
@@ -407,7 +387,7 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                     
             final_content = "\n".join(parts)
 
-            if not final_content and not embeds and not files:
+            if not final_content and not embeds and not files and not use_card:
                 return {"status": "error", "action": action, "http_status": 400, "message": "Cannot send empty announcement."}
 
             view = None
@@ -427,19 +407,18 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                         description=embed_desc,
                         footer=embed_footer,
                         thumbnail=thumb,
-                        header="attachment://announcement-banner.png",
+                        header=cover_url,
                         gallery=[url for url in ([image] + [i for i in images if i and i.startswith("attachment://")]) if url],
                         buttons=_link_buttons(buttons_data),
                     )
                     sent_msg = await channel.send(view=card_view, files=files)
                 except Exception as card_err:
-                    # Never lose the announcement: post the picture with a normal embed under it instead
-                    print(f"[Announcement] Card layout failed, posting a normal embed under the picture instead: {card_err}")
+                    # Never lose the announcement: post a normal embed with the cover as its picture instead
+                    print(f"[Announcement] Card layout failed, posting a normal embed instead: {card_err}")
                     fallback_embed = discord.Embed(title=embed_title, description=embed_desc, color=discord.Color.from_str("#f47fff"))
                     if thumb and str(thumb).startswith("http"):
                         fallback_embed.set_thumbnail(url=thumb)
-                    if image and str(image).startswith("http"):
-                        fallback_embed.set_image(url=image)
+                    fallback_embed.set_image(url=cover_url)
                     if embed_footer:
                         fallback_embed.set_footer(text=embed_footer)
                     fallback_view = None
@@ -451,7 +430,6 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                     sent_msg = await channel.send(
                         content=final_content,
                         embeds=[fallback_embed] if (embed_title or embed_desc or embed_footer) else [],
-                        files=[discord.File(io.BytesIO(rendered_banner), filename="announcement-banner.png")],
                         view=fallback_view,
                     )
             else:
@@ -816,23 +794,6 @@ async def on_dashboard_trigger(action: str, guild: discord.Guild, payload: dict)
                 "status": "success",
                 "action": action,
                 "dynamic_image_id": dynamic_image_id,
-                "mime_type": "image/png",
-                "image_base64": base64.b64encode(rendered).decode("ascii"),
-            }
-
-        elif action == "render_announcement_dynamic_image":
-            banner = payload.get("dynamic_image")
-            rendered = await render_welcome_dynamic_image_bytes(banner, guild, None) if isinstance(banner, dict) else None
-            if not rendered:
-                return {
-                    "status": "error",
-                    "action": action,
-                    "http_status": 500,
-                    "message": "Dynamic image rendering returned no data.",
-                }
-            return {
-                "status": "success",
-                "action": action,
                 "mime_type": "image/png",
                 "image_base64": base64.b64encode(rendered).decode("ascii"),
             }
