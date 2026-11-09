@@ -8,6 +8,7 @@ from pathlib import Path
 import aiohttp
 from PIL import Image, ImageDraw, ImageFont
 
+_STRIP_RATIO = 2.6
 _FONT = Path(__file__).resolve().parent.parent / "assets" / "fonts" / "Poppins-Bold.ttf"
 
 
@@ -15,11 +16,15 @@ def _draw_title(cover: bytes, title: str) -> bytes:
     image = Image.open(io.BytesIO(cover)).convert("RGB")
     # Upscaled so the text edges stay sharp when Discord shows the picture large
     image = image.resize((image.width * 2, image.height * 2), Image.LANCZOS)
+    # Short wide strip (2.6 : 1) instead of the full 16 : 9 picture, cut a little above the middle where the artwork is
+    strip = int(image.width / _STRIP_RATIO)
+    top = int((image.height - strip) * 0.3)
+    image = image.crop((0, top, image.width, top + strip))
     width, height = image.size
     draw = ImageDraw.Draw(image)
 
-    max_width = int(width * 0.92)
-    size = int(height * 0.2)
+    max_width = int(width * 0.9)
+    size = int(height * 0.24)
     while size > 16:
         font = ImageFont.truetype(str(_FONT), size)
         stroke = max(2, size // 8)
@@ -27,8 +32,8 @@ def _draw_title(cover: bytes, title: str) -> bytes:
         if right - left <= max_width:
             break
         size -= 4
-    x = (width - (right - left)) // 2 - left
-    y = int(height * 0.78) - (bottom - top) // 2 - top
+    x = int(width * 0.04) - left
+    y = int(height * 0.8) - (bottom - top) // 2 - top
     draw.text((x, y), title, font=font, fill="white", stroke_width=stroke, stroke_fill="black")
 
     out = io.BytesIO()
