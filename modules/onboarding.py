@@ -291,6 +291,7 @@ def normalize_welcome_dynamic_images(cfg: dict) -> dict[str, dict]:
                     "image_url": str(raw_layer.get("image_url") or ""),
                     "color": str(raw_layer.get("color") or ("#1F232B" if layer_type == "block" else "#FFFFFF")),
                     "font_weight": font_weight,
+                    "font_style": "italic" if raw_layer.get("font_style") == "italic" else "normal",
                     "text_align": text_align,
                     "text_vertical_align": text_vertical_align,
                     "x": _safe_int(raw_layer.get("x"), 20, 0, 5000),
@@ -829,7 +830,14 @@ async def render_welcome_dynamic_image_bytes(
                 if text_vertical_align not in {"top", "middle", "bottom"}:
                     text_vertical_align = "top"
 
-                font = _load_dynamic_font(font_size, bold=is_bold)
+                if layer.get("font_style") == "italic":
+                    font_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "fonts", "Lato-BoldItalic.ttf" if is_bold else "Lato-Italic.ttf")
+                    font = ImageFont.truetype(font_path, font_size)
+                    while font_size > 8 * quality_scale and _measure_text(draw, text, font)[0] > layer_width:
+                        font_size -= quality_scale
+                        font = ImageFont.truetype(font_path, font_size)
+                else:
+                    font = _load_dynamic_font(font_size, bold=is_bold)
                 spacing = max(2, int(font_size * 0.16))
                 text_w, text_h = _measure_multiline_text(draw, text, font, spacing, text_align)
 
