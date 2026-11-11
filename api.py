@@ -986,6 +986,7 @@ class StickyConfig(BaseModel):
     color: Optional[int] = None
 
 class BoostConfigGuild(BaseModel):
+    days_per_boost: int = Field(default=15, ge=1, le=365, strict=True)
     category_id: Optional[str] = None
     channel_id: Optional[str] = None
     roles: List[str] = []
@@ -3445,6 +3446,7 @@ async def get_boost(guild_id: str):
         "category_id": raw.get("category_id"),
         "channel_id": raw.get("channel_id"),
         "roles": raw.get("roles", []),
+        "days_per_boost": raw.get("days_per_boost", 15),
     })
 
 @app.put("/api/guilds/{guild_id}/boost")
@@ -3452,7 +3454,7 @@ async def get_boost(guild_id: str):
 async def update_boost(guild_id: str, config: BoostConfigGuild):
     data = load_json("boost_configs", {})
     prev = data.get(guild_id, {}) if isinstance(data.get(guild_id, {}), dict) else {}
-    data[guild_id] = _merge_shallow_dict(prev, config.model_dump())
+    data[guild_id] = _merge_shallow_dict(prev, config.model_dump(exclude_unset=True))
     save_json("boost_configs", data)
     return {"status": "success"}
 
